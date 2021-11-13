@@ -92,62 +92,70 @@ export enum AccessType {
   free,
   pro
 }
-const Home: NextPage<Props> = ({ courses, tags }) => {
-  const [sortBy, setSortBy] = useState(Sort.default)
-  const [accessType, setAccessType] = useState(AccessType.default)
-  const bgColor = useColorModeValue('white', 'black')
-  const [search, setSearch] = useState('')
-  const debouncedSetSearch = useDebouncedCallback(setSearch, 500)
-  const processedCourses = useMemo(() => {
-    const applySort = (list: Course[]) => {
-      if (sortBy === Sort.default) {
-        return list.sort((a, b) => {
-          return b.watched_count - a.watched_count
-        })
-      }
-      if (sortBy === Sort.best) {
-        const courseValue = (course: Course) => {
-          const views = course.watched_count
-          const rating = course.average_rating_out_of_5
-          return views / 500 ** (5 - rating)
-        }
-        return list.sort((a, b) => {
-          return courseValue(b) - courseValue(a)
-        })
-      }
-      if (sortBy === Sort.date) {
-        const courseValue = (course: Course) => {
-          return new Date(course.created_at).valueOf()
-        }
-        return list.sort((a, b) => {
-          return courseValue(b) - courseValue(a)
-        })
-      }
-      if (sortBy === Sort.rating) {
-        return list.sort((a, b) => {
-          const dif = b.average_rating_out_of_5 - a.average_rating_out_of_5
-          if (dif === 0) {
-            return b.watched_count - a.watched_count
-          }
-          return dif
-        })
-      }
+const processCourses = (
+  sortBy: Sort,
+  accessType: AccessType,
+  courses: Course[]
+) => {
+  const applySort = (list: Course[]) => {
+    if (sortBy === Sort.default) {
       return list.sort((a, b) => {
         return b.watched_count - a.watched_count
       })
     }
-    const applyAccessType = (list: Course[]) => {
-      if (accessType === AccessType.free) {
-        return list.filter((course) => course.access_state === 'free')
+    if (sortBy === Sort.best) {
+      const courseValue = (course: Course) => {
+        const views = course.watched_count
+        const rating = course.average_rating_out_of_5
+        return views / 500 ** (5 - rating)
       }
-      if (accessType === AccessType.pro) {
-        return list.filter((course) => course.access_state === 'pro')
-      }
-      return list
+      return list.sort((a, b) => {
+        return courseValue(b) - courseValue(a)
+      })
     }
-    const result = applyAccessType(applySort(courses.slice()))
-    return result
-  }, [sortBy, courses, accessType])
+    if (sortBy === Sort.date) {
+      const courseValue = (course: Course) => {
+        return new Date(course.created_at).valueOf()
+      }
+      return list.sort((a, b) => {
+        return courseValue(b) - courseValue(a)
+      })
+    }
+    if (sortBy === Sort.rating) {
+      return list.sort((a, b) => {
+        const dif = b.average_rating_out_of_5 - a.average_rating_out_of_5
+        if (dif === 0) {
+          return b.watched_count - a.watched_count
+        }
+        return dif
+      })
+    }
+    return list.sort((a, b) => {
+      return b.watched_count - a.watched_count
+    })
+  }
+  const applyAccessType = (list: Course[]) => {
+    if (accessType === AccessType.free) {
+      return list.filter((course) => course.access_state === 'free')
+    }
+    if (accessType === AccessType.pro) {
+      return list.filter((course) => course.access_state === 'pro')
+    }
+    return list
+  }
+  const result = applyAccessType(applySort(courses.slice()))
+  return result
+}
+
+const Home: NextPage<Props> = ({ courses, tags }) => {
+  const [sortBy, setSortBy] = useState(Sort.default)
+  const [accessType, setAccessType] = useState(AccessType.default)
+  const [search, setSearch] = useState('')
+  const debouncedSetSearch = useDebouncedCallback(setSearch, 500)
+  const processedCourses = useMemo(
+    () => processCourses(sortBy, accessType, courses),
+    [sortBy, courses, accessType]
+  )
   const finalCourses = useMemo(() => {
     if (search.length < 3) {
       return processedCourses
@@ -185,33 +193,6 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
               />
             </InputGroup>
           </HStack>
-          <Popover>
-            <PopoverTrigger>
-              <Button variant={'solid'}>Tags</Button>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverArrow bgColor={bgColor} />
-              <PopoverBody>
-                <SimpleGrid columns={2} spacing={2}>
-                  {tags.map((tag) => (
-                    <GridItem
-                      key={tag.tag.name}
-                      value={tag.tag.name}
-                      colSpan={1}
-                    >
-                      <Button
-                        variant={'link'}
-                        justifyContent={'flex-start'}
-                        w="full"
-                      >
-                        {tag.tag.label} ({tag.count})
-                      </Button>
-                    </GridItem>
-                  ))}
-                </SimpleGrid>
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
           <HStack>
             <InputGroup>
               <Tooltip hasArrow label={'Sort the courses'}>
