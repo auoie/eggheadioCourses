@@ -7,6 +7,8 @@ npm install fuse.js
 npm install use-debounce
 ```
 
+![](./output.gif)
+
 Some nice Chakra UI templates are here: https://chakra-templates.dev/.
 
 ## Dark Mode Scrollbar
