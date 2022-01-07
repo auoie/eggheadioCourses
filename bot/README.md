@@ -1,5 +1,13 @@
 # Egghead IO Courses Bot
 
+To get the desired output, run
+
+```
+npx ts-node src/index.ts > output/cleanCourses.json
+```
+
+## Commands
+
 ```bash
 # boilerplate
 npm install typescript
