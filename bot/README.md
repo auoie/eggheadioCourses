@@ -3,7 +3,7 @@
 To get the desired output, run
 
 ```
-npx ts-node src/index.ts > output/cleanCourses.json
+npx ts-node --transpile-only src/index.ts > output/cleanCourses.json
 ```
 
 ## Commands
