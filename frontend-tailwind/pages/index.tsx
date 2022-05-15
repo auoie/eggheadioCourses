@@ -145,7 +145,7 @@ const processCourses = (
   );
 };
 
-const colorModes = ["system", "dark", "light"] as const;
+const colorModes = ["system", "light", "dark"] as const;
 type ColorMode = typeof colorModes[number];
 interface SettingState {
   setting: ColorMode;
@@ -333,14 +333,14 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
             </select>
           </div>
         </nav>
-        <article className="px-4 my-4 space-y-2 prose sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
+        <article className="px-4 my-4 space-y-2 prose dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
           <p>
             This is a static website. It periodically parses the contents of{" "}
             <a href="https://egghead.io/courses">egghead.io/courses</a> and
             displays the results here. It uses{" "}
             <a href="https://nextjs.org/">Next.js</a> to render the initial
             state and <a href="https://tailwindcss.com/">Tailwind CSS</a> for
-            styling.
+            styling. The current color theme is {theme}.
           </p>
           <p>
             Each course has a labelled access type of free or pro.{" "}
@@ -365,9 +365,9 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
           return (
             <div
               key={course.slug}
-              className="grid-cols-1 overflow-hidden rounded-md shadow-lg"
+              className="grid-cols-1 overflow-hidden rounded-md shadow shadow-neutral-300 dark:shadow-neutral-700"
             >
-              <div className="flex flex-col p-4 space-y-2 bg-neutral-200">
+              <div className="flex flex-col p-4 space-y-2 bg-neutral-200 dark:bg-neutral-900">
                 <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
                   <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>
                     {course.title}
@@ -398,8 +398,10 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
                 <div className="flex space-x-2">
                   <div
                     className={clsx(
-                      "font-semibold text-xs rounded bg-neutral-300 px-2 py-0.5",
-                      isFree ? "bg-green-300" : "bg-blue-300"
+                      "font-semibold text-xs rounded px-2 py-0.5",
+                      isFree
+                        ? "bg-green-300 dark:bg-green-600"
+                        : "bg-blue-300 dark:bg-blue-600"
                     )}
                   >
                     {isFree ? "Free" : "Pro"}
@@ -408,7 +410,7 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
                     return (
                       <div
                         key={tag.name}
-                        className="font-semibold text-xs rounded bg-neutral-300 px-2 py-0.5"
+                        className="font-semibold text-xs rounded bg-neutral-300 dark:bg-neutral-700 px-2 py-0.5"
                       >
                         {tag.label}
                       </div>
@@ -417,7 +419,7 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
                 </div>
               </div>
               <div className="p-4 pt-0 overflow-auto">
-                <div className="mt-4 prose-sm prose prose-blockquote:m-0 prose-blockquote:mt-2 prose-ul:m-0 prose-ul:mt-2 max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:m-0 prose-li:leading-5">
+                <div className="mt-4 prose-sm prose dark:prose-invert prose-blockquote:m-0 prose-blockquote:mt-2 prose-ul:m-0 prose-ul:mt-2 max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:m-0 prose-li:leading-5">
                   <MDXRemote {...course.markdown} />
                 </div>
               </div>
