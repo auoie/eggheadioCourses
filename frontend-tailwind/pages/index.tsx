@@ -69,10 +69,10 @@ export const getStaticProps: GetStaticProps<Props> = async (_context) => {
 };
 const EGGHEADIO_URL = "https://egghead.io";
 const EGGHEADIO_COURSES_URL = "https://egghead.io/courses/";
-const freeAccessState = { value: "free", label: "Free" } as const;
 const allAccessState = { value: "all", label: "All" } as const;
+const freeAccessState = { value: "free", label: "Free" } as const;
 const proAccessState = { value: "pro", label: "Pro" } as const;
-const accessStates = [freeAccessState, allAccessState, proAccessState] as const;
+const accessStates = [allAccessState, freeAccessState, proAccessState] as const;
 const descendingState = { value: "descending", label: "Descending" } as const;
 const ascendingState = { value: "ascending", label: "Ascending" } as const;
 const sortOrderStates = [descendingState, ascendingState] as const;
@@ -112,7 +112,11 @@ const processCourses = (
       });
     }
     return list.sort((a, b) => {
-      return b.average_rating_out_of_5 - a.average_rating_out_of_5;
+      const dif = b.average_rating_out_of_5 - a.average_rating_out_of_5;
+      if (dif === 0) {
+        return b.watched_count - a.watched_count;
+      }
+      return dif;
     });
   };
   const applySortOrder = (list: CourseProp[]) => {
