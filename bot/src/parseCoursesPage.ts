@@ -1,4 +1,4 @@
-import { JSDOM } from "jsdom";
+import parse from "node-html-parser";
 export type Tag = {
   name: string;
   label: string;
@@ -22,15 +22,14 @@ export type Course = {
   };
 };
 
-const parseCoursesPage = (coursesPage: string) => {
-  const dom = new JSDOM(coursesPage);
-  const scripts = dom.window.document.getElementsByTagName("script");
-  const lastScript = scripts.item(scripts.length - 1);
+export const parseCoursesPage = (coursesPage: string) => {
+  const dom = parse(coursesPage);
+  const scripts = dom.getElementsByTagName("script");
+  const lastScript = scripts.pop();
   if (lastScript) {
     const json = JSON.parse(lastScript.innerHTML);
     const courses = json.props.pageProps.courses as Course[];
-    return courses
+    return courses;
   }
-  return undefined
+  return undefined;
 };
-export default parseCoursesPage;

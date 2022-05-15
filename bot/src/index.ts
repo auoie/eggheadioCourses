@@ -2,7 +2,10 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import cleanCourses from "./cleanCourses";
 import getCoursesPage from "./getCoursesPage";
-import parseCoursesPage, { Course } from "./parseCoursesPage";
+import {
+  Course,
+  parseCoursesPage,
+} from "./parseCoursesPage";
 
 // 1.
 // getCoursesPage().then((res) => console.log(res));
@@ -28,9 +31,9 @@ import parseCoursesPage, { Course } from "./parseCoursesPage";
 // );
 
 // 4.
-getCoursesPage().then(res => {
-  const courses = parseCoursesPage(res)
+getCoursesPage().then((res) => {
+  const courses = parseCoursesPage(res);
   if (courses) {
-    console.log(JSON.stringify(cleanCourses(courses)))
+    console.log(JSON.stringify(cleanCourses(courses)));
   }
-})
+});
