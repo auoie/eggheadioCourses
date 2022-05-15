@@ -93,8 +93,12 @@ const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
                       {course.instructor.full_name}
                     </Link>
                   </div>
-                  <div className="text-base font-light leading-5">Completed: {course.watched_count}x</div>
-                  <div className="text-base font-light leading-5">Rating: {course.average_rating_out_of_5.toFixed(2)}</div>
+                  <div className="text-base font-light leading-5">
+                    Completed: {course.watched_count}x
+                  </div>
+                  <div className="text-base font-light leading-5">
+                    Rating: {course.average_rating_out_of_5.toFixed(2)}
+                  </div>
                   <div
                     className={clsx(
                       "font-semibold text-xs rounded bg-neutral-300 px-2 py-0.5",
@@ -118,7 +122,7 @@ const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
                 </div>
               </div>
               <div className="p-4 pt-0 overflow-auto">
-                <div className="mt-4 prose-sm prose max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:leading-5">
+                <div className="mt-4 prose-sm prose prose-blockquote:m-0 prose-blockquote:mt-2 prose-ul:m-0 prose-ul:mt-2 max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:m-0 prose-li:leading-5">
                   <MDXRemote {...course.markdown} />
                 </div>
               </div>
