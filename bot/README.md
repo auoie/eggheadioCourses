@@ -16,7 +16,7 @@ npx tsc --init
 npm install --save-dev ts-node
 # project
 npm install axios
-npm install jsdom
+npm i node-html-parser
 npm install --save-dev @types/jsdom
 ```
 
