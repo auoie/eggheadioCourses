@@ -7,4 +7,5 @@ npx tailwindcss init -p
 npm install -D @tailwindcss/typography
 npm install clsx
 npm i next-mdx-remote
+npm install zustand
 ```

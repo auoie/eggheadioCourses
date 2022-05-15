@@ -7,7 +7,8 @@ import { Course, Tag as TagType } from "../../bot/src/parseCoursesPage";
 import clsx from "clsx";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import create from "zustand";
 
 type CourseProp = Course & {
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
@@ -143,11 +144,81 @@ const processCourses = (
     applySortOrder(applySortBy(applyAccessValue(courses.slice())))
   );
 };
+
+const colorModes = ["system", "dark", "light"] as const;
+type ColorMode = typeof colorModes[number];
+interface SettingState {
+  setting: ColorMode;
+  setSetting: (setting: ColorMode) => void;
+}
+const useSetting = create<SettingState>((set) => ({
+  setting: "system",
+  setSetting: (setting) => set({ setting }),
+}));
+const update = () => {
+  document.documentElement.classList.add("changing-theme");
+  if (
+    localStorage["theme"] === "dark" ||
+    (!("theme" in localStorage) &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches)
+  ) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+  window.setTimeout(() => {
+    document.documentElement.classList.remove("changing-theme");
+  });
+};
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+const useTheme = () => {
+  const { setSetting, setting } = useSetting();
+  const initial = useRef(true);
+  useIsomorphicLayoutEffect(() => {
+    let theme = localStorage["theme"] as unknown;
+    if (theme === "light" || theme === "dark") {
+      setSetting(theme);
+    }
+  }, [setSetting]);
+  useIsomorphicLayoutEffect(() => {
+    if (setting === "system") {
+      localStorage.removeItem("theme");
+    } else if (setting === "light" || setting === "dark") {
+      localStorage["theme"] = setting;
+    }
+    if (initial.current) {
+      initial.current = false;
+    } else {
+      update();
+    }
+  }, [setting]);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    mediaQuery.addEventListener("change", update);
+    const onStorage = () => {
+      update();
+      const theme = localStorage["theme"] as unknown;
+      if (theme === "light" || theme === "dark") {
+        setSetting(theme);
+      } else {
+        setSetting("system");
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => {
+      mediaQuery.removeEventListener("change", update);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, [setSetting]);
+  return [setting, setSetting] as const;
+};
 const Home: NextPage<Props> = ({ courses, tags }) => {
   const [accessState, setAccessState] = useState<AccessState>("all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("descending");
   const [sortBy, setSortBy] = useState<SortBy>("date");
   const [tag, setTag] = useState("");
+  const [theme, setTheme] = useTheme();
   const processedCourses = useMemo(
     () => processCourses(courses, accessState, sortOrder, sortBy, tag),
     [courses, accessState, sortOrder, sortBy, tag]
@@ -237,6 +308,25 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
                 return (
                   <option value={tag.tag.name} key={tag.tag.name}>
                     {tag.tag.label} ({tag.count})
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="theme">Theme: </label>
+            <select
+              name="theme"
+              id="theme"
+              value={theme}
+              onChange={(event) => {
+                setTheme(event.target.value as ColorMode);
+              }}
+            >
+              {colorModes.map((color) => {
+                return (
+                  <option value={color} key={color}>
+                    {color}
                   </option>
                 );
               })}
