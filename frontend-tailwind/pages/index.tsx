@@ -16,12 +16,12 @@ type Props = {
     tag: TagType;
   }[];
 };
-export const getStaticProps: GetStaticProps<Props> = async (context) => {
+export const getStaticProps: GetStaticProps<Props> = async (_context) => {
   const dir = process.cwd();
   const coursesPath = join(dir, "..", "bot", "output", "cleanCourses.json");
   const courses = (
     JSON.parse(readFileSync(coursesPath, "utf8")) as Course[]
-  ).slice(0, 200); // TODO Comment out
+  ).slice(0); // TODO Comment out
   const distinctTags = new Set<string>();
   const tagObjects = new Map<string, TagType>();
   const tagCounts = new Map<string, number>();
@@ -66,7 +66,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
 };
 const eggHeadioUrl = "https://egghead.io";
 const eggHeadioCoursesUrl = "https://egghead.io/courses/";
-const Home: NextPage<Props> = ({ courses, tags }) => {
+const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
   return (
     <div>
       <Head>
