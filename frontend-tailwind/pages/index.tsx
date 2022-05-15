@@ -160,7 +160,7 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
       <div className="my-4 sm:grid sm:grid-cols-2">
         <nav className="flex flex-col flex-wrap justify-center px-4 mx-auto my-4 sm:px-6 sm:grid-cols-1">
           <div className="mx-auto mb-2 font-bold hover:underline">
-            <Link href={"/"}>Egghead Courses</Link>
+            <Link href={"/"}>Egghead IO Courses</Link>
           </div>
           <div>
             <label htmlFor="access_state">Access State: </label>
@@ -259,8 +259,7 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
               : `The ${accessState} access type has been specified.`}
           </p>
           <p>
-            The courses are being sorted in {sortOrder} order. The courses are
-            being sorted by {sortBy}.
+            The courses are being sorted by {sortBy} in {sortOrder} order.
           </p>
           <p>
             {processedCourses.length}
