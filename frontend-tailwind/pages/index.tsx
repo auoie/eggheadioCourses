@@ -73,7 +73,10 @@ const descendingState = { value: "descending", label: "Descending" } as const;
 const ascendingState = { value: "ascending", label: "Ascending" } as const;
 const sortOrderStates = [descendingState, ascendingState] as const;
 const sortByDate = { value: "date", label: "Date" } as const;
-const sortByCompleted = { value: "completed", label: "Completed" } as const;
+const sortByCompleted = {
+  value: "completed count",
+  label: "Completed",
+} as const;
 const sortByRating = { value: "rating", label: "Rating" } as const;
 const sortByStates = [sortByDate, sortByCompleted, sortByRating] as const;
 type OptionToValue<U> = U extends {
@@ -95,7 +98,7 @@ const processCourses = (
   tag: string
 ) => {
   const applySortBy = (list: CourseProp[]) => {
-    if (sortBy === "completed") {
+    if (sortBy === "completed count") {
       return list.sort((a, b) => {
         return b.watched_count - a.watched_count;
       });
@@ -154,92 +157,126 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
       <Head>
         <title>Egghead IO Courses</title>
       </Head>
-      <nav className="flex flex-wrap space-x-2">
-        <div>
-          <label htmlFor="access_state">Access State: </label>
-          <select
-            name="access_state"
-            id="access_state"
-            value={accessState}
-            onChange={(event) => {
-              setAccessState(event.target.value as AccessState);
-            }}
-          >
-            {accessStates.map((accessState) => {
-              return (
-                <option value={accessState.value} key={accessState.value}>
-                  {accessState.label}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="sort_order">Sort Direction: </label>
-          <select
-            name="sort_order"
-            id="sort_order"
-            value={sortOrder}
-            onChange={(event) => {
-              setSortOrder(event.target.value as SortOrder);
-            }}
-          >
-            {sortOrderStates.map((sortOrderState) => {
-              return (
-                <option value={sortOrderState.value} key={sortOrderState.value}>
-                  {sortOrderState.label}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="sort_by">Sort By: </label>
-          <select
-            name="sort_by"
-            id="sort_by"
-            value={sortBy}
-            onChange={(event) => {
-              setSortBy(event.target.value as SortBy);
-            }}
-          >
-            {sortByStates.map((sortByState) => {
-              return (
-                <option value={sortByState.value} key={sortByState.value}>
-                  {sortByState.label}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="tag">Tag: </label>
-          <select
-            name="tag"
-            id="tag"
-            value={tag}
-            onChange={(event) => {
-              setTag(event.target.value);
-            }}
-          >
-            <option value={""}></option>
-            {tags.map((tag) => {
-              return (
-                <option value={tag.tag.name} key={tag.tag.name}>
-                  {tag.tag.label} ({tag.count})
-                </option>
-              );
-            })}
-          </select>
-        </div>
-      </nav>
-      <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      <div className="my-4 sm:grid sm:grid-cols-2">
+        <nav className="flex flex-col flex-wrap justify-center px-4 mx-auto my-4 sm:px-6 sm:grid-cols-1">
+          <div className="mx-auto mb-2 font-bold hover:underline">
+            <Link href={"/"}>Egghead Courses</Link>
+          </div>
+          <div>
+            <label htmlFor="access_state">Access State: </label>
+            <select
+              name="access_state"
+              id="access_state"
+              value={accessState}
+              onChange={(event) => {
+                setAccessState(event.target.value as AccessState);
+              }}
+            >
+              {accessStates.map((accessState) => {
+                return (
+                  <option value={accessState.value} key={accessState.value}>
+                    {accessState.label}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="sort_order">Sort Direction: </label>
+            <select
+              name="sort_order"
+              id="sort_order"
+              value={sortOrder}
+              onChange={(event) => {
+                setSortOrder(event.target.value as SortOrder);
+              }}
+            >
+              {sortOrderStates.map((sortOrderState) => {
+                return (
+                  <option
+                    value={sortOrderState.value}
+                    key={sortOrderState.value}
+                  >
+                    {sortOrderState.label}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="sort_by">Sort By: </label>
+            <select
+              name="sort_by"
+              id="sort_by"
+              value={sortBy}
+              onChange={(event) => {
+                setSortBy(event.target.value as SortBy);
+              }}
+            >
+              {sortByStates.map((sortByState) => {
+                return (
+                  <option value={sortByState.value} key={sortByState.value}>
+                    {sortByState.label}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="tag">Tag: </label>
+            <select
+              name="tag"
+              id="tag"
+              value={tag}
+              onChange={(event) => {
+                setTag(event.target.value);
+              }}
+            >
+              <option value={""}></option>
+              {tags.map((tag) => {
+                return (
+                  <option value={tag.tag.name} key={tag.tag.name}>
+                    {tag.tag.label} ({tag.count})
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        </nav>
+        <article className="px-4 my-4 space-y-2 prose sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
+          <p>
+            This is a static website. It periodically parses the contents of{" "}
+            <a href="https://egghead.io/courses">egghead.io/courses</a> and
+            displays the results here. It uses{" "}
+            <a href="https://nextjs.org/">Next.js</a> to render the initial
+            state and <a href="https://tailwindcss.com/">Tailwind CSS</a> for
+            styling.
+          </p>
+          <p>
+            Each course has a labelled access type of free or pro.{" "}
+            {accessState === "all"
+              ? "An access type has not been specified."
+              : `The ${accessState} access type has been specified.`}
+          </p>
+          <p>
+            The courses are being sorted in {sortOrder} order. The courses are
+            being sorted by {sortBy}.
+          </p>
+          <p>
+            {processedCourses.length}
+            {processedCourses.length === 1 ? " course has " : " courses have "}
+            been found satisfying the specified criteria.
+          </p>
+        </article>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 m-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {processedCourses.map((course) => {
           const isFree = course.access_state === "free";
           return (
             <div
               key={course.slug}
-              className="overflow-hidden rounded-md shadow-lg"
+              className="grid-cols-1 overflow-hidden rounded-md shadow-lg"
             >
               <div className="flex flex-col p-4 space-y-2 bg-neutral-200">
                 <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
