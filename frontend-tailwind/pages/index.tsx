@@ -7,10 +7,13 @@ import { Course, Tag as TagType } from "../../bot/src/parseCoursesPage";
 import clsx from "clsx";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import { useMemo, useState } from "react";
+
+type CourseProp = Course & {
+  markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
+};
 type Props = {
-  courses: (Course & {
-    markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
-  })[];
+  courses: CourseProp[];
   tags: {
     count: number;
     tag: TagType;
@@ -64,17 +67,68 @@ export const getStaticProps: GetStaticProps<Props> = async (_context) => {
     },
   };
 };
-const eggHeadioUrl = "https://egghead.io";
-const eggHeadioCoursesUrl = "https://egghead.io/courses/";
+const EGGHEADIO_URL = "https://egghead.io";
+const EGGHEADIO_COURSES_URL = "https://egghead.io/courses/";
+const freeAccessState = { value: "free", label: "Free" } as const;
+const allAccessState = { value: "all", label: "All" } as const;
+const proAccessState = { value: "pro", label: "Pro" } as const;
+const accessStates = [freeAccessState, allAccessState, proAccessState] as const;
+type AccessStateToValue<U> = U extends {
+  value: infer Value;
+}
+  ? Value
+  : never;
+type AccessStatesToValues<Us> = Us extends readonly [infer head, ...infer tail]
+  ? AccessStateToValue<head> | AccessStatesToValues<tail>
+  : never;
+type AccessStateValue = AccessStatesToValues<typeof accessStates>;
+const processCourses = (
+  courses: CourseProp[],
+  accessStateValue: AccessStateValue
+) => {
+  const applyAccessValue = (list: CourseProp[]) => {
+    if (accessStateValue === "all") {
+      return list;
+    }
+    return list.filter((course) => course.access_state === accessStateValue);
+  };
+  return applyAccessValue(courses);
+};
 const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
+  const [accessStateValue, setAccessStateValue] =
+    useState<AccessStateValue>("free");
+  const processedCourses = useMemo(
+    () => processCourses(courses, accessStateValue),
+    [courses, accessStateValue]
+  );
   return (
     <div>
       <Head>
         <title>Egghead IO Courses</title>
       </Head>
-      <nav></nav>
+      <nav>
+        <div>
+          <label htmlFor="access_state">Access State: </label>
+          <select
+            name="access_state"
+            id="access_state"
+            value={accessStateValue}
+            onChange={(event) => {
+              setAccessStateValue(event.target.value as AccessStateValue);
+            }}
+          >
+            {accessStates.map((accessState) => {
+              return (
+                <option value={accessState.value} key={accessState.value}>
+                  {accessState.label}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      </nav>
       <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {courses.map((course) => {
+        {processedCourses.map((course) => {
           const isFree = course.access_state === "free";
           return (
             <div
@@ -83,13 +137,13 @@ const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
             >
               <div className="p-4 bg-neutral-200">
                 <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
-                  <Link href={`${eggHeadioCoursesUrl}${course.slug}`}>
+                  <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>
                     {course.title}
                   </Link>
                 </div>
                 <div className="flex items-center justify-between mt-2 space-x-2 overflow-x-auto overflow-y-hidden leading-5">
                   <div className="font-bold hover:underline">
-                    <Link href={`${eggHeadioUrl}${course.instructor.path}`}>
+                    <Link href={`${EGGHEADIO_URL}${course.instructor.path}`}>
                       {course.instructor.full_name}
                     </Link>
                   </div>
