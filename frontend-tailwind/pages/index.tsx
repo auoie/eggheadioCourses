@@ -73,33 +73,69 @@ const freeAccessState = { value: "free", label: "Free" } as const;
 const allAccessState = { value: "all", label: "All" } as const;
 const proAccessState = { value: "pro", label: "Pro" } as const;
 const accessStates = [freeAccessState, allAccessState, proAccessState] as const;
-type AccessStateToValue<U> = U extends {
+const descendingState = { value: "descending", label: "Descending" } as const;
+const ascendingState = { value: "ascending", label: "Ascending" } as const;
+const sortOrderStates = [descendingState, ascendingState] as const;
+const sortByDate = { value: "date", label: "Date" } as const;
+const sortByCompleted = { value: "completed", label: "Completed" } as const;
+const sortByRating = { value: "rating", label: "Rating" } as const;
+const sortByStates = [sortByDate, sortByCompleted, sortByRating] as const;
+type OptionToValue<U> = U extends {
   value: infer Value;
 }
   ? Value
   : never;
-type AccessStatesToValues<Us> = Us extends readonly [infer head, ...infer tail]
-  ? AccessStateToValue<head> | AccessStatesToValues<tail>
+type OptionsToValues<Us> = Us extends readonly [infer head, ...infer tail]
+  ? OptionToValue<head> | OptionsToValues<tail>
   : never;
-type AccessStateValue = AccessStatesToValues<typeof accessStates>;
+type AccessState = OptionsToValues<typeof accessStates>;
+type SortOrder = OptionsToValues<typeof sortOrderStates>;
+type SortBy = OptionsToValues<typeof sortByStates>;
 const processCourses = (
   courses: CourseProp[],
-  accessStateValue: AccessStateValue
+  accessStateValue: AccessState,
+  sortOrder: SortOrder,
+  sortBy: SortBy
 ) => {
+  const applySortBy = (list: CourseProp[]) => {
+    if (sortBy === "completed") {
+      return list.sort((a, b) => {
+        return b.watched_count - a.watched_count;
+      });
+    }
+    if (sortBy === "date") {
+      const courseValue = (course: Course) => {
+        return new Date(course.created_at).valueOf();
+      };
+      return list.sort((a, b) => {
+        return courseValue(b) - courseValue(a);
+      });
+    }
+    return list.sort((a, b) => {
+      return b.average_rating_out_of_5 - a.average_rating_out_of_5;
+    });
+  };
+  const applySortOrder = (list: CourseProp[]) => {
+    if (sortOrder === "ascending") {
+      return list.reverse();
+    }
+    return list;
+  };
   const applyAccessValue = (list: CourseProp[]) => {
     if (accessStateValue === "all") {
       return list;
     }
     return list.filter((course) => course.access_state === accessStateValue);
   };
-  return applyAccessValue(courses);
+  return applySortOrder(applySortBy(applyAccessValue(courses.slice())));
 };
 const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
-  const [accessStateValue, setAccessStateValue] =
-    useState<AccessStateValue>("free");
+  const [accessState, setAccessState] = useState<AccessState>("all");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("descending");
+  const [sortBy, setSortBy] = useState<SortBy>("date");
   const processedCourses = useMemo(
-    () => processCourses(courses, accessStateValue),
-    [courses, accessStateValue]
+    () => processCourses(courses, accessState, sortOrder, sortBy),
+    [courses, accessState, sortOrder, sortBy]
   );
   return (
     <div>
@@ -112,15 +148,53 @@ const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
           <select
             name="access_state"
             id="access_state"
-            value={accessStateValue}
+            value={accessState}
             onChange={(event) => {
-              setAccessStateValue(event.target.value as AccessStateValue);
+              setAccessState(event.target.value as AccessState);
             }}
           >
             {accessStates.map((accessState) => {
               return (
                 <option value={accessState.value} key={accessState.value}>
                   {accessState.label}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="sort_order">Sort Direction: </label>
+          <select
+            name="sort_order"
+            id="sort_order"
+            value={sortOrder}
+            onChange={(event) => {
+              setSortOrder(event.target.value as SortOrder);
+            }}
+          >
+            {sortOrderStates.map((sortOrderState) => {
+              return (
+                <option value={sortOrderState.value} key={sortOrderState.value}>
+                  {sortOrderState.label}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="sort_by">Sort By: </label>
+          <select
+            name="sort_by"
+            id="sort_by"
+            value={sortBy}
+            onChange={(event) => {
+              setSortBy(event.target.value as SortBy);
+            }}
+          >
+            {sortByStates.map((sortByState) => {
+              return (
+                <option value={sortByState.value} key={sortByState.value}>
+                  {sortByState.label}
                 </option>
               );
             })}
