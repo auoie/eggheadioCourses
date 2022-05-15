@@ -25,7 +25,7 @@ export const getStaticProps: GetStaticProps<Props> = async (_context) => {
   const coursesPath = join(dir, "..", "bot", "output", "cleanCourses.json");
   const courses = (
     JSON.parse(readFileSync(coursesPath, "utf8")) as Course[]
-  ).slice(0); // TODO Comment out
+  ).slice(0);
   const distinctTags = new Set<string>();
   const tagObjects = new Map<string, TagType>();
   const tagCounts = new Map<string, number>();
@@ -358,7 +358,6 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
           </p>
         </article>
       </div>
-
       <div className="grid grid-cols-1 gap-4 m-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {processedCourses.map((course) => {
           const isFree = course.access_state === "free";
