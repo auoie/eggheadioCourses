@@ -118,7 +118,7 @@ const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
                 </div>
               </div>
               <div className="overflow-auto p-4 pt-0">
-                <div className="prose mt-4 prose-sm prose-headings:p-0 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-p:leading-5 prose-li:leading-5">
+                <div className="prose mt-4 max-w-screen-2xl prose-sm prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:leading-5">
                   <MDXRemote {...course.markdown} />
                 </div>
               </div>
