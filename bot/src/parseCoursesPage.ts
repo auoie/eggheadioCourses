@@ -1,5 +1,5 @@
 import { JSDOM } from "jsdom";
-type Tag = {
+export type Tag = {
   name: string;
   label: string;
   image_url: string;
@@ -31,5 +31,6 @@ const parseCoursesPage = (coursesPage: string) => {
     const courses = json.props.pageProps.courses as Course[];
     return courses
   }
+  return undefined
 };
 export default parseCoursesPage;

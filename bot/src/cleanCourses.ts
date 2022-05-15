@@ -1,4 +1,4 @@
-import { Course } from "./parseCoursesPage";
+import { Course, Tag } from "./parseCoursesPage";
 
 /**
  * Makes sure that for each course, the values of course.tags.name are distinct
@@ -7,15 +7,14 @@ import { Course } from "./parseCoursesPage";
  */
 const cleanCourses = (courses: Course[]): Course[] => {
   return courses.map((course) => {
-    const tags = [];
+    const tags: Tag[] = [];
     const distinctTagNames = new Set<string>();
-    for (let i = 0; i < course.tags.length; i += 1) {
-      const curTag = course.tags[i];
+    course.tags.forEach((curTag) => {
       if (!distinctTagNames.has(curTag.name)) {
         distinctTagNames.add(curTag.name);
         tags.push(curTag);
       }
-    }
+    });
     return { ...course, tags };
   });
 };
