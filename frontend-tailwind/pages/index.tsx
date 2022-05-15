@@ -50,11 +50,7 @@ export const getStaticProps: GetStaticProps<Props> = async (_context) => {
   );
   const tags = Array.from(distinctTags)
     .sort((a, b) => {
-      const dif = (tagCounts.get(b) as number) - (tagCounts.get(a) as number);
-      if (dif === 0) {
-        return a.localeCompare(b);
-      }
-      return dif;
+      return a.localeCompare(b);
     })
     .map((tag) => ({
       tag: tagObjects.get(tag) as TagType,
@@ -95,7 +91,8 @@ const processCourses = (
   courses: CourseProp[],
   accessStateValue: AccessState,
   sortOrder: SortOrder,
-  sortBy: SortBy
+  sortBy: SortBy,
+  tag: string
 ) => {
   const applySortBy = (list: CourseProp[]) => {
     if (sortBy === "completed") {
@@ -131,22 +128,33 @@ const processCourses = (
     }
     return list.filter((course) => course.access_state === accessStateValue);
   };
-  return applySortOrder(applySortBy(applyAccessValue(courses.slice())));
+  const filterByTag = (list: CourseProp[]) => {
+    if (tag === "") {
+      return list;
+    }
+    return list.filter((course) => {
+      return course.tags.map((tagEntry) => tagEntry.name).includes(tag);
+    });
+  };
+  return filterByTag(
+    applySortOrder(applySortBy(applyAccessValue(courses.slice())))
+  );
 };
-const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
+const Home: NextPage<Props> = ({ courses, tags }) => {
   const [accessState, setAccessState] = useState<AccessState>("all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("descending");
   const [sortBy, setSortBy] = useState<SortBy>("date");
+  const [tag, setTag] = useState("");
   const processedCourses = useMemo(
-    () => processCourses(courses, accessState, sortOrder, sortBy),
-    [courses, accessState, sortOrder, sortBy]
+    () => processCourses(courses, accessState, sortOrder, sortBy, tag),
+    [courses, accessState, sortOrder, sortBy, tag]
   );
   return (
     <div>
       <Head>
         <title>Egghead IO Courses</title>
       </Head>
-      <nav>
+      <nav className="flex flex-wrap space-x-2">
         <div>
           <label htmlFor="access_state">Access State: </label>
           <select
@@ -204,6 +212,26 @@ const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
             })}
           </select>
         </div>
+        <div>
+          <label htmlFor="tag">Tag: </label>
+          <select
+            name="tag"
+            id="tag"
+            value={tag}
+            onChange={(event) => {
+              setTag(event.target.value);
+            }}
+          >
+            <option value={""}></option>
+            {tags.map((tag) => {
+              return (
+                <option value={tag.tag.name} key={tag.tag.name}>
+                  {tag.tag.label} ({tag.count})
+                </option>
+              );
+            })}
+          </select>
+        </div>
       </nav>
       <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {processedCourses.map((course) => {
@@ -213,24 +241,35 @@ const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
               key={course.slug}
               className="overflow-hidden rounded-md shadow-lg"
             >
-              <div className="p-4 bg-neutral-200">
+              <div className="flex flex-col p-4 space-y-2 bg-neutral-200">
                 <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
                   <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>
                     {course.title}
                   </Link>
                 </div>
-                <div className="flex items-center justify-between mt-2 space-x-2 overflow-x-auto overflow-y-hidden leading-5">
-                  <div className="font-bold hover:underline">
-                    <Link href={`${EGGHEADIO_URL}${course.instructor.path}`}>
+                <pre className="text-sm font-light leading-5">
+                  <span className="uppercase">Completed:</span>{" "}
+                  {course.watched_count}x
+                  <br />
+                  <span className="uppercase">Rating:</span>
+                  {"    "}
+                  {course.average_rating_out_of_5}
+                  <br />
+                  <span className="uppercase">Published:</span>{" "}
+                  {new Date(course.created_at).toLocaleDateString()}
+                  <br />
+                  <span className="uppercase">Author:</span>
+                  {"    "}
+                  <span className="font-bold hover:underline">
+                    <Link
+                      href={`${EGGHEADIO_URL}${course.instructor.path}`}
+                      className="font-bold hover:underline"
+                    >
                       {course.instructor.full_name}
                     </Link>
-                  </div>
-                  <div className="text-base font-light leading-5">
-                    Completed: {course.watched_count}x
-                  </div>
-                  <div className="text-base font-light leading-5">
-                    Rating: {course.average_rating_out_of_5.toFixed(2)}
-                  </div>
+                  </span>
+                </pre>
+                <div className="flex space-x-2">
                   <div
                     className={clsx(
                       "font-semibold text-xs rounded bg-neutral-300 px-2 py-0.5",
@@ -239,8 +278,6 @@ const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
                   >
                     {isFree ? "Free" : "Pro"}
                   </div>
-                </div>
-                <div className="flex mt-2 space-x-2">
                   {course.tags.map((tag) => {
                     return (
                       <div
