@@ -73,28 +73,28 @@ const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
         <title>Egghead IO Courses</title>
       </Head>
       <nav></nav>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 p-4">
+      <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {courses.map((course) => {
           const isFree = course.access_state === "free";
           return (
             <div
               key={course.slug}
-              className="shadow-lg rounded-md overflow-hidden"
+              className="overflow-hidden rounded-md shadow-lg"
             >
-              <div className="bg-neutral-200 p-4">
-                <div className="font-bold text-xl overflow-x-auto overflow-y-hidden hover:underline leading-6 flex">
+              <div className="p-4 bg-neutral-200">
+                <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
                   <Link href={`${eggHeadioCoursesUrl}${course.slug}`}>
                     {course.title}
                   </Link>
                 </div>
-                <div className="flex overflow-x-auto overflow-y-hidden justify-between leading-5 items-center mt-2">
+                <div className="flex items-center justify-between mt-2 space-x-2 overflow-x-auto overflow-y-hidden leading-5">
                   <div className="font-bold hover:underline">
                     <Link href={`${eggHeadioUrl}${course.instructor.path}`}>
                       {course.instructor.full_name}
                     </Link>
                   </div>
-                  <div>{course.watched_count}x Completed</div>
-                  <div>Rating: {course.average_rating_out_of_5.toFixed(3)}</div>
+                  <div className="text-base font-light leading-5">Completed: {course.watched_count}x</div>
+                  <div className="text-base font-light leading-5">Rating: {course.average_rating_out_of_5.toFixed(2)}</div>
                   <div
                     className={clsx(
                       "font-semibold text-xs rounded bg-neutral-300 px-2 py-0.5",
@@ -104,7 +104,7 @@ const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
                     {isFree ? "Free" : "Pro"}
                   </div>
                 </div>
-                <div className="flex space-x-2 mt-2">
+                <div className="flex mt-2 space-x-2">
                   {course.tags.map((tag) => {
                     return (
                       <div
@@ -117,8 +117,8 @@ const Home: NextPage<Props> = ({ courses, tags: _tags }) => {
                   })}
                 </div>
               </div>
-              <div className="overflow-auto p-4 pt-0">
-                <div className="prose mt-4 max-w-screen-2xl prose-sm prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:leading-5">
+              <div className="p-4 pt-0 overflow-auto">
+                <div className="mt-4 prose-sm prose max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:leading-5">
                   <MDXRemote {...course.markdown} />
                 </div>
               </div>
