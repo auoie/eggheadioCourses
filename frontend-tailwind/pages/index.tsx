@@ -4,10 +4,13 @@ import Head from "next/head";
 import Link from "next/link";
 import { join } from "path";
 import { Course, Tag as TagType } from "../../bot/src/parseCoursesPage";
-import ReactMarkdown from "react-markdown";
 import clsx from "clsx";
+import { serialize } from "next-mdx-remote/serialize";
+import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 type Props = {
-  courses: Course[];
+  courses: (Course & {
+    markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
+  })[];
   tags: {
     count: number;
     tag: TagType;
@@ -22,10 +25,9 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
   const distinctTags = new Set<string>();
   const tagObjects = new Map<string, TagType>();
   const tagCounts = new Map<string, number>();
-  for (let i = 0; i < courses.length; i += 1) {
-    const curTags = courses[i].tags;
-    for (let j = 0; j < curTags.length; j += 1) {
-      const curTag = curTags[j];
+  courses.forEach((course) => {
+    const curTags = course.tags;
+    curTags.forEach((curTag) => {
       if (!distinctTags.has(curTag.name)) {
         distinctTags.add(curTag.name);
         tagObjects.set(curTag.name, curTag);
@@ -33,8 +35,16 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
       } else {
         tagCounts.set(curTag.name, (tagCounts.get(curTag.name) as number) + 1);
       }
-    }
-  }
+    });
+  });
+  const coursesWithMarkdown = await Promise.all(
+    courses.map(async (course) => {
+      const mdxSource = await serialize(
+        course.description ? course.description : ""
+      );
+      return { ...course, markdown: mdxSource };
+    })
+  );
   const tags = Array.from(distinctTags)
     .sort((a, b) => {
       const dif = (tagCounts.get(b) as number) - (tagCounts.get(a) as number);
@@ -49,7 +59,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     }));
   return {
     props: {
-      courses,
+      courses: coursesWithMarkdown,
       tags,
     },
   };
@@ -107,10 +117,10 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
                   })}
                 </div>
               </div>
-              <div className="overflow-auto p-4">
-                <ReactMarkdown className="prose prose-sm prose-headings:p-0 prose-headings:m-0 prose-p:m-0 prose-h2:text-lg prose-img:m-0 prose-p:leading-5 prose-p:mb-2 prose-li:leading-5">
-                  {course.description ? course.description : ""}
-                </ReactMarkdown>
+              <div className="overflow-auto p-4 pt-0">
+                <div className="prose mt-4 prose-sm prose-headings:p-0 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-p:leading-5 prose-li:leading-5">
+                  <MDXRemote {...course.markdown} />
+                </div>
               </div>
             </div>
           );
