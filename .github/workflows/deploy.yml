@@ -16,13 +16,13 @@ jobs:
     - name: Run bot
       working-directory: bot
       run: |
-        npm install
+        npm ci
         mkdir output
         npx ts-node --transpile-only src/index.ts > output/cleanCourses.json
     - name: Run Next.js build and export
       working-directory: frontend-tailwind
       run: |
-        npm install
+        npm ci
         npm run build
         npx next export
     - name: rsync deploy
