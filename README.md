@@ -11,7 +11,7 @@ npx create-next-app@latest --ts egghead
 ## Notes
 
 I don't remember what the `./docker/` folder is for.
-The folder `./egghead/` is a draft of the API using Chakra UI.
+The folder `./egghead/` is a draft of the frontend using Chakra UI.
 Basically, this application uses `bot` to fetch the contents of `https://egghead.io/courses` and then renders it with `frontend-tailwind`.
 
 It gets the output json with
