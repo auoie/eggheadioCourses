@@ -9,6 +9,7 @@ import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import create from "zustand";
+import { BotResult } from "../../bot/src/index";
 
 type CourseProp = Course & {
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
@@ -19,13 +20,13 @@ type Props = {
     count: number;
     tag: TagType;
   }[];
+  lastFetched: string;
 };
 export const getStaticProps: GetStaticProps<Props> = async (_context) => {
   const dir = process.cwd();
   const coursesPath = join(dir, "..", "bot", "output", "cleanCourses.json");
-  const courses = (
-    JSON.parse(readFileSync(coursesPath, "utf8")) as Course[]
-  ).slice(0);
+  const botResult = JSON.parse(readFileSync(coursesPath, "utf8")) as BotResult;
+  const courses = botResult.courses.slice(0);
   const distinctTags = new Set<string>();
   const tagObjects = new Map<string, TagType>();
   const tagCounts = new Map<string, number>();
@@ -61,6 +62,7 @@ export const getStaticProps: GetStaticProps<Props> = async (_context) => {
     props: {
       courses: coursesWithMarkdown,
       tags,
+      lastFetched: botResult.time,
     },
   };
 };
@@ -215,7 +217,7 @@ const useTheme = () => {
   }, [setSetting]);
   return [setting, setSetting] as const;
 };
-const Home: NextPage<Props> = ({ courses, tags }) => {
+const Home: NextPage<Props> = ({ courses, tags, lastFetched }) => {
   const [accessState, setAccessState] = useState<AccessState>("all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("descending");
   const [sortBy, setSortBy] = useState<SortBy>("date");
@@ -225,6 +227,7 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
     () => processCourses(courses, accessState, sortOrder, sortBy, tag),
     [courses, accessState, sortOrder, sortBy, tag]
   );
+  const lastFetchedDate = new Date(lastFetched)
   return (
     <div>
       <Head>
@@ -343,7 +346,9 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
           <p>
             This is a static website. It periodically parses the contents of{" "}
             <a href="https://egghead.io/courses">egghead.io/courses</a> and
-            displays the results here. It uses{" "}
+            displays the results here.
+            The courses were last fetched on {lastFetchedDate.toDateString()} at {lastFetchedDate.toLocaleTimeString()}.
+            It uses{" "}
             <a href="https://nextjs.org/">Next.js</a> to render the initial
             state and <a href="https://tailwindcss.com/">Tailwind CSS</a> for
             styling. The current color theme is{" "}

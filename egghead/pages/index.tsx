@@ -43,8 +43,11 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
   const dir = process.cwd()
   const coursesPath = join(dir, '..', 'bot', 'output', 'cleanCourses.json')
   const courses = (
-    JSON.parse(readFileSync(coursesPath, 'utf8')) as Course[]
-  ).slice(0)
+    JSON.parse(readFileSync(coursesPath, 'utf8')) as {
+      time: string
+      courses: Course[]
+    }
+  ).courses.slice(0)
   const distinctTags = new Set<string>()
   const tagObjects = new Map<string, TagType>()
   const tagCounts = new Map<string, number>()
