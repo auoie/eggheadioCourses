@@ -227,7 +227,7 @@ const Home: NextPage<Props> = ({ courses, tags, lastFetched }) => {
     () => processCourses(courses, accessState, sortOrder, sortBy, tag),
     [courses, accessState, sortOrder, sortBy, tag]
   );
-  const lastFetchedDate = new Date(lastFetched)
+  const lastFetchedDate = new Date(lastFetched);
   return (
     <div>
       <Head>
@@ -346,9 +346,8 @@ const Home: NextPage<Props> = ({ courses, tags, lastFetched }) => {
           <p>
             This is a static website. It parses the contents of{" "}
             <a href="https://egghead.io/courses">egghead.io/courses</a> and
-            displays the results here.
-            The courses were last fetched on {lastFetchedDate.toDateString()} at {lastFetchedDate.toLocaleTimeString()}.
-            It uses{" "}
+            displays the results here. The courses were last fetched on{" "}
+            {lastFetchedDate.toUTCString()}. It uses{" "}
             <a href="https://nextjs.org/">Next.js</a> to render the initial
             state and <a href="https://tailwindcss.com/">Tailwind CSS</a> for
             styling. The current color theme is{" "}
