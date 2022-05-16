@@ -2,7 +2,6 @@ import cleanCourses from "./cleanCourses";
 import getCoursesPage from "./getCoursesPage";
 import { parseCoursesPage } from "./parseCoursesPage";
 
-// 4.
 export const getBotResult = async () => {
   const timeString = new Date().toJSON();
   const coursesPage = await getCoursesPage();
