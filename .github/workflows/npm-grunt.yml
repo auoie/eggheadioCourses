@@ -33,6 +33,7 @@ jobs:
     - name: Run Next.js build and export
       working-directory: frontend-tailwind
       run: |
+        npm install
         npm run build
         npx next export
         ls
