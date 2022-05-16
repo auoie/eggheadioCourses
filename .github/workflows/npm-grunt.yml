@@ -21,9 +21,6 @@ jobs:
         npm install
         mkdir output
         npx ts-node --transpile-only src/index.ts > output/cleanCourses.json
-    - name: Location
-      working-directory: bot
-      run: ls
     - name: Setup Node.js for Next.js
       uses: actions/setup-node@v3.1.1
       with:
@@ -36,7 +33,6 @@ jobs:
         npm install
         npm run build
         npx next export
-        ls
     - name: rsync deploy
       uses: Burnett01/rsync-deployments@5.2
       with:
