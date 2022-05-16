@@ -389,7 +389,7 @@ const Home: NextPage<Props> = ({ courses, tags, lastFetched }) => {
                   <br />
                   <span className="uppercase">Rating:</span>
                   {"    "}
-                  {course.average_rating_out_of_5}
+                  {course.average_rating_out_of_5.toFixed(2)}
                   <br />
                   <span className="uppercase">Published:</span>{" "}
                   {new Date(course.created_at).toLocaleDateString()}
