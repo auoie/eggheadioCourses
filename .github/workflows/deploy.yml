@@ -12,7 +12,7 @@ jobs:
     - name: Setup Node.js for Bot
       uses: actions/setup-node@v3.1.1
       with:
-        node-version: 16
+        node-version: 18
         cache: npm
         cache-dependency-path: bot/package-lock.json
     - name: Run bot
@@ -24,7 +24,7 @@ jobs:
     - name: Setup Node.js for Next.js
       uses: actions/setup-node@v3.1.1
       with:
-        node-version: 16
+        node-version: 18
         cache: npm
         cache-dependency-path: frontend-tailwind/package-lock.json
     - name: Run Next.js build and export

@@ -3,13 +3,14 @@ import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { join } from "path";
-import { Course, Tag as TagType } from "../../bot/src/parseCoursesPage";
 import clsx from "clsx";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import create from "zustand";
-import { BotResult } from "../../bot/src/index";
+
+import type { Course, Tag as TagType } from "../../bot/src/parseCoursesPage";
+import type { BotResult } from "../../bot/src/index";
 
 type CourseProp = Course & {
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
