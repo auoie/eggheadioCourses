@@ -1,52 +1,24 @@
-import { readFileSync } from "fs";
-import { join } from "path";
 import cleanCourses from "./cleanCourses";
 import getCoursesPage from "./getCoursesPage";
-import {
-  Course,
-  parseCoursesPage,
-} from "./parseCoursesPage";
-
-// 1.
-// getCoursesPage().then((res) => console.log(res));
-
-// 2.
-// console.log(
-//   JSON.stringify(
-//     parseCoursesPage(
-//       readFileSync(join(__dirname, "..", "output", "coursesPage.html"), "utf8")
-//     )
-//   )
-// );
-
-// 3.
-// console.log(
-//   JSON.stringify(
-//     cleanCourses(
-//       JSON.parse(
-//         readFileSync(join(__dirname, "..", "output", "courses.json"), "utf8")
-//       ) as Course[]
-//     )
-//   )
-// );
+import { parseCoursesPage } from "./parseCoursesPage";
 
 // 4.
 export const getBotResult = async () => {
-  const timeString =  new Date().toJSON()
-  const coursesPage = await getCoursesPage()
-  const courses = parseCoursesPage(coursesPage)
+  const timeString = new Date().toJSON();
+  const coursesPage = await getCoursesPage();
+  const courses = parseCoursesPage(coursesPage);
   if (courses) {
     const result = {
       time: timeString,
-      courses: cleanCourses(courses)
-    }
-    return result
+      courses: cleanCourses(courses),
+    };
+    return result;
   }
-  throw new Error("parsing unsuccessful")
-}
-export type BotResult = Awaited<ReturnType<typeof getBotResult>>
-getBotResult().then(result => {
+  throw new Error("parsing unsuccessful");
+};
+export type BotResult = Awaited<ReturnType<typeof getBotResult>>;
+getBotResult().then((result) => {
   if (result !== undefined) {
-    console.log(JSON.stringify(result))
+    console.log(JSON.stringify(result));
   }
-})
+});
