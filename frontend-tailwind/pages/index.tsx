@@ -344,7 +344,7 @@ const Home: NextPage<Props> = ({ courses, tags, lastFetched }) => {
         </nav>
         <article className="px-4 my-4 space-y-2 prose dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
           <p>
-            This is a static website. It periodically parses the contents of{" "}
+            This is a static website. It parses the contents of{" "}
             <a href="https://egghead.io/courses">egghead.io/courses</a> and
             displays the results here.
             The courses were last fetched on {lastFetchedDate.toDateString()} at {lastFetchedDate.toLocaleTimeString()}.
