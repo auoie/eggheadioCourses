@@ -148,11 +148,11 @@ const processCourses = (
 const colorModes = ["system", "light", "dark"] as const;
 type ColorMode = typeof colorModes[number];
 interface SettingState {
-  setting: ColorMode;
+  setting: ColorMode | null;
   setSetting: (setting: ColorMode) => void;
 }
 const useSetting = create<SettingState>((set) => ({
-  setting: "system",
+  setting: null,
   setSetting: (setting) => set({ setting }),
 }));
 const update = () => {
@@ -179,6 +179,8 @@ const useTheme = () => {
     let theme = localStorage["theme"] as unknown;
     if (theme === "light" || theme === "dark") {
       setSetting(theme);
+    } else {
+      setSetting("system");
     }
   }, [setSetting]);
   useIsomorphicLayoutEffect(() => {
@@ -315,22 +317,26 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
           </div>
           <div>
             <label htmlFor="theme">Theme: </label>
-            <select
-              name="theme"
-              id="theme"
-              value={theme}
-              onChange={(event) => {
-                setTheme(event.target.value as ColorMode);
-              }}
-            >
-              {colorModes.map((color) => {
-                return (
-                  <option value={color} key={color}>
-                    {color}
-                  </option>
-                );
-              })}
-            </select>
+            {theme !== null ? (
+              <select
+                name="theme"
+                id="theme"
+                value={theme}
+                onChange={(event) => {
+                  setTheme(event.target.value as ColorMode);
+                }}
+              >
+                {colorModes.map((color) => {
+                  return (
+                    <option value={color} key={color}>
+                      {color}
+                    </option>
+                  );
+                })}
+              </select>
+            ) : (
+              "Loading theme..."
+            )}
           </div>
         </nav>
         <article className="px-4 my-4 space-y-2 prose dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
@@ -340,7 +346,8 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
             displays the results here. It uses{" "}
             <a href="https://nextjs.org/">Next.js</a> to render the initial
             state and <a href="https://tailwindcss.com/">Tailwind CSS</a> for
-            styling. The current color theme is {theme}.
+            styling. The current color theme is{" "}
+            {theme === null ? "loading" : theme}.
           </p>
           <p>
             Each course has a labelled access type of free or pro.{" "}
