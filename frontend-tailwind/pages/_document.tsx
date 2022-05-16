@@ -14,7 +14,7 @@ class MyDocument extends Document {
 
   override render() {
     return (
-      <Html lang="en">
+      <Html lang="en" className="dark:bg-black">
         <Head>
           <script
             dangerouslySetInnerHTML={{
@@ -30,7 +30,7 @@ class MyDocument extends Document {
             }}
           />
         </Head>
-        <body className="dark:bg-black">
+        <body>
           <Main />
           <NextScript />
         </body>

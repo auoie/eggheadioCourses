@@ -371,9 +371,9 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
           return (
             <div
               key={course.slug}
-              className="grid-cols-1 overflow-hidden rounded-md shadow shadow-neutral-300 dark:shadow-neutral-700"
+              className="grid-cols-1 overflow-hidden rounded-md shadow-md shadow-zinc-300 dark:shadow-zinc-800"
             >
-              <div className="flex flex-col p-4 space-y-2 bg-neutral-200 dark:bg-neutral-900">
+              <div className="flex flex-col p-4 space-y-2 bg-zinc-200 dark:bg-zinc-900">
                 <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
                   <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>
                     {course.title}
@@ -416,7 +416,7 @@ const Home: NextPage<Props> = ({ courses, tags }) => {
                     return (
                       <div
                         key={tag.name}
-                        className="font-semibold text-xs rounded bg-neutral-300 dark:bg-neutral-700 px-2 py-0.5"
+                        className="font-semibold text-xs rounded bg-zinc-300 dark:bg-zinc-700 px-2 py-0.5"
                       >
                         {tag.label}
                       </div>
