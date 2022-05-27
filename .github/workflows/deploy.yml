@@ -31,7 +31,7 @@ jobs:
         npm run build
         npx next export
     - name: rsync deploy
-      uses: Burnett01/rsync-deployments@2.0
+      uses: Burnett01/rsync-deployments@5.2
       with:
         switches: -avh --delete
         path: frontend-tailwind/out/
