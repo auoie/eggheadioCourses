@@ -15,15 +15,7 @@ import type { BotResult } from "../../bot/src/index";
 type CourseProp = Course & {
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
 };
-type Props = {
-  courses: CourseProp[];
-  tags: {
-    count: number;
-    tag: TagType;
-  }[];
-  lastFetched: string;
-};
-export const getStaticProps: GetStaticProps<Props> = async (_context) => {
+const getHomeProps = async () => {
   const dir = process.cwd();
   const coursesPath = join(dir, "..", "bot", "output", "cleanCourses.json");
   const botResult = JSON.parse(readFileSync(coursesPath, "utf8")) as BotResult;
@@ -66,6 +58,14 @@ export const getStaticProps: GetStaticProps<Props> = async (_context) => {
       lastFetched: botResult.time,
     },
   };
+};
+type ResolveStaticPropsReturnType<
+  T extends (...args: any) => Promise<{ props: any }>
+> = T extends (...args: any) => Promise<{ props: infer U }> ? U : never;
+type HomeProps = ResolveStaticPropsReturnType<typeof getHomeProps>;
+
+export const getStaticProps: GetStaticProps<HomeProps> = async (_context) => {
+  return await getHomeProps();
 };
 const EGGHEADIO_URL = "https://egghead.io";
 const EGGHEADIO_COURSES_URL = "https://egghead.io/courses/";
@@ -218,7 +218,7 @@ const useTheme = () => {
   }, [setSetting]);
   return [setting, setSetting] as const;
 };
-const Home: NextPage<Props> = ({ courses, tags, lastFetched }) => {
+const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
   const [accessState, setAccessState] = useState<AccessState>("all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("descending");
   const [sortBy, setSortBy] = useState<SortBy>("date");
