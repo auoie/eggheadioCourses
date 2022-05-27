@@ -36,3 +36,16 @@ rsync -avh --delete out/  <remote-user>@<remote-ip-address>:<remote-path>
 
 This process is automated on a push to the main branch of my remote GitHub
 with GitHub actions with the file `./.github/workflows/deploy.yml`.
+
+## Bug
+
+When I run the stuff below on my machine, my website does not emit any errors emitted in the console.
+
+```bash
+npm run build && npx next export
+rsync -avh --delete out/  <remote-user>@<remote-ip-address>:<remote-path>
+```
+
+But with GitHub actions, I get a bunch of errors including https://reactjs.org/docs/error-decoder.html/?invariant=425.
+I get one error for each course card.
+I don't know why this is happening.

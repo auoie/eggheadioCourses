@@ -14,6 +14,10 @@ jobs:
       uses: actions/setup-node@v3.1.1
       with:
         node-version: 18
+    - name: Show node version
+      run: |
+        node --version
+        npm --version
     - name: Run bot
       working-directory: bot
       run: |
