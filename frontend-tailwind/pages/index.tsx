@@ -6,7 +6,16 @@ import { join } from "path";
 import clsx from "clsx";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import create from "zustand";
 
 import type { Course, Tag as TagType } from "../../bot/src/parseCoursesPage";
@@ -218,16 +227,96 @@ const useTheme = () => {
   }, [setSetting]);
   return [setting, setSetting] as const;
 };
+type PaginationProps = {
+  page: [
+    {
+      pageSize: number;
+      pageNumber: number;
+    },
+    Dispatch<
+      SetStateAction<{
+        pageSize: number;
+        pageNumber: number;
+      }>
+    >
+  ];
+  numPages: number;
+};
+const PaginationDiv: FC<
+  JSX.IntrinsicElements["td"] & { current?: boolean }
+> = ({ className, children, current, ...props }) => {
+  return (
+    <div
+      className={clsx(
+        "w-10 h-7 hover:cursor-pointer justify-center items-center    flex",
+        current && "bg-zinc-100 dark:bg-zinc-900",
+        !current &&
+          "bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-100 hover:dark:bg-zinc-900",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+const Pagination: FC<PaginationProps> = ({ page, numPages }) => {
+  const [curPage, setCurPage] = page;
+  return (
+    <div className="flex items-center justify-center mt-1">
+      <PaginationDiv
+        onClick={() => {
+          setCurPage((prev) => {
+            return {
+              pageNumber: Math.max(prev.pageNumber - 1, 0),
+              pageSize: prev.pageSize,
+            };
+          });
+        }}
+      >
+        {"<"}
+      </PaginationDiv>
+      {[...Array(numPages)].map((_, idx) => {
+        return (
+          <PaginationDiv
+            onClick={() => {
+              setCurPage({ pageNumber: idx, pageSize: curPage.pageSize });
+            }}
+            className={clsx(curPage.pageNumber === idx && "font-bold")}
+            current={curPage.pageNumber === idx}
+            key={idx + 1}
+          >
+            {idx + 1}
+          </PaginationDiv>
+        );
+      })}
+      <PaginationDiv
+        onClick={() => {
+          setCurPage((prev) => {
+            return {
+              pageNumber: Math.min(prev.pageNumber + 1, numPages - 1),
+              pageSize: prev.pageSize,
+            };
+          });
+        }}
+      >
+        {">"}
+      </PaginationDiv>
+    </div>
+  );
+};
 const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
   const [accessState, setAccessState] = useState<AccessState>("all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("descending");
   const [sortBy, setSortBy] = useState<SortBy>("date");
   const [tag, setTag] = useState("");
   const [theme, setTheme] = useTheme();
+  const [page, setPage] = useState({ pageSize: 100, pageNumber: 0 });
   const processedCourses = useMemo(
     () => processCourses(courses, accessState, sortOrder, sortBy, tag),
     [courses, accessState, sortOrder, sortBy, tag]
   );
+  const numPages = Math.ceil(processedCourses.length / page.pageSize);
   const lastFetchedDate = new Date(lastFetched);
   return (
     <div>
@@ -236,8 +325,8 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
       </Head>
       <div className="my-4 sm:grid sm:grid-cols-2">
         <nav className="flex flex-col flex-wrap justify-center px-4 mx-auto my-4 sm:px-6 sm:grid-cols-1">
-          <div className="mx-auto mb-2 font-bold hover:underline">
-            <Link href={"/"}>Egghead IO Courses</Link>
+          <div className="mx-auto mb-2 text-xl font-bold">
+            Egghead IO Courses
           </div>
           <div>
             <label htmlFor="access_state">Access State: </label>
@@ -370,73 +459,82 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
           </p>
         </article>
       </div>
-      <div className="grid grid-cols-1 gap-4 m-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {processedCourses.map((course) => {
-          const isFree = course.access_state === "free";
-          return (
-            <div
-              key={course.slug}
-              className="grid-cols-1 overflow-hidden rounded-md shadow-md shadow-zinc-300 dark:shadow-zinc-800"
-            >
-              <div className="flex flex-col p-4 space-y-2 bg-zinc-200 dark:bg-zinc-900">
-                <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
-                  <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>
-                    {course.title}
-                  </Link>
-                </div>
-                <pre className="text-sm font-light leading-5">
-                  <span className="uppercase">Completed:</span>{" "}
-                  {course.watched_count}x
-                  <br />
-                  <span className="uppercase">Rating:</span>
-                  {"    "}
-                  {course.average_rating_out_of_5.toFixed(2)}
-                  <br />
-                  <span className="uppercase">Published:</span>{" "}
-                  {new Date(course.created_at).toLocaleDateString()}
-                  <br />
-                  <span className="uppercase">Author:</span>
-                  {"    "}
-                  <span className="font-bold hover:underline">
-                    <Link
-                      href={`${EGGHEADIO_URL}${course.instructor.path}`}
-                      className="font-bold hover:underline"
-                    >
-                      {course.instructor.full_name}
+      <div className="flex items-center justify-center">
+        Showing items {page.pageNumber * page.pageSize + 1} through{" "}
+        {Math.min(
+          processedCourses.length,
+          page.pageSize * (page.pageNumber + 1)
+        )}
+      </div>
+      <Pagination page={[page, setPage]} numPages={numPages} />
+      <div className="grid grid-cols-1 gap-3 m-3 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        {processedCourses
+          .slice(
+            page.pageNumber * page.pageSize,
+            page.pageSize * (page.pageNumber + 1)
+          )
+          .map((course) => {
+            const isFree = course.access_state === "free";
+            return (
+              <div key={course.slug} className="grid-cols-1 overflow-hidden">
+                <div className="flex flex-col p-4 space-y-2 bg-zinc-200 dark:bg-zinc-800">
+                  <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
+                    <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>
+                      {course.title}
                     </Link>
-                  </span>
-                </pre>
-                <div className="flex space-x-2">
-                  <div
-                    className={clsx(
-                      "font-semibold text-xs rounded px-2 py-0.5",
-                      isFree
-                        ? "bg-green-300 dark:bg-green-600"
-                        : "bg-blue-300 dark:bg-blue-600"
-                    )}
-                  >
-                    {isFree ? "Free" : "Pro"}
                   </div>
-                  {course.tags.map((tag) => {
-                    return (
-                      <div
-                        key={tag.name}
-                        className="font-semibold text-xs rounded bg-zinc-300 dark:bg-zinc-700 px-2 py-0.5"
+                  <div className="">
+                    <span className="font-bold hover:underline">
+                      <Link
+                        href={`${EGGHEADIO_URL}${course.instructor.path}`}
+                        className="font-bold hover:underline"
                       >
-                        {tag.label}
-                      </div>
-                    );
-                  })}
+                        {course.instructor.full_name}
+                      </Link>
+                    </span>
+                    <br />
+                    {course.watched_count}x completed
+                    <span className="inline-flex items-center justify-center mx-1 select-none">
+                      •
+                    </span>
+                    {course.average_rating_out_of_5.toFixed(2)} rating
+                    <span className="inline-flex items-center justify-center mx-1 select-none">
+                      •
+                    </span>
+                    {new Date(course.created_at).toLocaleDateString()}
+                    <br />
+                  </div>
+                  <div className="flex space-x-2">
+                    <div
+                      className={clsx(
+                        "font-semibold text-xs rounded px-2 py-0.5",
+                        isFree
+                          ? "bg-green-300 dark:bg-green-600"
+                          : "bg-blue-300 dark:bg-blue-600"
+                      )}
+                    >
+                      {isFree ? "Free" : "Pro"}
+                    </div>
+                    {course.tags.map((tag) => {
+                      return (
+                        <div
+                          key={tag.name}
+                          className="font-semibold text-xs rounded bg-zinc-300 dark:bg-zinc-700 px-2 py-0.5"
+                        >
+                          {tag.label}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="p-4 pt-0 overflow-auto">
+                  <div className="mt-4 prose dark:prose-invert prose-blockquote:m-0 prose-blockquote:mt-2 prose-ul:m-0 prose-ul:mt-2 max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:m-0 prose-li:leading-5">
+                    <MDXRemote {...course.markdown} />
+                  </div>
                 </div>
               </div>
-              <div className="p-4 pt-0 overflow-auto">
-                <div className="mt-4 prose-sm prose dark:prose-invert prose-blockquote:m-0 prose-blockquote:mt-2 prose-ul:m-0 prose-ul:mt-2 max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:m-0 prose-li:leading-5">
-                  <MDXRemote {...course.markdown} />
-                </div>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </div>
   );
