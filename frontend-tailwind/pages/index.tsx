@@ -9,10 +9,10 @@ import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import {
   Dispatch,
   FC,
-  SetStateAction,
   useEffect,
   useLayoutEffect,
   useMemo,
+  useReducer,
   useRef,
   useState,
 } from "react";
@@ -20,6 +20,7 @@ import create from "zustand";
 
 import type { Course, Tag as TagType } from "../../bot/src/parseCoursesPage";
 import type { BotResult } from "../../bot/src/index";
+import { usePagination } from "../hooks/usePagination";
 
 type CourseProp = Course & {
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
@@ -85,6 +86,10 @@ const accessStates = [allAccessState, freeAccessState, proAccessState] as const;
 const descendingState = { value: "descending", label: "Descending" } as const;
 const ascendingState = { value: "ascending", label: "Ascending" } as const;
 const sortOrderStates = [descendingState, ascendingState] as const;
+const pageSize60 = { value: 60, label: "60" } as const;
+const pageSize120 = { value: 120, label: "120" } as const;
+const pageSizeAll = { value: "all", label: "All" } as const;
+const pageSizeStates = [pageSize60, pageSize120, pageSizeAll] as const;
 const sortByDate = { value: "date", label: "Date" } as const;
 const sortByCompleted = {
   value: "completed count",
@@ -102,6 +107,7 @@ type OptionsToValues<Us> = Us extends readonly [infer head, ...infer tail]
   : never;
 type AccessState = OptionsToValues<typeof accessStates>;
 type SortOrder = OptionsToValues<typeof sortOrderStates>;
+type PageSize = OptionsToValues<typeof pageSizeStates>;
 type SortBy = OptionsToValues<typeof sortByStates>;
 const processCourses = (
   courses: CourseProp[],
@@ -228,30 +234,19 @@ const useTheme = () => {
   return [setting, setSetting] as const;
 };
 type PaginationProps = {
-  page: [
-    {
-      pageSize: number;
-      pageNumber: number;
-    },
-    Dispatch<
-      SetStateAction<{
-        pageSize: number;
-        pageNumber: number;
-      }>
-    >
-  ];
+  page: [PageState, Dispatch<PageAction>];
   numPages: number;
 };
 const PaginationDiv: FC<
-  JSX.IntrinsicElements["td"] & { current?: boolean }
-> = ({ className, children, current, ...props }) => {
+  JSX.IntrinsicElements["td"] & { clickable: boolean }
+> = ({ className, children, clickable, ...props }) => {
   return (
     <div
       className={clsx(
-        "w-10 h-7 hover:cursor-pointer justify-center items-center    flex",
-        current && "bg-zinc-100 dark:bg-zinc-900",
-        !current &&
-          "bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-100 hover:dark:bg-zinc-900",
+        "w-8 h-7 justify-center items-center flex",
+        clickable &&
+          "hover:bg-zinc-950 hover:text-zinc-50 hover:cursor-pointer hover:dark:bg-zinc-50 hover:dark:text-zinc-950",
+        !clickable && "text-zinc-400 dark:text-zinc-500",
         className
       )}
       {...props}
@@ -260,66 +255,137 @@ const PaginationDiv: FC<
     </div>
   );
 };
-const Pagination: FC<PaginationProps> = ({ page, numPages }) => {
-  const [curPage, setCurPage] = page;
+const Pagination: FC<JSX.IntrinsicElements["div"] & PaginationProps> = ({
+  page,
+  numPages,
+  className,
+}) => {
+  const [pageState, dispatchPage] = page;
+  const paginationArray = usePagination({
+    currentPage: pageState.pageNumber,
+    numPages,
+    siblingCount: 1,
+  });
   return (
-    <div className="flex items-center justify-center mt-1">
+    <div
+      className={clsx(
+        "flex items-center justify-center font-bold select-none",
+        className
+      )}
+    >
       <PaginationDiv
         onClick={() => {
-          setCurPage((prev) => {
-            return {
-              pageNumber: Math.max(prev.pageNumber - 1, 0),
-              pageSize: prev.pageSize,
-            };
-          });
+          dispatchPage({ type: "decrement" });
         }}
+        clickable={pageState.pageNumber !== 1}
       >
         {"<"}
       </PaginationDiv>
-      {[...Array(numPages)].map((_, idx) => {
+      {paginationArray.map((pageValue, idx) => {
+        if (pageValue === null) {
+          return (
+            <PaginationDiv
+              key={idx}
+              className="text-zinc-400"
+              clickable={false}
+            >
+              ...
+            </PaginationDiv>
+          );
+        }
+        const current = pageState.pageNumber === pageValue;
         return (
           <PaginationDiv
             onClick={() => {
-              setCurPage({ pageNumber: idx, pageSize: curPage.pageSize });
+              dispatchPage({ type: "set page", pageIndex: pageValue });
             }}
-            className={clsx(curPage.pageNumber === idx && "font-bold")}
-            current={curPage.pageNumber === idx}
-            key={idx + 1}
+            clickable={!current}
+            key={idx}
           >
-            {idx + 1}
+            {pageValue}
           </PaginationDiv>
         );
       })}
       <PaginationDiv
         onClick={() => {
-          setCurPage((prev) => {
-            return {
-              pageNumber: Math.min(prev.pageNumber + 1, numPages - 1),
-              pageSize: prev.pageSize,
-            };
-          });
+          dispatchPage({ type: "increment", numPages });
         }}
+        clickable={pageState.pageNumber !== numPages}
       >
         {">"}
       </PaginationDiv>
     </div>
   );
 };
+interface PageState {
+  pageSize: number;
+  pageNumber: number;
+}
+type PageAction =
+  | { type: "increment"; numPages: number }
+  | { type: "decrement" }
+  | { type: "set page"; pageIndex: number }
+  | { type: "start" }
+  | { type: "set page size"; pageSize: number };
 const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
   const [accessState, setAccessState] = useState<AccessState>("all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("descending");
   const [sortBy, setSortBy] = useState<SortBy>("date");
   const [tag, setTag] = useState("");
+  const [pageSize, setPageSize] = useState<PageSize>(60);
   const [theme, setTheme] = useTheme();
-  const [page, setPage] = useState({ pageSize: 100, pageNumber: 0 });
   const processedCourses = useMemo(
     () => processCourses(courses, accessState, sortOrder, sortBy, tag),
     [courses, accessState, sortOrder, sortBy, tag]
   );
-  const numPages = Math.ceil(processedCourses.length / page.pageSize);
+  const [pageState, dispatchPage] = useReducer(
+    (state: PageState, action: PageAction): PageState => {
+      switch (action.type) {
+        case "decrement":
+          return {
+            pageSize: state.pageSize,
+            pageNumber: Math.max(state.pageNumber - 1, 1),
+          };
+        case "increment":
+          return {
+            pageSize: state.pageSize,
+            pageNumber: Math.min(state.pageNumber + 1, action.numPages),
+          };
+        case "set page":
+          return {
+            pageSize: state.pageSize,
+            pageNumber: action.pageIndex,
+          };
+        case "start":
+          return {
+            pageSize: state.pageSize,
+            pageNumber: 1,
+          };
+        case "set page size":
+          return {
+            pageSize: action.pageSize,
+            pageNumber: 1,
+          };
+      }
+    },
+    {
+      pageSize: pageSize === "all" ? processedCourses.length : pageSize,
+      pageNumber: 1,
+    }
+  );
+  useEffect(() => {
+    dispatchPage({ type: "start" });
+  }, [processedCourses]);
+  useEffect(() => {
+    dispatchPage({
+      type: "set page size",
+      pageSize: pageSize === "all" ? courses.length : pageSize,
+    });
+  }, [pageSize, courses.length]);
+  const numPages = Math.ceil(processedCourses.length / pageState.pageSize);
   const lastFetchedDate = new Date(lastFetched);
   return (
-    <div>
+    <div className="max-w-[180rem] mx-auto">
       <Head>
         <title>Egghead IO Courses</title>
       </Head>
@@ -409,6 +475,25 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             </select>
           </div>
           <div>
+            <label htmlFor="page_size">Page Size: </label>
+            <select
+              name="page_size"
+              id="page_size"
+              value={pageSize}
+              onChange={(event) => {
+                setPageSize(event.target.value as PageSize);
+              }}
+            >
+              {pageSizeStates.map((pageSize) => {
+                return (
+                  <option key={pageSize.value} value={pageSize.value}>
+                    {pageSize.label}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div>
             <label htmlFor="theme">Theme: </label>
             {theme !== null ? (
               <select
@@ -460,18 +545,23 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
         </article>
       </div>
       <div className="flex items-center justify-center">
-        Showing items {page.pageNumber * page.pageSize + 1} through{" "}
+        Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{" "}
+        through{" "}
         {Math.min(
           processedCourses.length,
-          page.pageSize * (page.pageNumber + 1)
+          pageState.pageSize * pageState.pageNumber
         )}
       </div>
-      <Pagination page={[page, setPage]} numPages={numPages} />
+      <Pagination
+        className="mt-3"
+        page={[pageState, dispatchPage]}
+        numPages={numPages}
+      />
       <div className="grid grid-cols-1 gap-3 m-3 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {processedCourses
           .slice(
-            page.pageNumber * page.pageSize,
-            page.pageSize * (page.pageNumber + 1)
+            (pageState.pageNumber - 1) * pageState.pageSize,
+            pageState.pageSize * pageState.pageNumber
           )
           .map((course) => {
             const isFree = course.access_state === "free";

@@ -1,5 +1,7 @@
 # Notes
 
+- https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/. This is how to add pagination.
+
 ```bash
 npx create-next-app@latest --ts
 npm install -D tailwindcss postcss autoprefixer
@@ -9,3 +11,11 @@ npm install clsx
 npm i next-mdx-remote
 npm install zustand
 ```
+
+## Todo
+
+- [ ] Add syntax highlighting to code blocks.
+- [ ] When I change my page using the bottom pagination component while on iOS, sometimes it jumps.
+      I think this is because the new page is longer in length.
+      iOS might be using a naive absolute position relative to the top-left corner rather than keeping the user at the bottom.
+      I should fix it so that the user stays at the bottom when clicking that pagination link.
