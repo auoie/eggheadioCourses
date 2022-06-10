@@ -1,5 +1,8 @@
 @tailwind base;
 @tailwind components;
+:root {
+  overflow-y: scroll;
+}
 .changing-theme,
 .changing-theme * {
   transition: none !important;

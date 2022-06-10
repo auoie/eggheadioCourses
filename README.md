@@ -17,7 +17,7 @@ Basically, this application uses `bot` to fetch the contents of `https://egghead
 It gets the output json with
 
 ```bash
-npx ts-node --transpile-only src/index.ts > output/cleanCourses.json.
+npx ts-node --transpile-only src/index.ts > output/cleanCourses.json
 ```
 
 The Next.js project in `./frontend-tailwind/` reads the content in `./bot/output/cleanCourses.json` at build time and then exports the results to a static folder.
