@@ -12,6 +12,8 @@ npm i next-mdx-remote
 npm install zustand
 ```
 
+For styling, [this link](https://www.tailwind-kit.com/templates/dashboard) was a helpful reference.
+
 ## Todo
 
 - [ ] Add syntax highlighting to code blocks.

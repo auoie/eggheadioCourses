@@ -245,7 +245,7 @@ const PaginationDiv: FC<
       className={clsx(
         "w-8 h-7 justify-center items-center flex",
         clickable &&
-          "hover:bg-zinc-950 hover:text-zinc-50 hover:cursor-pointer hover:dark:bg-zinc-50 hover:dark:text-zinc-950",
+          "hover:bg-zinc-700 rounded hover:text-zinc-100 hover:cursor-pointer hover:dark:bg-zinc-50 hover:dark:text-zinc-800",
         !clickable && "text-zinc-400 dark:text-zinc-500",
         className
       )}
@@ -337,7 +337,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
   const processedCourses = useMemo(
     () => processCourses(courses, accessState, sortOrder, sortBy, tag),
     [courses, accessState, sortOrder, sortBy, tag]
-  );
+  )
   const [pageState, dispatchPage] = useReducer(
     (state: PageState, action: PageAction): PageState => {
       switch (action.type) {
@@ -389,8 +389,8 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
       <Head>
         <title>Egghead IO Courses</title>
       </Head>
-      <div className="my-4 sm:grid sm:grid-cols-2">
-        <nav className="flex flex-col flex-wrap justify-center px-4 mx-auto my-4 sm:px-6 sm:grid-cols-1">
+      <div className="m-4 my-4 sm:grid sm:grid-cols-2">
+        <nav className="flex flex-col flex-wrap justify-center p-4 px-4 mx-auto my-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-800 sm:px-6 sm:grid-cols-1">
           <div className="mx-auto mb-2 text-xl font-bold">
             Egghead IO Courses
           </div>
@@ -414,22 +414,20 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             </select>
           </div>
           <div>
-            <label htmlFor="sort_order">Sort Direction: </label>
+            <label htmlFor="tag">Tag: </label>
             <select
-              name="sort_order"
-              id="sort_order"
-              value={sortOrder}
+              name="tag"
+              id="tag"
+              value={tag}
               onChange={(event) => {
-                setSortOrder(event.target.value as SortOrder);
+                setTag(event.target.value);
               }}
             >
-              {sortOrderStates.map((sortOrderState) => {
+              <option value={""}></option>
+              {tags.map((tag) => {
                 return (
-                  <option
-                    value={sortOrderState.value}
-                    key={sortOrderState.value}
-                  >
-                    {sortOrderState.label}
+                  <option value={tag.tag.name} key={tag.tag.name}>
+                    {tag.tag.label} ({tag.count})
                   </option>
                 );
               })}
@@ -455,20 +453,22 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             </select>
           </div>
           <div>
-            <label htmlFor="tag">Tag: </label>
+            <label htmlFor="sort_order">Sort Direction: </label>
             <select
-              name="tag"
-              id="tag"
-              value={tag}
+              name="sort_order"
+              id="sort_order"
+              value={sortOrder}
               onChange={(event) => {
-                setTag(event.target.value);
+                setSortOrder(event.target.value as SortOrder);
               }}
             >
-              <option value={""}></option>
-              {tags.map((tag) => {
+              {sortOrderStates.map((sortOrderState) => {
                 return (
-                  <option value={tag.tag.name} key={tag.tag.name}>
-                    {tag.tag.label} ({tag.count})
+                  <option
+                    value={sortOrderState.value}
+                    key={sortOrderState.value}
+                  >
+                    {sortOrderState.label}
                   </option>
                 );
               })}
@@ -517,7 +517,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             )}
           </div>
         </nav>
-        <article className="px-4 my-4 space-y-2 prose dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
+        <article className="p-4 mx-auto my-4 space-y-2 prose bg-white shadow-lg rounded-2xl dark:bg-zinc-800 dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
           <p>
             This is a static website. It parses the contents of{" "}
             <a href="https://egghead.io/courses">egghead.io/courses</a> and
@@ -544,20 +544,19 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
           </p>
         </article>
       </div>
-      <div className="flex items-center justify-center">
-        Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{" "}
-        through{" "}
-        {Math.min(
-          processedCourses.length,
-          pageState.pageSize * pageState.pageNumber
-        )}
+      <div className="block p-4 m-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-800">
+        <div className="flex items-center justify-center">
+          Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{" "}
+          through{" "}
+          {Math.min(
+            processedCourses.length,
+            pageState.pageSize * pageState.pageNumber
+          )}
+        </div>
+        <Pagination page={[pageState, dispatchPage]} numPages={numPages} className="mt-2" />
       </div>
-      <Pagination
-        className="mt-3"
-        page={[pageState, dispatchPage]}
-        numPages={numPages}
-      />
-      <div className="grid grid-cols-1 gap-3 m-3 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+
+      <div className="grid grid-cols-1 gap-4 m-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {processedCourses
           .slice(
             (pageState.pageNumber - 1) * pageState.pageSize,
@@ -566,8 +565,11 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
           .map((course) => {
             const isFree = course.access_state === "free";
             return (
-              <div key={course.slug} className="grid-cols-1 overflow-hidden">
-                <div className="flex flex-col p-4 space-y-2 bg-zinc-200 dark:bg-zinc-800">
+              <div
+                key={course.slug}
+                className="grid-cols-1 overflow-hidden bg-white shadow-xl dark:bg-zinc-800 rounded-2xl"
+              >
+                <div className="flex flex-col p-4 space-y-2 ">
                   <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
                     <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>
                       {course.title}
@@ -594,13 +596,13 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                     {new Date(course.created_at).toLocaleDateString()}
                     <br />
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex flex-wrap space-x-2">
                     <div
                       className={clsx(
-                        "font-semibold text-xs rounded px-2 py-0.5",
+                        "font-semibold text-xs rounded px-2 py-1 uppercase whitespace-nowrap",
                         isFree
-                          ? "bg-green-300 dark:bg-green-600"
-                          : "bg-blue-300 dark:bg-blue-600"
+                          ? "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-100"
+                          : "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-100"
                       )}
                     >
                       {isFree ? "Free" : "Pro"}
@@ -609,16 +611,14 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                       return (
                         <div
                           key={tag.name}
-                          className="font-semibold text-xs rounded bg-zinc-300 dark:bg-zinc-700 px-2 py-0.5"
+                          className="px-2 py-1 text-xs font-semibold uppercase rounded bg-zinc-200 text-zinc-600 dark:text-zinc-100 dark:bg-zinc-700 whitespace-nowrap"
                         >
                           {tag.label}
                         </div>
                       );
                     })}
                   </div>
-                </div>
-                <div className="p-4 pt-0 overflow-auto">
-                  <div className="mt-4 prose dark:prose-invert prose-blockquote:m-0 prose-blockquote:mt-2 prose-ul:m-0 prose-ul:mt-2 max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:m-0 prose-li:leading-5">
+                  <div className="prose dark:prose-invert prose-blockquote:m-0 prose-blockquote:mt-2 prose-ul:m-0 prose-ul:mt-2 max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:m-0 prose-li:leading-5">
                     <MDXRemote {...course.markdown} />
                   </div>
                 </div>
