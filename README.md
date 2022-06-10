@@ -43,7 +43,7 @@ When I run the stuff below on my machine, my website does not emit any errors em
 
 ```bash
 npm run build && npx next export
-rsync -avh --delete out/  <remote-user>@<remote-ip-address>:<remote-path>
+rsync -avzh --delete out/  <remote-user>@<remote-ip-address>:<remote-path>
 ```
 
 But with GitHub actions, I get a bunch of errors including https://reactjs.org/docs/error-decoder.html/?invariant=425.
