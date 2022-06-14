@@ -390,7 +390,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
         <title>Egghead IO Courses</title>
       </Head>
       <div className="m-4 my-4 sm:grid sm:grid-cols-2">
-        <nav className="flex flex-col flex-wrap justify-center p-4 px-4 mx-auto my-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-800 sm:px-6 sm:grid-cols-1">
+        <nav className="flex flex-col flex-wrap justify-center p-4 px-4 mx-auto my-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-900 sm:px-6 sm:grid-cols-1">
           <div className="mx-auto mb-2 text-xl font-bold">
             Egghead IO Courses
           </div>
@@ -517,7 +517,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             )}
           </div>
         </nav>
-        <article className="p-4 mx-auto my-4 space-y-2 prose bg-white shadow-lg rounded-2xl dark:bg-zinc-800 dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
+        <article className="p-4 mx-auto my-4 space-y-2 prose bg-white shadow-lg rounded-2xl dark:bg-zinc-900 dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
           <p>
             This is a static website. It parses the contents of{" "}
             <a href="https://egghead.io/courses">egghead.io/courses</a> and
@@ -544,7 +544,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
           </p>
         </article>
       </div>
-      <div className="block p-4 m-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-800">
+      <div className="block p-4 m-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-900">
         <div className="flex items-center justify-center">
           Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{" "}
           through{" "}
@@ -567,7 +567,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             return (
               <div
                 key={course.slug}
-                className="grid-cols-1 overflow-hidden bg-white shadow-xl dark:bg-zinc-800 rounded-2xl"
+                className="grid-cols-1 overflow-hidden bg-white shadow-xl dark:bg-zinc-900 rounded-2xl"
               >
                 <div className="flex flex-col p-4 space-y-2 ">
                   <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
@@ -601,8 +601,8 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                       className={clsx(
                         "font-semibold text-xs rounded px-2 py-1 uppercase whitespace-nowrap",
                         isFree
-                          ? "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-100"
-                          : "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-100"
+                          ? "bg-green-100 dark:bg-green-600 text-green-600 dark:text-green-100"
+                          : "bg-blue-100 dark:bg-blue-600 text-blue-600 dark:text-blue-100"
                       )}
                     >
                       {isFree ? "Free" : "Pro"}
@@ -611,7 +611,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                       return (
                         <div
                           key={tag.name}
-                          className="px-2 py-1 text-xs font-semibold uppercase rounded bg-zinc-200 text-zinc-600 dark:text-zinc-100 dark:bg-zinc-700 whitespace-nowrap"
+                          className="px-2 py-1 text-xs font-semibold uppercase rounded bg-zinc-200 text-zinc-600 dark:text-zinc-100 dark:bg-zinc-600 whitespace-nowrap"
                         >
                           {tag.label}
                         </div>

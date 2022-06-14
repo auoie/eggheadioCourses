@@ -30,7 +30,7 @@ class MyDocument extends Document {
             }}
           />
         </Head>
-        <body className="bg-zinc-200 dark:bg-zinc-700">
+        <body className="bg-zinc-200 dark:bg-zinc-800">
           <Main />
           <NextScript />
         </body>
