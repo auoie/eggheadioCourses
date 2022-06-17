@@ -10,6 +10,7 @@ npm install -D @tailwindcss/typography
 npm install clsx
 npm i next-mdx-remote
 npm install zustand
+npm install next-images
 ```
 
 For styling, [this link](https://www.tailwind-kit.com/templates/dashboard) was a helpful reference.
