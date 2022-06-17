@@ -6,6 +6,7 @@ import { join } from "path";
 import clsx from "clsx";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import MdImage from "../components/MdImage";
 import {
   Dispatch,
   FC,
@@ -337,7 +338,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
   const processedCourses = useMemo(
     () => processCourses(courses, accessState, sortOrder, sortBy, tag),
     [courses, accessState, sortOrder, sortBy, tag]
-  )
+  );
   const [pageState, dispatchPage] = useReducer(
     (state: PageState, action: PageAction): PageState => {
       switch (action.type) {
@@ -389,8 +390,8 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
       <Head>
         <title>Egghead IO Courses</title>
       </Head>
-      <div className="m-4 my-4 sm:grid sm:grid-cols-2">
-        <nav className="flex flex-col flex-wrap justify-center p-4 px-4 mx-auto my-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-900 sm:px-6 sm:grid-cols-1">
+      <div className="mx-4 sm:grid sm:grid-cols-2">
+        <nav className="flex flex-col flex-wrap justify-center p-4 mx-auto my-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-900 sm:px-6 sm:grid-cols-1">
           <div className="mx-auto mb-2 text-xl font-bold">
             Egghead IO Courses
           </div>
@@ -544,18 +545,23 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
           </p>
         </article>
       </div>
-      <div className="block p-4 m-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-900">
-        <div className="flex items-center justify-center">
-          Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{" "}
-          through{" "}
-          {Math.min(
-            processedCourses.length,
-            pageState.pageSize * pageState.pageNumber
-          )}
+      <div className="text-center">
+        <div className="sm:inline-block p-4 mx-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-900">
+          <div className="text-center">
+            Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{" "}
+            through{" "}
+            {Math.min(
+              processedCourses.length,
+              pageState.pageSize * pageState.pageNumber
+            )}
+          </div>
+          <Pagination
+            page={[pageState, dispatchPage]}
+            numPages={numPages}
+            className="mt-2"
+          />
         </div>
-        <Pagination page={[pageState, dispatchPage]} numPages={numPages} className="mt-2" />
       </div>
-
       <div className="grid grid-cols-1 gap-4 m-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {processedCourses
           .slice(
@@ -619,7 +625,10 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                     })}
                   </div>
                   <div className="prose dark:prose-invert prose-blockquote:m-0 prose-blockquote:mt-2 prose-ul:m-0 prose-ul:mt-2 max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:m-0 prose-li:leading-5">
-                    <MDXRemote {...course.markdown} />
+                    <MDXRemote
+                      {...course.markdown}
+                      components={{ img: MdImage as any }}
+                    />
                   </div>
                 </div>
               </div>
