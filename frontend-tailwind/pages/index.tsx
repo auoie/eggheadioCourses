@@ -71,8 +71,8 @@ const getHomeProps = async () => {
   };
 };
 type ResolveStaticPropsReturnType<
-  T extends (...args: any) => Promise<{ props: any }>
-> = T extends (...args: any) => Promise<{ props: infer U }> ? U : never;
+  T extends (...args: never) => Promise<{ props: unknown }>
+> = T extends (...args: never) => Promise<{ props: infer U }> ? U : never;
 type HomeProps = ResolveStaticPropsReturnType<typeof getHomeProps>;
 
 export const getStaticProps: GetStaticProps<HomeProps> = async (_context) => {
