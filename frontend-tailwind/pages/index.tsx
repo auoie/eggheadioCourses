@@ -391,7 +391,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
         <title>Egghead IO Courses</title>
       </Head>
       <div className="mx-4 sm:grid sm:grid-cols-2">
-        <nav className="flex flex-col flex-wrap justify-center p-4 mx-auto my-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-900 sm:px-6 sm:grid-cols-1">
+        <nav className="flex flex-col flex-wrap justify-center p-4 mx-auto my-4 bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700 sm:px-6 sm:grid-cols-1">
           <div className="mx-auto mb-2 text-xl font-bold">
             Egghead IO Courses
           </div>
@@ -518,7 +518,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             )}
           </div>
         </nav>
-        <article className="p-4 mx-auto my-4 space-y-2 prose bg-white shadow-lg rounded-2xl dark:bg-zinc-900 dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
+        <article className="p-4 mx-auto my-4 space-y-2 prose bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700 dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
           <p>
             This is a static website. It parses the contents of{" "}
             <a href="https://egghead.io/courses">egghead.io/courses</a> and
@@ -546,7 +546,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
         </article>
       </div>
       <div className="text-center">
-        <div className="sm:inline-block p-4 mx-4 bg-white shadow-lg rounded-2xl dark:bg-zinc-900">
+        <div className="sm:inline-block p-4 mx-4 bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700">
           <div className="text-center">
             Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{" "}
             through{" "}
@@ -573,7 +573,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             return (
               <div
                 key={course.slug}
-                className="grid-cols-1 overflow-hidden bg-white shadow-xl dark:bg-zinc-900 rounded-2xl"
+                className="grid-cols-1 overflow-hidden bg-white shadow-xl dark:bg-zinc-950 border dark:border-zinc-700 rounded-md"
               >
                 <div className="flex flex-col p-4 space-y-2 ">
                   <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
@@ -607,8 +607,8 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                       className={clsx(
                         "font-semibold text-xs rounded px-2 py-1 uppercase whitespace-nowrap",
                         isFree
-                          ? "bg-green-100 dark:bg-green-600 text-green-600 dark:text-green-100"
-                          : "bg-blue-100 dark:bg-blue-600 text-blue-600 dark:text-blue-100"
+                          ? "bg-green-100 dark:bg-green-600 text-green-600 dark:text-white"
+                          : "bg-blue-100 dark:bg-blue-600 text-blue-600 dark:text-white"
                       )}
                     >
                       {isFree ? "Free" : "Pro"}

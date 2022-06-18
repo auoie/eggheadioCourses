@@ -1,6 +1,7 @@
 # Notes
 
 - https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/. This is how to add pagination.
+- [This](https://davidyeiser.com/work/givapp-design-system) is an example of a beautiful design.
 
 ```bash
 npx create-next-app@latest --ts
