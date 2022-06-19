@@ -4,7 +4,7 @@
 
 ```bash
 # .
-npm install -D tailwindcss postcss autoprefixer
+npm install -D tailwindcss postcss autoprefixer zod
 
 # apps/frontend-tailwind
 cd apps/frontend-tailwind
