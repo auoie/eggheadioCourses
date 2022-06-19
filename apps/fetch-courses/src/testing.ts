@@ -1,8 +1,11 @@
+import {
+  cleanCourses,
+  Course,
+  getCoursesPage,
+  parseCoursesPage,
+} from '@egghead/egghead-courses';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { cleanCourses } from './cleanCourses';
-import getCoursesPage from './getCoursesPage';
-import { Course, parseCoursesPage } from './parseCoursesPage';
 
 // 1.
 getCoursesPage().then((res) => console.log(res));

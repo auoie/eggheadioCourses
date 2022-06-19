@@ -18,7 +18,17 @@ npm install @swc/core @swc/cli
 
 # https://superuser.com/questions/88202/how-do-i-move-files-and-directories-to-the-parent-folder-in-linux
 find . -maxdepth 1 -exec mv {} .. \;
+
+# .
+npx nx format:check --all
 ```
 
 Running `nx run egghead-courses:test`, I got the error `Cannot find module '@swc/core'`.
 Thus, I will install it.
+
+## Running a Fetcher Script
+
+```bash
+npx nx run fetch-courses:build && node dist/apps/fetch-courses/main.js > test.json
+time node dist/apps/fetch-courses/main.js > test.json # timing it
+```

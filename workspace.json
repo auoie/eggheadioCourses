@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "egghead-courses": "libs/egghead-courses",
+    "fetch-courses": "apps/fetch-courses",
     "frontend-tailwind": "apps/frontend-tailwind",
     "frontend-tailwind-e2e": "apps/frontend-tailwind-e2e"
   }

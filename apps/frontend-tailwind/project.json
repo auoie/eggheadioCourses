@@ -21,7 +21,8 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "frontend-tailwind:build",
-        "dev": true
+        "dev": true,
+        "proxyConfig": "apps/frontend-tailwind/proxy.conf.json"
       },
       "configurations": {
         "development": {

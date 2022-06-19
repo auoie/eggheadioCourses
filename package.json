@@ -10,7 +10,6 @@
   "private": true,
   "dependencies": {
     "@nrwl/next": "14.3.6",
-    "@nrwl/node": "^14.3.6",
     "@tailwindcss/typography": "^0.5.2",
     "axios": "^0.27.2",
     "clsx": "^1.1.1",
@@ -33,6 +32,7 @@
     "@nrwl/jest": "14.3.6",
     "@nrwl/js": "14.3.6",
     "@nrwl/linter": "14.3.6",
+    "@nrwl/node": "14.3.6",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/react": "14.3.6",
     "@nrwl/web": "14.3.6",

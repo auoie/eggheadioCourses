@@ -1,5 +1,5 @@
 import { cleanCourses } from './cleanCourses';
-import getCoursesPage from './getCoursesPage';
+import { getCoursesPage } from './getCoursesPage';
 import { parseCoursesPage } from './parseCoursesPage';
 
 export const getBotResult = async () => {
