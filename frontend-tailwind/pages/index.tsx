@@ -62,13 +62,14 @@ const getHomeProps = async () => {
       tag: tagObjects.get(tag) as TagType,
       count: tagCounts.get(tag) as number,
     }));
-  return {
+  const result = {
     props: {
       courses: coursesWithMarkdown,
       tags,
       lastFetched: botResult.time,
     },
   };
+  return result;
 };
 type ResolveStaticPropsReturnType<
   T extends (...args: never) => Promise<{ props: unknown }>
