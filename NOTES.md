@@ -32,3 +32,16 @@ Thus, I will install it.
 npx nx run fetch-courses:build && node dist/apps/fetch-courses/main.js > test.json
 time node dist/apps/fetch-courses/main.js > test.json # timing it
 ```
+
+## Nx Cloud
+
+Nx Cloud automatically puts a Read-Write key in `nx.json`.
+If the repository is public, that is bad.
+I made a read-only key and put it in `nx.json`.
+I put my read-write key in `.env.local` with the format
+
+```text
+NX_CLOUD_ACCESS_TOKEN="stuff"
+```
+
+Then I can access it with `source .env.local`.
