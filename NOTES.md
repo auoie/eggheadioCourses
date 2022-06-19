@@ -44,3 +44,7 @@ NX_CLOUD_ACCESS_TOKEN="stuff"
 ```
 
 Then I can access it with `source .env.local`.
+
+# Todo
+
+- [ ] Get `nx run frontend-tailwind:build` to work.
