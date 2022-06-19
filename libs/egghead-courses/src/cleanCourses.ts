@@ -5,7 +5,7 @@ import { Course, Tag } from "./parseCoursesPage";
  * @param courses are a list of courses
  * @returns courses such that the tag names are distinct
  */
-const cleanCourses = (courses: Course[]): Course[] => {
+export const cleanCourses = (courses: Course[]): Course[] => {
   return courses.map((course) => {
     const tags: Tag[] = [];
     const distinctTagNames = new Set<string>();
@@ -18,4 +18,3 @@ const cleanCourses = (courses: Course[]): Course[] => {
     return { ...course, tags };
   });
 };
-export default cleanCourses;

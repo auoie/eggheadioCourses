@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { join } from "path";
-import cleanCourses from "./cleanCourses";
+import { cleanCourses } from "./cleanCourses";
 import getCoursesPage from "./getCoursesPage";
 import { Course, parseCoursesPage } from "./parseCoursesPage";
 
