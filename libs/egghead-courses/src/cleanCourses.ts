@@ -1,4 +1,4 @@
-import { Course, Tag } from "./parseCoursesPage";
+import { Course, Tag } from './parseCoursesPage';
 
 /**
  * Makes sure that for each course, the values of course.tags.name are distinct

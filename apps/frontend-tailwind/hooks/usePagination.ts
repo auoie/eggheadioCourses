@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
 // There will not be dots on the left iff currentPage - 1 <=  siblingCount + 2
 // There will not be dots on the right iff numPages - currentPage <= siblingCount + 2

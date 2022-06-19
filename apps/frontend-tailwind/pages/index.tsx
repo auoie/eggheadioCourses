@@ -1,12 +1,12 @@
-import { readFileSync } from "fs";
-import type { GetStaticProps, NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import { join } from "path";
-import clsx from "clsx";
-import { serialize } from "next-mdx-remote/serialize";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import MdImage from "../components/MdImage";
+import { readFileSync } from 'fs';
+import type { GetStaticProps, NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import { join } from 'path';
+import clsx from 'clsx';
+import { serialize } from 'next-mdx-remote/serialize';
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import MdImage from '../components/MdImage';
 import {
   Dispatch,
   FC,
@@ -16,18 +16,22 @@ import {
   useReducer,
   useRef,
   useState,
-} from "react";
-import create from "zustand";
-import { usePagination } from "../hooks/usePagination";
-import type { BotResult, Course, Tag as TagType } from "@egghead/egghead-courses";
+} from 'react';
+import create from 'zustand';
+import { usePagination } from '../hooks/usePagination';
+import type {
+  BotResult,
+  Course,
+  Tag as TagType,
+} from '@egghead/egghead-courses';
 
 type CourseProp = Course & {
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
 };
 const getHomeProps = async () => {
   const dir = process.cwd();
-  const coursesPath = join(dir, "..", "bot", "output", "cleanCourses.json");
-  const botResult = JSON.parse(readFileSync(coursesPath, "utf8")) as BotResult;
+  const coursesPath = join(dir, '..', 'bot', 'output', 'cleanCourses.json');
+  const botResult = JSON.parse(readFileSync(coursesPath, 'utf8')) as BotResult;
   const courses = botResult.courses.slice(0);
   const distinctTags = new Set<string>();
   const tagObjects = new Map<string, TagType>();
@@ -47,7 +51,7 @@ const getHomeProps = async () => {
   const coursesWithMarkdown = await Promise.all(
     courses.map(async (course) => {
       const mdxSource = await serialize(
-        course.description ? course.description : ""
+        course.description ? course.description : ''
       );
       return { ...course, markdown: mdxSource };
     })
@@ -77,25 +81,25 @@ type HomeProps = ResolveStaticPropsReturnType<typeof getHomeProps>;
 export const getStaticProps: GetStaticProps<HomeProps> = async (_context) => {
   return await getHomeProps();
 };
-const EGGHEADIO_URL = "https://egghead.io";
-const EGGHEADIO_COURSES_URL = "https://egghead.io/courses/";
-const allAccessState = { value: "all", label: "All" } as const;
-const freeAccessState = { value: "free", label: "Free" } as const;
-const proAccessState = { value: "pro", label: "Pro" } as const;
+const EGGHEADIO_URL = 'https://egghead.io';
+const EGGHEADIO_COURSES_URL = 'https://egghead.io/courses/';
+const allAccessState = { value: 'all', label: 'All' } as const;
+const freeAccessState = { value: 'free', label: 'Free' } as const;
+const proAccessState = { value: 'pro', label: 'Pro' } as const;
 const accessStates = [allAccessState, freeAccessState, proAccessState] as const;
-const descendingState = { value: "descending", label: "Descending" } as const;
-const ascendingState = { value: "ascending", label: "Ascending" } as const;
+const descendingState = { value: 'descending', label: 'Descending' } as const;
+const ascendingState = { value: 'ascending', label: 'Ascending' } as const;
 const sortOrderStates = [descendingState, ascendingState] as const;
-const pageSize60 = { value: 60, label: "60" } as const;
-const pageSize120 = { value: 120, label: "120" } as const;
-const pageSizeAll = { value: "all", label: "All" } as const;
+const pageSize60 = { value: 60, label: '60' } as const;
+const pageSize120 = { value: 120, label: '120' } as const;
+const pageSizeAll = { value: 'all', label: 'All' } as const;
 const pageSizeStates = [pageSize60, pageSize120, pageSizeAll] as const;
-const sortByDate = { value: "date", label: "Date" } as const;
+const sortByDate = { value: 'date', label: 'Date' } as const;
 const sortByCompleted = {
-  value: "completed count",
-  label: "Completed",
+  value: 'completed count',
+  label: 'Completed',
 } as const;
-const sortByRating = { value: "rating", label: "Rating" } as const;
+const sortByRating = { value: 'rating', label: 'Rating' } as const;
 const sortByStates = [sortByDate, sortByCompleted, sortByRating] as const;
 type OptionToValue<U> = U extends {
   value: infer Value;
@@ -117,12 +121,12 @@ const processCourses = (
   tag: string
 ) => {
   const applySortBy = (list: CourseProp[]) => {
-    if (sortBy === "completed count") {
+    if (sortBy === 'completed count') {
       return list.sort((a, b) => {
         return b.watched_count - a.watched_count;
       });
     }
-    if (sortBy === "date") {
+    if (sortBy === 'date') {
       const courseValue = (course: Course) => {
         return new Date(course.created_at).valueOf();
       };
@@ -139,19 +143,19 @@ const processCourses = (
     });
   };
   const applySortOrder = (list: CourseProp[]) => {
-    if (sortOrder === "ascending") {
+    if (sortOrder === 'ascending') {
       return list.reverse();
     }
     return list;
   };
   const applyAccessValue = (list: CourseProp[]) => {
-    if (accessStateValue === "all") {
+    if (accessStateValue === 'all') {
       return list;
     }
     return list.filter((course) => course.access_state === accessStateValue);
   };
   const filterByTag = (list: CourseProp[]) => {
-    if (tag === "") {
+    if (tag === '') {
       return list;
     }
     return list.filter((course) => {
@@ -163,7 +167,7 @@ const processCourses = (
   );
 };
 
-const colorModes = ["system", "light", "dark"] as const;
+const colorModes = ['system', 'light', 'dark'] as const;
 type ColorMode = typeof colorModes[number];
 interface SettingState {
   setting: ColorMode | null;
@@ -174,38 +178,38 @@ const useSetting = create<SettingState>((set) => ({
   setSetting: (setting) => set({ setting }),
 }));
 const update = () => {
-  document.documentElement.classList.add("changing-theme");
+  document.documentElement.classList.add('changing-theme');
   if (
-    localStorage["theme"] === "dark" ||
-    (!("theme" in localStorage) &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches)
+    localStorage['theme'] === 'dark' ||
+    (!('theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches)
   ) {
-    document.documentElement.classList.add("dark");
+    document.documentElement.classList.add('dark');
   } else {
-    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.remove('dark');
   }
   window.setTimeout(() => {
-    document.documentElement.classList.remove("changing-theme");
+    document.documentElement.classList.remove('changing-theme');
   });
 };
 const useIsomorphicLayoutEffect =
-  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 const useTheme = () => {
   const { setSetting, setting } = useSetting();
   const initial = useRef(true);
   useIsomorphicLayoutEffect(() => {
-    const theme = localStorage["theme"] as unknown;
-    if (theme === "light" || theme === "dark") {
+    const theme = localStorage['theme'] as unknown;
+    if (theme === 'light' || theme === 'dark') {
       setSetting(theme);
     } else {
-      setSetting("system");
+      setSetting('system');
     }
   }, [setSetting]);
   useIsomorphicLayoutEffect(() => {
-    if (setting === "system") {
-      localStorage.removeItem("theme");
-    } else if (setting === "light" || setting === "dark") {
-      localStorage["theme"] = setting;
+    if (setting === 'system') {
+      localStorage.removeItem('theme');
+    } else if (setting === 'light' || setting === 'dark') {
+      localStorage['theme'] = setting;
     }
     if (initial.current) {
       initial.current = false;
@@ -214,21 +218,21 @@ const useTheme = () => {
     }
   }, [setting]);
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    mediaQuery.addEventListener("change", update);
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', update);
     const onStorage = () => {
       update();
-      const theme = localStorage["theme"] as unknown;
-      if (theme === "light" || theme === "dark") {
+      const theme = localStorage['theme'] as unknown;
+      if (theme === 'light' || theme === 'dark') {
         setSetting(theme);
       } else {
-        setSetting("system");
+        setSetting('system');
       }
     };
-    window.addEventListener("storage", onStorage);
+    window.addEventListener('storage', onStorage);
     return () => {
-      mediaQuery.removeEventListener("change", update);
-      window.removeEventListener("storage", onStorage);
+      mediaQuery.removeEventListener('change', update);
+      window.removeEventListener('storage', onStorage);
     };
   }, [setSetting]);
   return [setting, setSetting] as const;
@@ -238,15 +242,15 @@ type PaginationProps = {
   numPages: number;
 };
 const PaginationDiv: FC<
-  JSX.IntrinsicElements["td"] & { clickable: boolean }
+  JSX.IntrinsicElements['td'] & { clickable: boolean }
 > = ({ className, children, clickable, ...props }) => {
   return (
     <div
       className={clsx(
-        "w-8 h-7 justify-center items-center flex",
+        'w-8 h-7 justify-center items-center flex',
         clickable &&
-          "hover:bg-zinc-700 rounded hover:text-zinc-100 hover:cursor-pointer hover:dark:bg-zinc-50 hover:dark:text-zinc-800",
-        !clickable && "text-zinc-400 dark:text-zinc-500",
+          'hover:bg-zinc-700 rounded hover:text-zinc-100 hover:cursor-pointer hover:dark:bg-zinc-50 hover:dark:text-zinc-800',
+        !clickable && 'text-zinc-400 dark:text-zinc-500',
         className
       )}
       {...props}
@@ -255,7 +259,7 @@ const PaginationDiv: FC<
     </div>
   );
 };
-const Pagination: FC<JSX.IntrinsicElements["div"] & PaginationProps> = ({
+const Pagination: FC<JSX.IntrinsicElements['div'] & PaginationProps> = ({
   page,
   numPages,
   className,
@@ -269,17 +273,17 @@ const Pagination: FC<JSX.IntrinsicElements["div"] & PaginationProps> = ({
   return (
     <div
       className={clsx(
-        "flex items-center justify-center font-bold select-none",
+        'flex items-center justify-center font-bold select-none',
         className
       )}
     >
       <PaginationDiv
         onClick={() => {
-          dispatchPage({ type: "decrement" });
+          dispatchPage({ type: 'decrement' });
         }}
         clickable={pageState.pageNumber !== 1}
       >
-        {"<"}
+        {'<'}
       </PaginationDiv>
       {paginationArray.map((pageValue, idx) => {
         if (pageValue === null) {
@@ -297,7 +301,7 @@ const Pagination: FC<JSX.IntrinsicElements["div"] & PaginationProps> = ({
         return (
           <PaginationDiv
             onClick={() => {
-              dispatchPage({ type: "set page", pageIndex: pageValue });
+              dispatchPage({ type: 'set page', pageIndex: pageValue });
             }}
             clickable={!current}
             key={idx}
@@ -308,11 +312,11 @@ const Pagination: FC<JSX.IntrinsicElements["div"] & PaginationProps> = ({
       })}
       <PaginationDiv
         onClick={() => {
-          dispatchPage({ type: "increment", numPages });
+          dispatchPage({ type: 'increment', numPages });
         }}
         clickable={pageState.pageNumber !== numPages}
       >
-        {">"}
+        {'>'}
       </PaginationDiv>
     </div>
   );
@@ -322,16 +326,16 @@ interface PageState {
   pageNumber: number;
 }
 type PageAction =
-  | { type: "increment"; numPages: number }
-  | { type: "decrement" }
-  | { type: "set page"; pageIndex: number }
-  | { type: "start" }
-  | { type: "set page size"; pageSize: number };
+  | { type: 'increment'; numPages: number }
+  | { type: 'decrement' }
+  | { type: 'set page'; pageIndex: number }
+  | { type: 'start' }
+  | { type: 'set page size'; pageSize: number };
 const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
-  const [accessState, setAccessState] = useState<AccessState>("all");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("descending");
-  const [sortBy, setSortBy] = useState<SortBy>("date");
-  const [tag, setTag] = useState("");
+  const [accessState, setAccessState] = useState<AccessState>('all');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('descending');
+  const [sortBy, setSortBy] = useState<SortBy>('date');
+  const [tag, setTag] = useState('');
   const [pageSize, setPageSize] = useState<PageSize>(60);
   const [theme, setTheme] = useTheme();
   const processedCourses = useMemo(
@@ -341,27 +345,27 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
   const [pageState, dispatchPage] = useReducer(
     (state: PageState, action: PageAction): PageState => {
       switch (action.type) {
-        case "decrement":
+        case 'decrement':
           return {
             pageSize: state.pageSize,
             pageNumber: Math.max(state.pageNumber - 1, 1),
           };
-        case "increment":
+        case 'increment':
           return {
             pageSize: state.pageSize,
             pageNumber: Math.min(state.pageNumber + 1, action.numPages),
           };
-        case "set page":
+        case 'set page':
           return {
             pageSize: state.pageSize,
             pageNumber: action.pageIndex,
           };
-        case "start":
+        case 'start':
           return {
             pageSize: state.pageSize,
             pageNumber: 1,
           };
-        case "set page size":
+        case 'set page size':
           return {
             pageSize: action.pageSize,
             pageNumber: 1,
@@ -369,17 +373,17 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
       }
     },
     {
-      pageSize: pageSize === "all" ? processedCourses.length : pageSize,
+      pageSize: pageSize === 'all' ? processedCourses.length : pageSize,
       pageNumber: 1,
     }
   );
   useEffect(() => {
-    dispatchPage({ type: "start" });
+    dispatchPage({ type: 'start' });
   }, [processedCourses]);
   useEffect(() => {
     dispatchPage({
-      type: "set page size",
-      pageSize: pageSize === "all" ? courses.length : pageSize,
+      type: 'set page size',
+      pageSize: pageSize === 'all' ? courses.length : pageSize,
     });
   }, [pageSize, courses.length]);
   const numPages = Math.ceil(processedCourses.length / pageState.pageSize);
@@ -423,7 +427,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                 setTag(event.target.value);
               }}
             >
-              <option value={""}></option>
+              <option value={''}></option>
               {tags.map((tag) => {
                 return (
                   <option value={tag.tag.name} key={tag.tag.name}>
@@ -513,25 +517,25 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                 })}
               </select>
             ) : (
-              "Loading theme..."
+              'Loading theme...'
             )}
           </div>
         </nav>
         <article className="p-4 mx-auto my-4 space-y-2 prose bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700 dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
           <p>
-            This is a static website. It parses the contents of{" "}
+            This is a static website. It parses the contents of{' '}
             <a href="https://egghead.io/courses">egghead.io/courses</a> and
-            displays the results here. The courses were last fetched on{" "}
-            {lastFetchedDate.toUTCString()}. It uses{" "}
+            displays the results here. The courses were last fetched on{' '}
+            {lastFetchedDate.toUTCString()}. It uses{' '}
             <a href="https://nextjs.org/">Next.js</a> to render the initial
             state and <a href="https://tailwindcss.com/">Tailwind CSS</a> for
-            styling. The current color theme is{" "}
-            {theme === null ? "loading" : theme}.
+            styling. The current color theme is{' '}
+            {theme === null ? 'loading' : theme}.
           </p>
           <p>
-            Each course has a labelled access type of free or pro.{" "}
-            {accessState === "all"
-              ? "An access type has not been specified."
+            Each course has a labelled access type of free or pro.{' '}
+            {accessState === 'all'
+              ? 'An access type has not been specified.'
               : `The ${accessState} access type has been specified.`}
           </p>
           <p>
@@ -539,7 +543,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
           </p>
           <p>
             {processedCourses.length}
-            {processedCourses.length === 1 ? " course has " : " courses have "}
+            {processedCourses.length === 1 ? ' course has ' : ' courses have '}
             been found satisfying the specified criteria.
           </p>
         </article>
@@ -547,8 +551,8 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
       <div className="text-center">
         <div className="sm:inline-block p-4 mx-4 bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700">
           <div className="text-center">
-            Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{" "}
-            through{" "}
+            Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{' '}
+            through{' '}
             {Math.min(
               processedCourses.length,
               pageState.pageSize * pageState.pageNumber
@@ -568,7 +572,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             pageState.pageSize * pageState.pageNumber
           )
           .map((course) => {
-            const isFree = course.access_state === "free";
+            const isFree = course.access_state === 'free';
             return (
               <div
                 key={course.slug}
@@ -604,13 +608,13 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                   <div className="flex flex-wrap space-x-2">
                     <div
                       className={clsx(
-                        "font-semibold text-xs rounded px-2 py-1 uppercase whitespace-nowrap",
+                        'font-semibold text-xs rounded px-2 py-1 uppercase whitespace-nowrap',
                         isFree
-                          ? "bg-green-100 dark:bg-green-600 text-green-600 dark:text-white"
-                          : "bg-blue-100 dark:bg-blue-600 text-blue-600 dark:text-white"
+                          ? 'bg-green-100 dark:bg-green-600 text-green-600 dark:text-white'
+                          : 'bg-blue-100 dark:bg-blue-600 text-blue-600 dark:text-white'
                       )}
                     >
-                      {isFree ? "Free" : "Pro"}
+                      {isFree ? 'Free' : 'Pro'}
                     </div>
                     {course.tags.map((tag) => {
                       return (

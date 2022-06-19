@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       colors: {
         zinc: {
-          950: "#0e0e11",
+          950: '#0e0e11',
         },
       },
     },

@@ -1,4 +1,4 @@
-import { getBotResult } from "./bot";
+import { getBotResult } from './bot';
 
 getBotResult().then((result) => {
   if (result !== undefined) {

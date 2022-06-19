@@ -1,6 +1,6 @@
-import { cleanCourses } from "./cleanCourses";
-import getCoursesPage from "./getCoursesPage";
-import { parseCoursesPage } from "./parseCoursesPage";
+import { cleanCourses } from './cleanCourses';
+import getCoursesPage from './getCoursesPage';
+import { parseCoursesPage } from './parseCoursesPage';
 
 export const getBotResult = async () => {
   const timeString = new Date().toJSON();
@@ -13,6 +13,6 @@ export const getBotResult = async () => {
     };
     return result;
   }
-  throw new Error("parsing unsuccessful");
+  throw new Error('parsing unsuccessful');
 };
 export type BotResult = Awaited<ReturnType<typeof getBotResult>>;
