@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "frontend-tailwind": "apps/frontend-tailwind",
+    "frontend-tailwind-e2e": "apps/frontend-tailwind-e2e"
+  }
+}
