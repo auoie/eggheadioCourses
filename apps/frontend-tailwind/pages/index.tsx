@@ -18,10 +18,8 @@ import {
   useState,
 } from "react";
 import create from "zustand";
-
-import type { Course, Tag as TagType } from "../../bot/src/parseCoursesPage";
-import type { BotResult } from "../../bot/src/index";
 import { usePagination } from "../hooks/usePagination";
+import type { BotResult, Course, Tag as TagType } from "@egghead/egghead-courses";
 
 type CourseProp = Course & {
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
@@ -196,7 +194,7 @@ const useTheme = () => {
   const { setSetting, setting } = useSetting();
   const initial = useRef(true);
   useIsomorphicLayoutEffect(() => {
-    let theme = localStorage["theme"] as unknown;
+    const theme = localStorage["theme"] as unknown;
     if (theme === "light" || theme === "dark") {
       setSetting(theme);
     } else {
@@ -628,7 +626,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                   <div className="prose dark:prose-invert prose-blockquote:m-0 prose-blockquote:mt-2 prose-ul:m-0 prose-ul:mt-2 max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:m-0 prose-li:leading-5">
                     <MDXRemote
                       {...course.markdown}
-                      components={{ img: MdImage as any }}
+                      components={{ img: MdImage }}
                     />
                   </div>
                 </div>
