@@ -90,6 +90,12 @@ NX_CLOUD_ACCESS_TOKEN="stuff"
 
 Then I can access it with `source .env.local`.
 
+## Components
+
+- Badge is based on Chakra UI
+- Pagination Algorithm Taken from online
+- ThemeSwitch taken from next-themes and nextra-docs-theme
+
 # Todo
 
 - [ ] Get `nx run frontend-tailwind:build` to work.

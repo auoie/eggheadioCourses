@@ -16,7 +16,9 @@ import { usePageReducer } from '../hooks/usePageReducer';
 import { CourseCard } from '../components/CourseCard';
 import { LabelSelect } from '../components/LabelSelect';
 import { useMountedTheme } from '../hooks/useMountedTheme';
-import { capitalize } from '../utils/capitalize';
+import Link from 'next/link';
+import ThemeSwitch from '../components/ThemeSwitch';
+import clsx from 'clsx';
 
 type CourseProp = {
   course: Course;
@@ -156,7 +158,6 @@ const processCourses = (
     applySortOrder(applySortBy(applyAccessValue(courses.slice())))
   );
 };
-const colorModes = ['system', 'light', 'dark'] as const;
 const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
   const [accessState, setAccessState] = useState<AccessState>('all');
   const [sortOrder, setSortOrder] = useState<SortOrder>('descending');
@@ -187,17 +188,35 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
       <Head>
         <title>Egghead IO Courses</title>
       </Head>
-      <div className="mx-4 sm:grid sm:grid-cols-2">
-        <div className="flex flex-col flex-wrap justify-center p-4 mx-auto my-4 bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700 sm:px-6 sm:grid-cols-1">
-          <div className="mx-auto mb-2 text-xl font-bold">
-            Egghead IO Courses
+      <nav
+        className={clsx(
+          'h-16 flex items-center px-4 fixed left-0 right-0 top-0',
+          'bg-white border-zinc-200 dark:bg-zinc-950 border-b dark:border-zinc-800 shadow-md',
+          'bg-opacity-70 backdrop-blur dark:bg-opacity-70'
+        )}
+      >
+        <div className="flex items-center max-w-[178rem] w-full mx-auto">
+          <div className="flex w-full ">
+            <div className="font-extrabold">
+              <Link href={'/'}>
+                <a className="hover:opacity-75">Egghead IO Courses</a>
+              </Link>
+            </div>
           </div>
+          <ThemeSwitch
+            setTheme={setTheme}
+            theme={theme === undefined ? '' : theme}
+          />
+        </div>
+      </nav>
+      <div className="mx-4 md:grid md:grid-cols-2 pt-16">
+        <div className="flex flex-col flex-wrap justify-center p-4 mx-auto bg-white shadow-md rounded-md dark:bg-zinc-950 border dark:border-zinc-800 sm:px-6 sm:grid-cols-1 my-4">
           <LabelSelect
             identification="access_state"
             setState={setAccessState}
             states={accessStates}
             value={accessState}
-            title="Access State: "
+            title="Access State"
           />
           <LabelSelect
             identification="tag"
@@ -207,7 +226,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
               label: `${tag.tag.label} (${tag.count})`,
               value: tag.tag.name,
             }))}
-            title="Tag: "
+            title="Tag"
           >
             <option value={''}></option>
           </LabelSelect>
@@ -216,62 +235,56 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             setState={setSortBy}
             states={sortByStates}
             value={sortBy}
-            title="Sort By: "
+            title="Sort By"
           />
           <LabelSelect
             identification="sort_order"
             setState={setSortOrder}
             states={sortOrderStates}
             value={sortOrder}
-            title="Sort Direction: "
+            title="Sort Direction"
           />
           <LabelSelect
             identification="page_size"
             setState={setPageSize}
             states={pageSizeStates}
             value={pageSize}
-            title="Page Size: "
-          />
-          <LabelSelect
-            identification="theme"
-            setState={setTheme}
-            states={colorModes.map((mode) => ({
-              label: capitalize(mode),
-              value: mode,
-            }))}
-            value={theme === undefined ? '' : theme}
-            title="Theme: "
+            title="Page Size"
           />
         </div>
-        <div className="p-4 mx-auto my-4 space-y-2 prose bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700 dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
-          <p>
-            This is a static website. It parses the contents of{' '}
-            <a href="https://egghead.io/courses">egghead.io/courses</a> and
-            displays the results here. The courses were last fetched on{' '}
-            {lastFetchedDate.toUTCString()}. It uses{' '}
-            <a href="https://nextjs.org/">Next.js</a> to render the initial
-            state and <a href="https://tailwindcss.com/">Tailwind CSS</a> for
-            styling. The current color theme is{' '}
-            {theme === undefined ? 'loading' : theme}.
-          </p>
-          <p>
-            Each course has a labelled access type of free or pro.{' '}
-            {accessState === 'all'
-              ? 'An access type has not been specified.'
-              : `The ${accessState} access type has been specified.`}
-          </p>
-          <p>
-            The courses are being sorted by {sortBy} in {sortOrder} order.
-          </p>
-          <p>
-            {processedCourses.length}
-            {processedCourses.length === 1 ? ' course has ' : ' courses have '}
-            been found satisfying the specified criteria.
-          </p>
+        <div className="sm:grid-cols-1 border dark:border-zinc-800 shadow-md rounded-md dark:bg-zinc-950 bg-white p-4 mx-auto max-w-3xl flex items-center my-4">
+          <div className="prose dark:prose-invert prose-p:m-0 prose-p:leading-5 space-y-2 max-w-full">
+            <p>
+              This is a static website. It parses the contents of{' '}
+              <a href="https://egghead.io/courses">egghead.io/courses</a> and
+              displays the results here. The courses were last fetched on{' '}
+              {lastFetchedDate.toUTCString()}. It uses{' '}
+              <a href="https://nextjs.org/">Next.js</a> to render the initial
+              state and <a href="https://tailwindcss.com/">Tailwind CSS</a> for
+              styling. The current color theme is{' '}
+              {theme === undefined ? 'loading' : theme}.
+            </p>
+            <p>
+              Each course has a labelled access type of free or pro.{' '}
+              {accessState === 'all'
+                ? 'An access type has not been specified.'
+                : `The ${accessState} access type has been specified.`}
+            </p>
+            <p>
+              The courses are being sorted by {sortBy} in {sortOrder} order.
+            </p>
+            <p>
+              {processedCourses.length}
+              {processedCourses.length === 1
+                ? ' course has '
+                : ' courses have '}
+              been found satisfying the specified criteria.
+            </p>
+          </div>
         </div>
       </div>
       <div className="text-center">
-        <div className="sm:inline-block p-4 mx-4 bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700">
+        <div className="md:inline-block p-4 mx-4 bg-white shadow-md rounded-md dark:bg-zinc-950 border dark:border-zinc-800">
           <div className="text-center">
             Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{' '}
             through{' '}
@@ -300,6 +313,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                 course={course}
                 markdown={courseProp.markdown}
                 key={course.slug}
+                className="bg-white shadow-md dark:bg-zinc-950 border dark:border-zinc-800 rounded-md grid-cols-1 overflow-hidden"
               />
             );
           })}

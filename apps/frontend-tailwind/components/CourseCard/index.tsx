@@ -23,7 +23,7 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
   return (
     <div
       className={clsx(
-        'grid-cols-1 overflow-hidden bg-white shadow-xl dark:bg-zinc-950 border dark:border-zinc-700 rounded-md',
+        '',
         className
       )}
       {...rest}
