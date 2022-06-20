@@ -10,7 +10,8 @@
         "outputPath": "dist/apps/fetch-courses",
         "main": "apps/fetch-courses/src/main.ts",
         "tsConfig": "apps/fetch-courses/tsconfig.app.json",
-        "assets": ["apps/fetch-courses/src/assets"]
+        "assets": ["apps/fetch-courses/src/assets"],
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {

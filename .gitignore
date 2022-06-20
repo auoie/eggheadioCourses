@@ -41,3 +41,4 @@ Thumbs.db
 # .env files
 .local.env
 .env.local
+_courses/cleanCourses.json

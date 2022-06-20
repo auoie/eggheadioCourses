@@ -29,8 +29,7 @@ type CourseProp = Course & {
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
 };
 const getHomeProps = async () => {
-  const dir = process.cwd();
-  const coursesPath = join(dir, '..', 'bot', 'output', 'cleanCourses.json');
+  const coursesPath = join(process.cwd(), '_courses', 'cleanCourses.json');
   const botResult = JSON.parse(readFileSync(coursesPath, 'utf8')) as BotResult;
   const courses = botResult.courses.slice(0);
   const distinctTags = new Set<string>();

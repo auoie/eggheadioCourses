@@ -14,6 +14,8 @@ npm install clsx next-images next-mdx-remote zustand @tailwindcss/typography
 npm install @nrwl/node
 npm install axios node-html-parser
 npx nx generate @nrwl/node:library egghead-courses --buildable --no-publishable --strict --testEnvironment=node
+npm install write
+npm install @types/write
 
 # https://superuser.com/questions/88202/how-do-i-move-files-and-directories-to-the-parent-folder-in-linux
 find . -maxdepth 1 -exec mv {} .. \;
@@ -25,11 +27,15 @@ npx nx format:check --all
 I tried to use the node library version that uses `swc`, but I kept getting an error that says I need an `.swcrc` file.
 I don't know how to make that, so I'm not going to do that.
 
-## Running a Fetcher Script
+## Running a Fetcher Script and Building the Website
 
 ```bash
 npx nx run fetch-courses:build && node dist/apps/fetch-courses/main.js > test.json
 time node dist/apps/fetch-courses/main.js > test.json # timing it
+
+time npx nx run fetch-courses:build
+time node dist/apps/fetch-courses/main.js
+time npx nx run frontend-tailwind:export
 ```
 
 ## Nx Cloud
