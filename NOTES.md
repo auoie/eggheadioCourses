@@ -69,6 +69,14 @@ npx nx run fetch-courses:export
 npx nx run frontend-tailwind:serve
 ```
 
+## useTheme
+
+I'm getting a warning `Warning: Text content did not match. Server: "loading" Client: "light"`
+because I'm using `useTheme` without `useEffect` to check if I'm mounted.
+This is fine because I'm not going to do any serverside rendering.
+That being said, I still don't like the warning.
+It can be avoided by using `useIsomorphicLayoutEffect`.
+
 ## Nx Cloud
 
 Nx Cloud automatically puts a Read-Write key in `nx.json`.

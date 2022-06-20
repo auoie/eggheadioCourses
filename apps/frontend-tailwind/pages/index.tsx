@@ -10,11 +10,13 @@ import type {
   Course,
   Tag as TagType,
 } from '@egghead/egghead-courses';
-import { useTheme } from 'next-themes';
 import { ResolveStaticPropsReturnType } from '../utils/typeUtils';
 import { Pagination } from '../components/Pagination';
 import { usePageReducer } from '../hooks/usePageReducer';
 import { CourseCard } from '../components/CourseCard';
+import { LabelSelect } from '../components/LabelSelect';
+import { useMountedTheme } from '../hooks/useMountedTheme';
+import { capitalize } from '../utils/capitalize';
 
 type CourseProp = {
   course: Course;
@@ -155,7 +157,6 @@ const processCourses = (
   );
 };
 const colorModes = ['system', 'light', 'dark'] as const;
-type ColorMode = typeof colorModes[number];
 const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
   const [accessState, setAccessState] = useState<AccessState>('all');
   const [sortOrder, setSortOrder] = useState<SortOrder>('descending');
@@ -178,7 +179,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
       pageSize: pageSize === 'all' ? courses.length : pageSize,
     });
   }, [pageSize, courses.length, dispatchPage]);
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useMountedTheme();
   const numPages = Math.ceil(processedCourses.length / pageState.pageSize);
   const lastFetchedDate = new Date(lastFetched);
   return (
@@ -191,128 +192,56 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
           <div className="mx-auto mb-2 text-xl font-bold">
             Egghead IO Courses
           </div>
-          <div>
-            <label htmlFor="access_state">Access State: </label>
-            <select
-              name="access_state"
-              id="access_state"
-              value={accessState}
-              onChange={(event) => {
-                setAccessState(event.target.value as AccessState);
-              }}
-            >
-              {accessStates.map((accessState) => {
-                return (
-                  <option value={accessState.value} key={accessState.value}>
-                    {accessState.label}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="tag">Tag: </label>
-            <select
-              name="tag"
-              id="tag"
-              value={tag}
-              onChange={(event) => {
-                setTag(event.target.value);
-              }}
-            >
-              <option value={''}></option>
-              {tags.map((tag) => {
-                return (
-                  <option value={tag.tag.name} key={tag.tag.name}>
-                    {tag.tag.label} ({tag.count})
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="sort_by">Sort By: </label>
-            <select
-              name="sort_by"
-              id="sort_by"
-              value={sortBy}
-              onChange={(event) => {
-                setSortBy(event.target.value as SortBy);
-              }}
-            >
-              {sortByStates.map((sortByState) => {
-                return (
-                  <option value={sortByState.value} key={sortByState.value}>
-                    {sortByState.label}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="sort_order">Sort Direction: </label>
-            <select
-              name="sort_order"
-              id="sort_order"
-              value={sortOrder}
-              onChange={(event) => {
-                setSortOrder(event.target.value as SortOrder);
-              }}
-            >
-              {sortOrderStates.map((sortOrderState) => {
-                return (
-                  <option
-                    value={sortOrderState.value}
-                    key={sortOrderState.value}
-                  >
-                    {sortOrderState.label}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="page_size">Page Size: </label>
-            <select
-              name="page_size"
-              id="page_size"
-              value={pageSize}
-              onChange={(event) => {
-                setPageSize(event.target.value as PageSize);
-              }}
-            >
-              {pageSizeStates.map((pageSize) => {
-                return (
-                  <option key={pageSize.value} value={pageSize.value}>
-                    {pageSize.label}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="theme">Theme: </label>
-            {theme !== undefined ? (
-              <select
-                name="theme"
-                id="theme"
-                value={theme}
-                onChange={(event) => {
-                  setTheme(event.target.value as ColorMode);
-                }}
-              >
-                {colorModes.map((color) => {
-                  return (
-                    <option value={color} key={color}>
-                      {color}
-                    </option>
-                  );
-                })}
-              </select>
-            ) : (
-              'Loading theme...'
-            )}
-          </div>
+          <LabelSelect
+            identification="access_state"
+            setState={setAccessState}
+            states={accessStates}
+            value={accessState}
+            title="Access State: "
+          />
+          <LabelSelect
+            identification="tag"
+            setState={setTag}
+            value={tag}
+            states={tags.map((tag) => ({
+              label: `${tag.tag.label} (${tag.count})`,
+              value: tag.tag.name,
+            }))}
+            title="Tag: "
+          >
+            <option value={''}></option>
+          </LabelSelect>
+          <LabelSelect
+            identification="sort_by"
+            setState={setSortBy}
+            states={sortByStates}
+            value={sortBy}
+            title="Sort By: "
+          />
+          <LabelSelect
+            identification="sort_order"
+            setState={setSortOrder}
+            states={sortOrderStates}
+            value={sortOrder}
+            title="Sort Direction: "
+          />
+          <LabelSelect
+            identification="page_size"
+            setState={setPageSize}
+            states={pageSizeStates}
+            value={pageSize}
+            title="Page Size: "
+          />
+          <LabelSelect
+            identification="theme"
+            setState={setTheme}
+            states={colorModes.map((mode) => ({
+              label: capitalize(mode),
+              value: mode,
+            }))}
+            value={theme === undefined ? '' : theme}
+            title="Theme: "
+          />
         </div>
         <div className="p-4 mx-auto my-4 space-y-2 prose bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700 dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
           <p>
