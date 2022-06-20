@@ -1,11 +1,9 @@
 import { readFileSync } from 'fs';
 import type { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { join } from 'path';
 import { serialize } from 'next-mdx-remote/serialize';
-import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
-import MdImage from '../components/MdImage';
+import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { useEffect, useMemo, useState } from 'react';
 import type {
   BotResult,
@@ -16,9 +14,10 @@ import { useTheme } from 'next-themes';
 import { ResolveStaticPropsReturnType } from '../utils/typeUtils';
 import { Pagination } from '../components/Pagination';
 import { usePageReducer } from '../hooks/usePageReducer';
-import { Badge } from '../components/Badge';
+import { CourseCard } from '../components/CourseCard';
 
-type CourseProp = Course & {
+type CourseProp = {
+  course: Course;
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
 };
 const getHomeProps = async () => {
@@ -45,7 +44,7 @@ const getHomeProps = async () => {
       const mdxSource = await serialize(
         course.description ? course.description : ''
       );
-      return { ...course, markdown: mdxSource };
+      return { course, markdown: mdxSource };
     })
   );
   const tags = Array.from(distinctTags)
@@ -69,8 +68,6 @@ type HomeProps = ResolveStaticPropsReturnType<typeof getHomeProps>;
 export const getStaticProps: GetStaticProps<HomeProps> = async (_context) => {
   return await getHomeProps();
 };
-const EGGHEADIO_URL = 'https://egghead.io';
-const EGGHEADIO_COURSES_URL = 'https://egghead.io/courses/';
 const allAccessState = { value: 'all', label: 'All' } as const;
 const freeAccessState = { value: 'free', label: 'Free' } as const;
 const proAccessState = { value: 'pro', label: 'Pro' } as const;
@@ -111,7 +108,7 @@ const processCourses = (
   const applySortBy = (list: CourseProp[]) => {
     if (sortBy === 'completed count') {
       return list.sort((a, b) => {
-        return b.watched_count - a.watched_count;
+        return b.course.watched_count - a.course.watched_count;
       });
     }
     if (sortBy === 'date') {
@@ -119,13 +116,14 @@ const processCourses = (
         return new Date(course.created_at).valueOf();
       };
       return list.sort((a, b) => {
-        return courseValue(b) - courseValue(a);
+        return courseValue(b.course) - courseValue(a.course);
       });
     }
     return list.sort((a, b) => {
-      const dif = b.average_rating_out_of_5 - a.average_rating_out_of_5;
+      const dif =
+        b.course.average_rating_out_of_5 - a.course.average_rating_out_of_5;
       if (dif === 0) {
-        return b.watched_count - a.watched_count;
+        return b.course.watched_count - a.course.watched_count;
       }
       return dif;
     });
@@ -140,14 +138,16 @@ const processCourses = (
     if (accessStateValue === 'all') {
       return list;
     }
-    return list.filter((course) => course.access_state === accessStateValue);
+    return list.filter(
+      (course) => course.course.access_state === accessStateValue
+    );
   };
   const filterByTag = (list: CourseProp[]) => {
     if (tag === '') {
       return list;
     }
     return list.filter((course) => {
-      return course.tags.map((tagEntry) => tagEntry.name).includes(tag);
+      return course.course.tags.map((tagEntry) => tagEntry.name).includes(tag);
     });
   };
   return filterByTag(
@@ -187,7 +187,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
         <title>Egghead IO Courses</title>
       </Head>
       <div className="mx-4 sm:grid sm:grid-cols-2">
-        <nav className="flex flex-col flex-wrap justify-center p-4 mx-auto my-4 bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700 sm:px-6 sm:grid-cols-1">
+        <div className="flex flex-col flex-wrap justify-center p-4 mx-auto my-4 bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700 sm:px-6 sm:grid-cols-1">
           <div className="mx-auto mb-2 text-xl font-bold">
             Egghead IO Courses
           </div>
@@ -313,8 +313,8 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
               'Loading theme...'
             )}
           </div>
-        </nav>
-        <article className="p-4 mx-auto my-4 space-y-2 prose bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700 dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
+        </div>
+        <div className="p-4 mx-auto my-4 space-y-2 prose bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700 dark:prose-invert sm:px-6 prose-p:m-0 prose-p:leading-5 sm:grid-cols-1">
           <p>
             This is a static website. It parses the contents of{' '}
             <a href="https://egghead.io/courses">egghead.io/courses</a> and
@@ -339,7 +339,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             {processedCourses.length === 1 ? ' course has ' : ' courses have '}
             been found satisfying the specified criteria.
           </p>
-        </article>
+        </div>
       </div>
       <div className="text-center">
         <div className="sm:inline-block p-4 mx-4 bg-white shadow-lg rounded-md dark:bg-zinc-950 border dark:border-zinc-700">
@@ -364,60 +364,14 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             (pageState.pageNumber - 1) * pageState.pageSize,
             pageState.pageSize * pageState.pageNumber
           )
-          .map((course) => {
-            const isFree = course.access_state === 'free';
+          .map((courseProp) => {
+            const course = courseProp.course;
             return (
-              <div
+              <CourseCard
+                course={course}
+                markdown={courseProp.markdown}
                 key={course.slug}
-                className="grid-cols-1 overflow-hidden bg-white shadow-xl dark:bg-zinc-950 border dark:border-zinc-700 rounded-md"
-              >
-                <div className="flex flex-col p-4 space-y-2 ">
-                  <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
-                    <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>
-                      {course.title}
-                    </Link>
-                  </div>
-                  <div className="">
-                    <span className="font-bold hover:underline">
-                      <Link
-                        href={`${EGGHEADIO_URL}${course.instructor.path}`}
-                        className="font-bold hover:underline"
-                      >
-                        {course.instructor.full_name}
-                      </Link>
-                    </span>
-                    <br />
-                    {course.watched_count}x completed
-                    <span className="inline-flex items-center justify-center mx-1 select-none">
-                      •
-                    </span>
-                    {course.average_rating_out_of_5.toFixed(2)} rating
-                    <span className="inline-flex items-center justify-center mx-1 select-none">
-                      •
-                    </span>
-                    {new Date(course.created_at).toLocaleDateString()}
-                    <br />
-                  </div>
-                  <div className="flex flex-wrap space-x-2">
-                    <Badge color={isFree ? 'green' : 'blue'}>
-                      {isFree ? 'Free' : 'Pro'}
-                    </Badge>
-                    {course.tags.map((tag) => {
-                      return (
-                        <Badge color="plain" key={tag.name}>
-                          {tag.label}
-                        </Badge>
-                      );
-                    })}
-                  </div>
-                  <div className="prose dark:prose-invert prose-blockquote:m-0 prose-blockquote:mt-2 prose-ul:m-0 prose-ul:mt-2 max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:m-0 prose-li:leading-5">
-                    <MDXRemote
-                      {...course.markdown}
-                      components={{ img: MdImage }}
-                    />
-                  </div>
-                </div>
-              </div>
+              />
             );
           })}
       </div>
