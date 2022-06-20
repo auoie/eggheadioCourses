@@ -50,9 +50,9 @@ npx nx run frontend-tailwind:export
 To build, we do the following.
 Note that because of caching,
 if we build again, it won't fetch the courses again.
-Also, if I run `npx nx run frontend-tailwind:build` and then `npx nx run frontend-tailwind:serve` and then `npx nx run frontend-tailwind:build`,
+Also, if I run `npx nx run frontend-tailwind:build` and then `npx nx run frontend-tailwind:serve` and then `npx nx run frontend-tailwind:build` and then `npx nx run frontend-tailwind:serve:production`,
 the build won't show up because the cache assumes it's already there and because the serve command overwrote the build result.
-As a workaround, use `npx nx reset` or remain the `build` command to something else so that it's not cached by `nx`.
+As a workaround, use `npx nx reset` or rename the `build` command to something else so that it's not cached by `nx`.
 Caching is confusing to me.
 
 ```bash
