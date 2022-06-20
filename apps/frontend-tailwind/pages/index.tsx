@@ -284,8 +284,8 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
         </div>
       </div>
       <div className="text-center">
-        <div className="md:inline-block p-4 mx-4 bg-white shadow-md rounded-md dark:bg-zinc-950 border dark:border-zinc-800">
-          <div className="text-center">
+        <div className="md:inline-block p-3 mx-4 bg-white shadow-md rounded-md dark:bg-zinc-950 border dark:border-zinc-800">
+          <div className="text-center m-1">
             Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{' '}
             through{' '}
             {Math.min(
@@ -296,7 +296,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
           <Pagination
             page={[pageState, dispatchPage]}
             numPages={numPages}
-            className="mt-2"
+            className="mt-1"
           />
         </div>
       </div>

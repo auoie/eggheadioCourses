@@ -93,9 +93,12 @@ Then I can access it with `source .env.local`.
 ## Components
 
 - Badge is based on Chakra UI
-- Pagination Algorithm Taken from online
+- Pagination Algorithm Taken from online. Pagination taken from geist-ui.
 - ThemeSwitch taken from next-themes and nextra-docs-theme
+- Icons taken from https://feathericons.com/
+- Styling taken from nextra
 
 # Todo
 
 - [ ] Get `nx run frontend-tailwind:build` to work.
+- [ ] Style the pagination with https://geist-ui.dev/en-us/components/pagination and make a nice looking select component based on `nextra-docs-theme`
