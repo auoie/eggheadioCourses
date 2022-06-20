@@ -3,7 +3,6 @@ import type { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { join } from 'path';
-import clsx from 'clsx';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import MdImage from '../components/MdImage';
@@ -17,6 +16,7 @@ import { useTheme } from 'next-themes';
 import { ResolveStaticPropsReturnType } from '../utils/typeUtils';
 import { Pagination } from '../components/Pagination';
 import { usePageReducer } from '../hooks/usePageReducer';
+import { Badge } from '../components/Badge';
 
 type CourseProp = Course & {
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
@@ -399,24 +399,14 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                     <br />
                   </div>
                   <div className="flex flex-wrap space-x-2">
-                    <div
-                      className={clsx(
-                        'font-semibold text-xs rounded px-2 py-1 uppercase whitespace-nowrap',
-                        isFree
-                          ? 'bg-green-100 dark:bg-green-600 text-green-600 dark:text-white'
-                          : 'bg-blue-100 dark:bg-blue-600 text-blue-600 dark:text-white'
-                      )}
-                    >
+                    <Badge color={isFree ? 'green' : 'blue'}>
                       {isFree ? 'Free' : 'Pro'}
-                    </div>
+                    </Badge>
                     {course.tags.map((tag) => {
                       return (
-                        <div
-                          key={tag.name}
-                          className="px-2 py-1 text-xs font-semibold uppercase rounded bg-zinc-200 text-zinc-600 dark:text-zinc-100 dark:bg-zinc-600 whitespace-nowrap"
-                        >
+                        <Badge color="plain" key={tag.name}>
                           {tag.label}
-                        </div>
+                        </Badge>
                       );
                     })}
                   </div>
