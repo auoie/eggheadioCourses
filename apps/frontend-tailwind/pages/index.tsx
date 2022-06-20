@@ -13,7 +13,7 @@ import type {
   Course,
   Tag as TagType,
 } from '@egghead/egghead-courses';
-import { ColorMode, colorModes, useTheme } from '../hooks/useTheme';
+import { useTheme } from 'next-themes';
 import { ResolveStaticPropsReturnType } from '../utils/typeUtils';
 import { Pagination } from '../components/Pagination';
 import { usePageReducer } from '../hooks/usePageReducer';
@@ -154,14 +154,14 @@ const processCourses = (
     applySortOrder(applySortBy(applyAccessValue(courses.slice())))
   );
 };
-
+const colorModes = ['system', 'light', 'dark'] as const;
+type ColorMode = typeof colorModes[number];
 const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
   const [accessState, setAccessState] = useState<AccessState>('all');
   const [sortOrder, setSortOrder] = useState<SortOrder>('descending');
   const [sortBy, setSortBy] = useState<SortBy>('date');
   const [tag, setTag] = useState('');
   const [pageSize, setPageSize] = useState<PageSize>(60);
-  const [theme, setTheme] = useTheme();
   const processedCourses = useMemo(
     () => processCourses(courses, accessState, sortOrder, sortBy, tag),
     [courses, accessState, sortOrder, sortBy, tag]
@@ -178,6 +178,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
       pageSize: pageSize === 'all' ? courses.length : pageSize,
     });
   }, [pageSize, courses.length, dispatchPage]);
+  const { theme, setTheme } = useTheme();
   const numPages = Math.ceil(processedCourses.length / pageState.pageSize);
   const lastFetchedDate = new Date(lastFetched);
   return (
@@ -291,7 +292,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
           </div>
           <div>
             <label htmlFor="theme">Theme: </label>
-            {theme !== null ? (
+            {theme !== undefined ? (
               <select
                 name="theme"
                 id="theme"
@@ -322,7 +323,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             <a href="https://nextjs.org/">Next.js</a> to render the initial
             state and <a href="https://tailwindcss.com/">Tailwind CSS</a> for
             styling. The current color theme is{' '}
-            {theme === null ? 'loading' : theme}.
+            {theme === undefined ? 'loading' : theme}.
           </p>
           <p>
             Each course has a labelled access type of free or pro.{' '}

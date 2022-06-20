@@ -15,21 +15,7 @@ class MyDocument extends Document {
   override render() {
     return (
       <Html lang="en">
-        <Head>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                try {
-                  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    document.documentElement.classList.add('dark')
-                  } else {
-                    document.documentElement.classList.remove('dark')
-                  }
-                } catch (_) {}
-              `,
-            }}
-          />
-        </Head>
+        <Head />
         <body className="bg-zinc-200 dark:bg-zinc-900">
           <Main />
           <NextScript />

@@ -3,11 +3,4 @@
 :root {
   overflow-y: scroll;
 }
-.changing-theme,
-.changing-theme * {
-  transition: none !important;
-}
-.dark {
-  color-scheme: dark;
-}
 @tailwind utilities;
