@@ -7,23 +7,16 @@ import clsx from 'clsx';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import MdImage from '../components/MdImage';
-import {
-  Dispatch,
-  FC,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from 'react';
-import create from 'zustand';
-import { usePagination } from '../hooks/usePagination';
+import { useEffect, useMemo, useState } from 'react';
 import type {
   BotResult,
   Course,
   Tag as TagType,
 } from '@egghead/egghead-courses';
+import { ColorMode, colorModes, useTheme } from '../hooks/useTheme';
+import { ResolveStaticPropsReturnType } from '../utils/typeUtils';
+import { Pagination } from '../components/Pagination';
+import { usePageReducer } from '../hooks/usePageReducer';
 
 type CourseProp = Course & {
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
@@ -72,11 +65,7 @@ const getHomeProps = async () => {
   };
   return result;
 };
-type ResolveStaticPropsReturnType<
-  T extends (...args: never) => Promise<{ props: unknown }>
-> = T extends (...args: never) => Promise<{ props: infer U }> ? U : never;
 type HomeProps = ResolveStaticPropsReturnType<typeof getHomeProps>;
-
 export const getStaticProps: GetStaticProps<HomeProps> = async (_context) => {
   return await getHomeProps();
 };
@@ -166,170 +155,6 @@ const processCourses = (
   );
 };
 
-const colorModes = ['system', 'light', 'dark'] as const;
-type ColorMode = typeof colorModes[number];
-interface SettingState {
-  setting: ColorMode | null;
-  setSetting: (setting: ColorMode) => void;
-}
-const useSetting = create<SettingState>((set) => ({
-  setting: null,
-  setSetting: (setting) => set({ setting }),
-}));
-const update = () => {
-  document.documentElement.classList.add('changing-theme');
-  if (
-    localStorage['theme'] === 'dark' ||
-    (!('theme' in localStorage) &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches)
-  ) {
-    document.documentElement.classList.add('dark');
-  } else {
-    document.documentElement.classList.remove('dark');
-  }
-  window.setTimeout(() => {
-    document.documentElement.classList.remove('changing-theme');
-  });
-};
-const useIsomorphicLayoutEffect =
-  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
-const useTheme = () => {
-  const { setSetting, setting } = useSetting();
-  const initial = useRef(true);
-  useIsomorphicLayoutEffect(() => {
-    const theme = localStorage['theme'] as unknown;
-    if (theme === 'light' || theme === 'dark') {
-      setSetting(theme);
-    } else {
-      setSetting('system');
-    }
-  }, [setSetting]);
-  useIsomorphicLayoutEffect(() => {
-    if (setting === 'system') {
-      localStorage.removeItem('theme');
-    } else if (setting === 'light' || setting === 'dark') {
-      localStorage['theme'] = setting;
-    }
-    if (initial.current) {
-      initial.current = false;
-    } else {
-      update();
-    }
-  }, [setting]);
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    mediaQuery.addEventListener('change', update);
-    const onStorage = () => {
-      update();
-      const theme = localStorage['theme'] as unknown;
-      if (theme === 'light' || theme === 'dark') {
-        setSetting(theme);
-      } else {
-        setSetting('system');
-      }
-    };
-    window.addEventListener('storage', onStorage);
-    return () => {
-      mediaQuery.removeEventListener('change', update);
-      window.removeEventListener('storage', onStorage);
-    };
-  }, [setSetting]);
-  return [setting, setSetting] as const;
-};
-type PaginationProps = {
-  page: [PageState, Dispatch<PageAction>];
-  numPages: number;
-};
-const PaginationDiv: FC<
-  JSX.IntrinsicElements['td'] & { clickable: boolean }
-> = ({ className, children, clickable, ...props }) => {
-  return (
-    <div
-      className={clsx(
-        'w-8 h-7 justify-center items-center flex',
-        clickable &&
-          'hover:bg-zinc-700 rounded hover:text-zinc-100 hover:cursor-pointer hover:dark:bg-zinc-50 hover:dark:text-zinc-800',
-        !clickable && 'text-zinc-400 dark:text-zinc-500',
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-};
-const Pagination: FC<JSX.IntrinsicElements['div'] & PaginationProps> = ({
-  page,
-  numPages,
-  className,
-}) => {
-  const [pageState, dispatchPage] = page;
-  const paginationArray = usePagination({
-    currentPage: pageState.pageNumber,
-    numPages,
-    siblingCount: 1,
-  });
-  return (
-    <div
-      className={clsx(
-        'flex items-center justify-center font-bold select-none',
-        className
-      )}
-    >
-      <PaginationDiv
-        onClick={() => {
-          dispatchPage({ type: 'decrement' });
-        }}
-        clickable={pageState.pageNumber !== 1}
-      >
-        {'<'}
-      </PaginationDiv>
-      {paginationArray.map((pageValue, idx) => {
-        if (pageValue === null) {
-          return (
-            <PaginationDiv
-              key={idx}
-              className="text-zinc-400"
-              clickable={false}
-            >
-              ...
-            </PaginationDiv>
-          );
-        }
-        const current = pageState.pageNumber === pageValue;
-        return (
-          <PaginationDiv
-            onClick={() => {
-              dispatchPage({ type: 'set page', pageIndex: pageValue });
-            }}
-            clickable={!current}
-            key={idx}
-          >
-            {pageValue}
-          </PaginationDiv>
-        );
-      })}
-      <PaginationDiv
-        onClick={() => {
-          dispatchPage({ type: 'increment', numPages });
-        }}
-        clickable={pageState.pageNumber !== numPages}
-      >
-        {'>'}
-      </PaginationDiv>
-    </div>
-  );
-};
-interface PageState {
-  pageSize: number;
-  pageNumber: number;
-}
-type PageAction =
-  | { type: 'increment'; numPages: number }
-  | { type: 'decrement' }
-  | { type: 'set page'; pageIndex: number }
-  | { type: 'start' }
-  | { type: 'set page size'; pageSize: number };
 const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
   const [accessState, setAccessState] = useState<AccessState>('all');
   const [sortOrder, setSortOrder] = useState<SortOrder>('descending');
@@ -341,50 +166,18 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
     () => processCourses(courses, accessState, sortOrder, sortBy, tag),
     [courses, accessState, sortOrder, sortBy, tag]
   );
-  const [pageState, dispatchPage] = useReducer(
-    (state: PageState, action: PageAction): PageState => {
-      switch (action.type) {
-        case 'decrement':
-          return {
-            pageSize: state.pageSize,
-            pageNumber: Math.max(state.pageNumber - 1, 1),
-          };
-        case 'increment':
-          return {
-            pageSize: state.pageSize,
-            pageNumber: Math.min(state.pageNumber + 1, action.numPages),
-          };
-        case 'set page':
-          return {
-            pageSize: state.pageSize,
-            pageNumber: action.pageIndex,
-          };
-        case 'start':
-          return {
-            pageSize: state.pageSize,
-            pageNumber: 1,
-          };
-        case 'set page size':
-          return {
-            pageSize: action.pageSize,
-            pageNumber: 1,
-          };
-      }
-    },
-    {
-      pageSize: pageSize === 'all' ? processedCourses.length : pageSize,
-      pageNumber: 1,
-    }
+  const { pageState, dispatchPage } = usePageReducer(
+    pageSize === 'all' ? processedCourses.length : pageSize
   );
   useEffect(() => {
     dispatchPage({ type: 'start' });
-  }, [processedCourses]);
+  }, [processedCourses, dispatchPage]);
   useEffect(() => {
     dispatchPage({
       type: 'set page size',
       pageSize: pageSize === 'all' ? courses.length : pageSize,
     });
-  }, [pageSize, courses.length]);
+  }, [pageSize, courses.length, dispatchPage]);
   const numPages = Math.ceil(processedCourses.length / pageState.pageSize);
   const lastFetchedDate = new Date(lastFetched);
   return (
