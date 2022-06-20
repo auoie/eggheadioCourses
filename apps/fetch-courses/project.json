@@ -47,7 +47,15 @@
         "jestConfig": "apps/fetch-courses/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "export": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node dist/apps/fetch-courses/main.js"
+      }
     }
   },
-  "tags": []
+  "tags": [],
+  "implicitDependencies": []
 }

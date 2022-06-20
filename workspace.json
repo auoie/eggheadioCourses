@@ -5,7 +5,6 @@
     "egghead-courses": "libs/egghead-courses",
     "fetch-courses": "apps/fetch-courses",
     "frontend-tailwind": "apps/frontend-tailwind",
-    "frontend-tailwind-e2e": "apps/frontend-tailwind-e2e",
-    "_courses": "_courses"
+    "frontend-tailwind-e2e": "apps/frontend-tailwind-e2e"
   }
 }

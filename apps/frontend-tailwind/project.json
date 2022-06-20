@@ -7,6 +7,12 @@
       "executor": "@nrwl/next:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": [
+        {
+          "projects": "dependencies",
+          "target": "export"
+        }
+      ],
       "options": {
         "root": "apps/frontend-tailwind",
         "outputPath": "dist/apps/frontend-tailwind"
@@ -37,6 +43,12 @@
     },
     "export": {
       "executor": "@nrwl/next:export",
+      "dependsOn": [
+        {
+          "projects": "dependencies",
+          "target": "export"
+        }
+      ],
       "options": {
         "buildTarget": "frontend-tailwind:build:production"
       }
@@ -58,5 +70,5 @@
     }
   },
   "tags": [],
-  "implicitDependencies": ["_courses"]
+  "implicitDependencies": ["fetch-courses"]
 }
