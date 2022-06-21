@@ -190,7 +190,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
         <nav
           className={clsx(
             'h-16 flex items-center px-4 fixed left-0 right-0 top-0',
-            'bg-white border-zinc-200 dark:bg-zinc-950 border-b dark:border-zinc-800 shadow-md',
+            'bg-white ring-zinc-200 dark:bg-zinc-950 ring-1 dark:ring-zinc-800 shadow-md',
             'nextra-nav-container-blur'
           )}
         >
@@ -207,7 +207,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
         </nav>
       </div>
       <div className="mx-4 md:grid md:grid-cols-2 pt-16">
-        <div className="flex flex-col flex-wrap justify-center p-4 mx-auto bg-white shadow-md rounded-md dark:bg-zinc-950 border dark:border-zinc-800 sm:px-6 sm:grid-cols-1 my-4">
+        <div className="flex flex-col flex-wrap justify-center p-4 mx-auto bg-white shadow-md rounded-md ring-zinc-200 dark:bg-zinc-950 ring-1 dark:ring-zinc-800 sm:px-6 sm:grid-cols-1 my-4">
           <LabelSelect
             identification="access_state"
             setState={setAccessState}
@@ -250,7 +250,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             title="Page Size"
           />
         </div>
-        <div className="sm:grid-cols-1 border dark:border-zinc-800 shadow-md rounded-md dark:bg-zinc-950 bg-white p-4 mx-auto max-w-3xl flex items-center my-4">
+        <div className="sm:grid-cols-1 ring-1 ring-zinc-200 dark:ring-zinc-800 shadow-md rounded-md dark:bg-zinc-950 bg-white p-4 mx-auto max-w-3xl flex items-center my-4">
           <div className="prose dark:prose-invert prose-p:m-0 prose-p:leading-5 space-y-2 max-w-full">
             <p>
               This is a static website. It parses the contents of{' '}
@@ -281,7 +281,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
         </div>
       </div>
       <div className="text-center">
-        <div className="md:inline-block p-3 mx-4 bg-white shadow-md rounded-md dark:bg-zinc-950 border dark:border-zinc-800">
+        <div className="md:inline-block p-3 mx-4 bg-white shadow-md rounded-md dark:bg-zinc-950 ring-1 ring-zinc-200 dark:ring-zinc-800">
           <div className="text-center m-1">
             Showing items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{' '}
             through{' '}
@@ -310,7 +310,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                 course={course}
                 markdown={courseProp.markdown}
                 key={course.slug}
-                className="bg-white shadow-md dark:bg-zinc-950 border dark:border-zinc-800 rounded-md grid-cols-1 overflow-hidden"
+                className="bg-white shadow-md dark:bg-zinc-950 ring-1 ring-zinc-200 dark:ring-zinc-800 rounded-md grid-cols-1 overflow-hidden"
               />
             );
           })}
