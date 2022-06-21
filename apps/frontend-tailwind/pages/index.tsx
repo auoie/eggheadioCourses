@@ -72,7 +72,7 @@ type HomeProps = ResolveStaticPropsReturnType<typeof getHomeProps>;
 export const getStaticProps: GetStaticProps<HomeProps> = async (_context) => {
   return await getHomeProps();
 };
-const allAccessState = { value: 'all', label: 'All' } as const;
+const allAccessState = { value: 'all', label: '' } as const;
 const freeAccessState = { value: 'free', label: 'Free' } as const;
 const proAccessState = { value: 'pro', label: 'Pro' } as const;
 const accessStates = [allAccessState, freeAccessState, proAccessState] as const;
@@ -224,14 +224,15 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
             identification="tag"
             setState={setTag}
             value={tag}
-            states={tags.map((tag) => ({
-              label: `${tag.tag.label} (${tag.count})`,
-              value: tag.tag.name,
-            }))}
+            states={[
+              { label: '', value: '' },
+              ...tags.map((tag) => ({
+                label: `${tag.tag.label} (${tag.count})`,
+                value: tag.tag.name,
+              })),
+            ]}
             title="Tag"
-          >
-            <option value={''}></option>
-          </LabelSelect>
+          />
           <LabelSelect
             identification="sort_by"
             setState={setSortBy}
