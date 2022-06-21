@@ -101,5 +101,6 @@ Then I can access it with `source .env.local`.
 
 # Todo
 
-- [ ] Get `nx run frontend-tailwind:build` to work.
-- [ ] Style the pagination with https://geist-ui.dev/en-us/components/pagination and make a nice looking select component based on `nextra-docs-theme`
+- [ ] Make a nice looking select component based on `nextra-docs-theme`
+- [ ] Passing components to MDXProvider (specificially make link responsive, modify image component, and make inline code look better, and make code block look better)
+- [ ] Adding nice looking search component
