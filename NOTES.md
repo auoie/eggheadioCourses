@@ -104,4 +104,7 @@ Then I can access it with `source .env.local`.
 
 - [ ] Make a nice looking select component based on `nextra-docs-theme`
 - [ ] Passing components to MDXProvider (specificially make link responsive, modify image component, and make inline code look better, and make code block look better)
+- [ ] Make pagination more responsive
 - [ ] Adding nice looking search component
+- [ ] Preserve state when navigating to about page
+- [ ] Make custom about page

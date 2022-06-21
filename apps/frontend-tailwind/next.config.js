@@ -7,6 +7,7 @@ const withImages = require('next-images');
  **/
 const nextConfig = {
   reactStrictMode: true,
+  trailingSlash: true,
   images: {
     disableStaticImages: true,
   },
