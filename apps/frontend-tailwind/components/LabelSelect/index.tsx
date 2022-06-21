@@ -21,7 +21,7 @@ export const LabelSelect = <T extends HTMLSelectValue>({
   ...rest
 }: JSX.IntrinsicElements['div'] & LabelSelectProps<T>) => {
   return (
-    <div className={clsx('grid grid-cols-5 h-8', className)} {...rest}>
+    <div className={clsx('grid grid-cols-5', className)} {...rest}>
       <div className="col-span-2 leading-4 align-middle text-center flex items-center whitespace-nowrap">
         <label
           htmlFor={identification}

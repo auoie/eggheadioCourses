@@ -35,22 +35,24 @@ const ThemeSwitch: FC<SetThemeProps> = () => {
           <>
             <Listbox.Button
               className={clsx(
-                'rounded-md px-2 h-7 transition-colors flex items-center',
+                'rounded-md px-2 h-7 transition-colors flex items-center text-zinc-600 dark:text-zinc-400 bg-zinc-900 dark:bg-zinc-100',
                 open
-                  ? 'bg-zinc-900 bg-opacity-10 dark:bg-zinc-100 dark:bg-opacity-10'
-                  : 'hover:bg-zinc-900 hover:bg-opacity-5 dark:hover:bg-zinc-100 dark:hover:bg-opacity-5'
+                  ? 'bg-opacity-10 text-zinc-950 dark:bg-opacity-10 dark:text-zinc-50'
+                  : 'hover:text-zinc-950 dark:hover:text-zinc-50 dark:bg-opacity-5 bg-opacity-5'
               )}
             >
-              <div className="h-3 w-3 mr-2">
-                {resolvedTheme === 'dark' ? (
-                  <Moon height={12} width={12} />
-                ) : resolvedTheme === 'light' ? (
-                  <Sun height={12} width={12} />
-                ) : (
-                  ''
-                )}
+              <div className="flex items-center w-20">
+                <div className="h-3 w-3 mr-2">
+                  {resolvedTheme === 'dark' ? (
+                    <Moon height={12} width={12} />
+                  ) : resolvedTheme === 'light' ? (
+                    <Sun height={12} width={12} />
+                  ) : (
+                    ''
+                  )}
+                </div>
+                {selectedOption?.name}
               </div>
-              {selectedOption?.name}
             </Listbox.Button>
             <Transition
               show={open}
@@ -61,7 +63,7 @@ const ThemeSwitch: FC<SetThemeProps> = () => {
             >
               <Listbox.Options
                 className={clsx(
-                  'absolute py-1 right-0 top-[130%] bg-white dark:bg-zinc-800 dark:ring-white rounded-md ring-1 ring-black ring-opacity-5 dark:ring-opacity-20 text-sm focus:outline-none'
+                  'absolute py-1 right-0 top-[130%] bg-white dark:bg-zinc-800 dark:ring-white rounded-md ring-1 ring-black ring-opacity-5 dark:ring-opacity-20 focus:outline-none'
                 )}
               >
                 {options.map((option) => (

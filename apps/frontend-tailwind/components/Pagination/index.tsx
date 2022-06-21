@@ -1,9 +1,9 @@
 import { usePagination } from '../../hooks/usePagination';
 import clsx from 'clsx';
 import { Dispatch, FC } from 'react';
-import { ChevronRight } from '../../icons/ChevronRight';
-import { ChevronLeft } from '../../icons/ChevronLeft';
 import { Ellipsis } from '../../icons/Ellipsis';
+import { CaretRight } from '../../icons/CaretRight';
+import { CaretLeft } from '../../icons/CaretLeft';
 
 export interface PageState {
   pageSize: number;
@@ -52,7 +52,7 @@ export const Pagination: FC<JSX.IntrinsicElements['div'] & PaginationProps> = ({
   return (
     <div
       className={clsx(
-        'flex items-center justify-center font-semibold select-none',
+        'flex items-center justify-center select-none',
         className
       )}
     >
@@ -62,7 +62,7 @@ export const Pagination: FC<JSX.IntrinsicElements['div'] & PaginationProps> = ({
         }}
         clickable={pageState.pageNumber !== 1}
       >
-        <ChevronLeft width={20} height={20} />
+        <CaretLeft width={16} height={16} />
       </PaginationDiv>
       {paginationArray.map((pageValue, idx) => {
         if (pageValue === null) {
@@ -72,7 +72,7 @@ export const Pagination: FC<JSX.IntrinsicElements['div'] & PaginationProps> = ({
               className="text-zinc-400"
               clickable={false}
             >
-              <Ellipsis width={20} height={20} />
+              <Ellipsis width={16} height={16} />
             </PaginationDiv>
           );
         }
@@ -95,7 +95,7 @@ export const Pagination: FC<JSX.IntrinsicElements['div'] & PaginationProps> = ({
         }}
         clickable={pageState.pageNumber !== numPages}
       >
-        <ChevronRight width={20} height={20} />
+        <CaretRight width={16} height={16} />
       </PaginationDiv>
     </div>
   );
