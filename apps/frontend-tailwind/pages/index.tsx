@@ -15,7 +15,6 @@ import { Pagination } from '../components/Pagination';
 import { usePageReducer } from '../hooks/usePageReducer';
 import { CourseCard } from '../components/CourseCard';
 import { LabelSelect } from '../components/LabelSelect';
-import { useMountedTheme } from '../hooks/useMountedTheme';
 import Link from 'next/link';
 import ThemeSwitch from '../components/ThemeSwitch';
 import clsx from 'clsx';
@@ -180,7 +179,6 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
       pageSize: pageSize === 'all' ? courses.length : pageSize,
     });
   }, [pageSize, courses.length, dispatchPage]);
-  const { theme, setTheme } = useMountedTheme();
   const numPages = Math.ceil(processedCourses.length / pageState.pageSize);
   const lastFetchedDate = new Date(lastFetched);
   return (
@@ -204,10 +202,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
                 </Link>
               </div>
             </div>
-            <ThemeSwitch
-              setTheme={setTheme}
-              theme={theme === undefined ? '' : theme}
-            />
+            <ThemeSwitch />
           </div>
         </nav>
       </div>
@@ -264,8 +259,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
               {lastFetchedDate.toUTCString()}. It uses{' '}
               <a href="https://nextjs.org/">Next.js</a> to render the initial
               state and <a href="https://tailwindcss.com/">Tailwind CSS</a> for
-              styling. The current color theme is{' '}
-              {theme === undefined ? 'loading' : theme}.
+              styling.
             </p>
             <p>
               Each course has a labelled access type of free or pro.{' '}

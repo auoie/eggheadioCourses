@@ -25,6 +25,7 @@ npx nx format:check --all
 
 # ./apps/frontend-tailwind
 npm install next-themes
+npm install @headlessui/react
 ```
 
 I tried to use the node library version that uses `swc`, but I kept getting an error that says I need an `.swcrc` file.

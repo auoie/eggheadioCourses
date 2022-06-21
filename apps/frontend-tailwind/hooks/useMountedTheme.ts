@@ -4,13 +4,13 @@ import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 
 export const useMountedTheme = () => {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   // useEffect only runs on the client, so now we can safely show the UI
   useIsomorphicLayoutEffect(() => {
     setMounted(true);
   }, []);
   if (!mounted) {
-    return { theme: undefined, setTheme };
+    return { theme: undefined, setTheme, resolvedTheme: undefined };
   }
-  return { theme, setTheme };
+  return { theme, setTheme, resolvedTheme };
 };

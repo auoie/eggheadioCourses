@@ -23,7 +23,10 @@ export const LabelSelect = <T extends HTMLSelectValue>({
   return (
     <div className={clsx('grid grid-cols-5 h-8', className)} {...rest}>
       <div className="col-span-2 leading-4 align-middle text-center flex items-center whitespace-nowrap">
-        <label htmlFor={identification} className="w-full h-full flex items-center">
+        <label
+          htmlFor={identification}
+          className="w-full h-full flex items-center"
+        >
           {title}
         </label>
       </div>
