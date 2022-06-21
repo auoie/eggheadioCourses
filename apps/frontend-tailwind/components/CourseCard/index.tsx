@@ -21,13 +21,7 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
 }) => {
   const isFree = course.access_state === 'free';
   return (
-    <div
-      className={clsx(
-        '',
-        className
-      )}
-      {...rest}
-    >
+    <div className={clsx('', className)} {...rest}>
       <div className="flex flex-col p-4 space-y-2 ">
         <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
           <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>

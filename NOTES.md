@@ -92,11 +92,12 @@ Then I can access it with `source .env.local`.
 
 ## Components
 
-- Badge is based on Chakra UI
+- Badge is based on Chakra UI.
+- Navbar blur is taken from nextra-docs-theme.
 - Pagination Algorithm Taken from online. Pagination taken from geist-ui.
-- ThemeSwitch taken from next-themes and nextra-docs-theme
-- Icons taken from https://feathericons.com/
-- Styling taken from nextra
+- ThemeSwitch taken from next-themes and nextra-docs-theme.
+- Icons taken from https://feathericons.com/.
+- Styling taken from nextra.
 
 # Todo
 

@@ -14,6 +14,6 @@ export const ChevronLeft: FC<JSX.IntrinsicElements['svg']> = ({ ...props }) => (
     {...props}
   >
     <path d="m 13 16  -4 -4 4 -4" />
-    <circle xmlns="http://www.w3.org/2000/svg" cx="12" cy="12" r="10"/>
+    <circle xmlns="http://www.w3.org/2000/svg" cx="12" cy="12" r="10" />
   </svg>
 );

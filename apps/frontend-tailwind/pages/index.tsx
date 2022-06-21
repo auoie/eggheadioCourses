@@ -188,27 +188,29 @@ const Home: NextPage<HomeProps> = ({ courses, tags, lastFetched }) => {
       <Head>
         <title>Egghead IO Courses</title>
       </Head>
-      <nav
-        className={clsx(
-          'h-16 flex items-center px-4 fixed left-0 right-0 top-0',
-          'bg-white border-zinc-200 dark:bg-zinc-950 border-b dark:border-zinc-800 shadow-md',
-          'bg-opacity-70 backdrop-blur dark:bg-opacity-70'
-        )}
-      >
-        <div className="flex items-center max-w-[178rem] w-full mx-auto">
-          <div className="flex w-full ">
-            <div className="font-extrabold">
-              <Link href={'/'}>
-                <a className="hover:opacity-75">Egghead IO Courses</a>
-              </Link>
+      <div className="bg-transparent dark:bg-transparent nextra-nav-container">
+        <nav
+          className={clsx(
+            'h-16 flex items-center px-4 fixed left-0 right-0 top-0',
+            'bg-white border-zinc-200 dark:bg-zinc-950 border-b dark:border-zinc-800 shadow-md',
+            'nextra-nav-container-blur'
+          )}
+        >
+          <div className="flex items-center max-w-[178rem] w-full mx-auto">
+            <div className="flex w-full ">
+              <div className="font-extrabold">
+                <Link href={'/'}>
+                  <a className="hover:opacity-75">Egghead IO Courses</a>
+                </Link>
+              </div>
             </div>
+            <ThemeSwitch
+              setTheme={setTheme}
+              theme={theme === undefined ? '' : theme}
+            />
           </div>
-          <ThemeSwitch
-            setTheme={setTheme}
-            theme={theme === undefined ? '' : theme}
-          />
-        </div>
-      </nav>
+        </nav>
+      </div>
       <div className="mx-4 md:grid md:grid-cols-2 pt-16">
         <div className="flex flex-col flex-wrap justify-center p-4 mx-auto bg-white shadow-md rounded-md dark:bg-zinc-950 border dark:border-zinc-800 sm:px-6 sm:grid-cols-1 my-4">
           <LabelSelect
