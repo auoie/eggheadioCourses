@@ -5,8 +5,8 @@ import { Moon } from '../../icons/Moon';
 import { Sun } from '../../icons/Sun';
 import { useMountedTheme } from '../../hooks/useMountedTheme';
 import { Check } from '../../icons/Check';
-type SetThemeProps = unknown;
-const ThemeSwitch: FC<SetThemeProps> = () => {
+type SetThemeProps = { className?: string };
+const ThemeSwitch: FC<SetThemeProps> = ({ className }) => {
   const { theme, setTheme, resolvedTheme } = useMountedTheme();
   const options = [
     {
@@ -35,10 +35,11 @@ const ThemeSwitch: FC<SetThemeProps> = () => {
           <>
             <Listbox.Button
               className={clsx(
-                'rounded-md px-2 h-7 transition-colors flex items-center text-zinc-600 dark:text-zinc-400 bg-zinc-900 dark:bg-zinc-100',
+                'rounded-md px-2 h-7 transition-colors flex items-center',
                 open
-                  ? 'bg-opacity-10 text-zinc-950 dark:bg-opacity-10 dark:text-zinc-50'
-                  : 'hover:text-zinc-950 dark:hover:text-zinc-50 dark:bg-opacity-5 bg-opacity-5'
+                  ? 'bg-zinc-900 bg-opacity-10 text-zinc-950 dark:bg-zinc-100 dark:bg-opacity-10 dark:text-zinc-50'
+                  : 'hover:bg-zinc-900 text-zinc-500 dark:text-zinc-400 hover:bg-opacity-5 hover:text-zinc-950 dark:hover:bg-zinc-100 dark:hover:bg-opacity-5 dark:hover:text-zinc-50',
+                className
               )}
             >
               <div className="flex items-center w-20">

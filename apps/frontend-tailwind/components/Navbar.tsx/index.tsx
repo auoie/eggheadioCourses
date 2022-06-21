@@ -30,7 +30,7 @@ export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
           <div className="flex w-full ">
             <div className="font-extrabold">
               <Link href={'/'}>
-                <a className="hover:opacity-75 p-2 whitespace-nowrap">
+                <a className="hover:opacity-75 whitespace-nowrap">
                   Egghead IO Courses
                 </a>
               </Link>
@@ -43,14 +43,14 @@ export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
                   className={clsx(
                     pathname.startsWith(item.path)
                       ? ''
-                      : 'dark:text-zinc-400 text-zinc-600'
+                      : 'dark:text-zinc-400 text-zinc-500'
                   )}
                 >
                   {item.label}
                 </a>
               </Link>
             ))}
-            <ThemeSwitch />
+            <ThemeSwitch className="ring-1 ring-zinc-200 dark:ring-zinc-800" />
           </div>
         </div>
       </nav>
