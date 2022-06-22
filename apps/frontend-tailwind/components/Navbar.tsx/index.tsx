@@ -50,7 +50,7 @@ export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
                 </a>
               </Link>
             ))}
-            <ThemeSwitch className="ring-1 ring-zinc-200 dark:ring-zinc-800" />
+            <ThemeSwitch />
           </div>
         </div>
       </nav>

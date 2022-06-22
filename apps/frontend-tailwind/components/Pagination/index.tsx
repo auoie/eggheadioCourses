@@ -21,17 +21,23 @@ type PaginationProps = {
 };
 const PaginationDiv: FC<
   JSX.IntrinsicElements['button'] & { clickable: boolean }
-> = ({ className, children, clickable, ...props }) => {
+> = ({ className, children, clickable, onClick, ...props }) => {
   return (
     <button
       className={clsx(
         'w-8 h-8 justify-center items-center flex',
         clickable &&
-          'hover:bg-zinc-500 hover:bg-opacity-20 transition rounded hover:dark:bg-opacity-20 hover:cursor-pointer hover:dark:bg-zinc-400',
+          'hover:bg-zinc-500 hover:bg-opacity-20 transition rounded hover:dark:bg-opacity-10 hover:focus:dark:bg-opacity-20 hover:cursor-pointer hover:dark:bg-zinc-400',
         !clickable && 'text-zinc-400 dark:text-zinc-500',
         className
       )}
       disabled={!clickable}
+      onClick={(event) => {
+        event.currentTarget.blur();
+        if (onClick !== undefined) {
+          onClick(event);
+        }
+      }}
       {...props}
     >
       {children}
