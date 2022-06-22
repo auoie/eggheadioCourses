@@ -131,7 +131,6 @@ For example, I removed the backticks from the code snippets and gave a gave them
 
 - [ ] Make a nice looking select component based on `nextra-docs-theme`
 - [ ] Passing components to MDXProvider (specificially make link responsive, modify image component, and make inline code look better, and make code block look better)
-- [ ] Style prose based on: https://github.com/shuding/site/blob/master/styles/main.css
 - [ ] Figure out how to transition between adjacent pagination buttons based on Geist tabs.
 - [ ] Adding nice looking search component
 - [ ] Preserve state when navigating to about page
