@@ -1,13 +1,9 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
 
 type HomeProps = unknown;
 const About: NextPage<HomeProps> = () => {
   return (
     <div className="max-w-[180rem] mx-auto">
-      <Head>
-        <title>Egghead IO Courses</title>
-      </Head>
       <div className="max-w-full mx-4 pt-20">
         <div className="bg-white shadow-md rounded-md dark:bg-zinc-900 max-w-lg mx-auto p-4">
           <div className="prose dark:prose-invert prose-p:m-0 prose-p:leading-5 space-y-2 max-w-full">

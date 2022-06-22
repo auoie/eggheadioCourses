@@ -9,6 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider disableTransitionOnChange attribute="class">
       <Head>
+        <title>eggheaad.io Courses</title>
         <link rel="icon" href={favicon} type="image/x-icon" />
       </Head>
       <Navbar />

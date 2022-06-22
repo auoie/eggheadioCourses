@@ -1,6 +1,5 @@
 import { readFileSync } from 'fs';
 import type { GetStaticProps, NextPage } from 'next';
-import Head from 'next/head';
 import { join } from 'path';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
@@ -194,9 +193,6 @@ const Home: NextPage<HomeProps> = ({ courses, tags }) => {
   const numPages = Math.ceil(processedCourses.length / pageState.pageSize);
   return (
     <div className="max-w-[180rem] mx-auto">
-      <Head>
-        <title>Egghead IO Courses</title>
-      </Head>
       <div className="max-w-full mx-4 pt-20">
         <div className="bg-white shadow-md rounded-md dark:bg-zinc-900 max-w-lg mx-auto">
           <div className="flex items-center justify-center">
