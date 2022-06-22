@@ -1,8 +1,10 @@
 @tailwind base;
 @tailwind components;
+
 :root {
   overflow-y: scroll;
 }
+
 @tailwind utilities;
 
 /* Navbar */
@@ -14,4 +16,95 @@
       @apply bg-opacity-[.85] dark:bg-opacity-80 backdrop-blur-md;
     }
   }
+}
+/* Prose settings */
+.prose {
+  content: '';
+  * {
+    @apply m-0 break-words text-zinc-700 dark:text-zinc-300;
+    /* @apply first:mt-0; */
+  }
+  > * {
+    @apply mt-2;
+  }
+  blockquote {
+    @apply border-zinc-200 dark:border-zinc-700 font-normal border-l-[3px];
+  }
+  ul {
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply p-0 dark:text-zinc-300;
+  }
+  h2 {
+    @apply leading-5 text-lg;
+  }
+  hr {
+  }
+  p {
+    @apply leading-5;
+  }
+  img {
+  }
+  li {
+    @apply leading-5 mt-1;
+  }
+  :not(pre) > code {
+    &:before,
+    &:after {
+      content: none;
+    }
+    @apply bg-black bg-opacity-5 border-none font-medium text-sm rounded-md px-1 py-0.5;
+    .dark & {
+      @apply bg-white bg-opacity-10;
+    }
+  }
+  a {
+    @apply font-normal dark:hover:text-zinc-500 hover:text-zinc-400  transition duration-300;
+  }
+  pre {
+    @apply px-4 py-3 m-0 rounded-lg my-4 overflow-x-auto font-medium leading-3;
+    @apply bg-zinc-100 dark:bg-zinc-300 dark:bg-opacity-5;
+    code {
+      @apply relative p-0 m-0 leading-5 text-current bg-transparent dark:bg-transparent rounded-none border-none inline-block min-w-full;
+      font-size: 0.9rem;
+      .line.highlighted {
+        @apply before:block before:absolute before:h-5 before:bg-zinc-500 before:bg-opacity-10 before:-inset-x-4 before:pointer-events-none before:select-none;
+        span {
+          @apply relative;
+        }
+      }
+    }
+  }
+}
+
+:root {
+  --shiki-color-text: #414141;
+  --shiki-color-background: transparent;
+  --shiki-token-constant: #1976d2;
+  --shiki-token-string: #22863a;
+  --shiki-token-comment: #aaa;
+  --shiki-token-keyword: #d32f2f;
+  --shiki-token-parameter: #ff9800;
+  --shiki-token-function: #6f42c1;
+  --shiki-token-string-expression: #22863a;
+  --shiki-token-punctuation: #212121;
+  --shiki-token-link: #22863a;
+  --nextra-shiki-deleted: #f00;
+  --nextra-shiki-inserted: #f00;
+}
+
+.dark {
+  --shiki-color-text: #d1d1d1;
+  --shiki-token-constant: #79b8ff;
+  --shiki-token-string: #ffab70;
+  --shiki-token-comment: #6b737c;
+  --shiki-token-keyword: #f97583;
+  --shiki-token-parameter: #ff9800;
+  --shiki-token-function: #b392f0;
+  --shiki-token-string-expression: #4bb74a;
+  --shiki-token-punctuation: #bbbbbb;
+  --shiki-token-link: #ffab70;
 }

@@ -26,6 +26,7 @@ npx nx format:check --all
 # ./apps/frontend-tailwind
 npm install next-themes
 npm install @headlessui/react
+npm install rehype-pretty-code shiki
 ```
 
 I tried to use the node library version that uses `swc`, but I kept getting an error that says I need an `.swcrc` file.
@@ -100,10 +101,37 @@ Then I can access it with `source .env.local`.
 - Icons taken from https://feathericons.com/.
 - Styling taken from nextra.
 
+## Theme Switch
+
+The theme switch button is based on theme-switch button in nextra-theme-docs.
+Also see geist for more ideas.
+
+## Pagination
+
+The pagination component is based on geist pagination.
+Also see https://vercel.com/design for how to make a good button
+https://nextjs.org/learn/basics/create-nextjs-app
+for how to make responsive numbered buttons.
+
+## Prose CSS and Syntax Highlighting
+
+To setup syntax highlighting, we need to use `rehype-pretty-code` which uses the `shiki` syntax highlighter.
+In order to setup dark and light mode switching, we'll need to use [theme with CSS variables](https://github.com/shikijs/shiki/blob/main/docs/themes.md#theming-with-css-variables).
+This comes from the `nextra` GitHub package.
+
+In order to setup custom CSS styles for markdown prose content, `nextra-theme-docs` and `nextra-theme-blog`.
+I also took the `--shiki` color variables from those sources.
+In order to add SCSS style nesting, I had to use [this documentation](https://tailwindcss.com/docs/using-with-preprocessors#nesting).
+Basically add the line `'tailwindcss/nesting': {}` to `postcss.config.js`.
+Then I could manually override the prose settings in my `globals.css` file using tailwind `@apply` directives.
+For guidance, I looked at the nextra docs and blog themes.
+For example, I removed the backticks from the code snippets and gave a gave them a rounded background instead.
+
 # Todo
 
 - [ ] Make a nice looking select component based on `nextra-docs-theme`
 - [ ] Passing components to MDXProvider (specificially make link responsive, modify image component, and make inline code look better, and make code block look better)
+- [ ] Style prose based on: https://github.com/shuding/site/blob/master/styles/main.css
 - [ ] Figure out how to transition between adjacent pagination buttons based on Geist tabs.
 - [ ] Adding nice looking search component
 - [ ] Preserve state when navigating to about page

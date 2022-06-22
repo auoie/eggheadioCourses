@@ -22,22 +22,22 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
   const isFree = course.access_state === 'free';
   return (
     <div className={clsx('', className)} {...rest}>
-      <div className="flex flex-col p-4 space-y-2 ">
-        <div className="flex overflow-x-auto overflow-y-hidden text-xl font-bold leading-6 hover:underline">
+      <div className="flex flex-col p-4">
+        <div className="flex overflow-x-hidden overflow-y-hidden">
           <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>
-            {course.title}
+            <a className="text-xl font-bold leading-6 hover:opacity-50 transition duration-300">
+              {course.title}
+            </a>
           </Link>
         </div>
-        <div className="">
-          <span className="font-bold hover:underline">
-            <Link
-              href={`${EGGHEADIO_URL}${course.instructor.path}`}
-              className="font-bold hover:underline"
-            >
-              {course.instructor.full_name}
+        <div className="mt-2">
+          <div className="flex overflow-x-auto overflow-y-hidden">
+            <Link href={`${EGGHEADIO_URL}${course.instructor.path}`}>
+              <a className="font-semibold hover:opacity-50 transition duration-300">
+                {course.instructor.full_name}
+              </a>
             </Link>
-          </span>
-          <br />
+          </div>
           {course.watched_count}x completed
           <span className="inline-flex items-center justify-center mx-1 select-none">
             •
@@ -49,7 +49,7 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
           {new Date(course.created_at).toLocaleDateString()}
           <br />
         </div>
-        <div className="flex flex-wrap space-x-2">
+        <div className="flex flex-wrap space-x-2 mt-2">
           <Badge color={isFree ? 'green' : 'blue'}>
             {isFree ? 'Free' : 'Pro'}
           </Badge>
@@ -61,9 +61,9 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
             );
           })}
         </div>
-        <div className="prose dark:prose-invert prose-blockquote:m-0 prose-blockquote:mt-2 prose-ul:m-0 prose-ul:mt-2 max-w-screen-2xl prose-headings:p-0 prose-h2:leading-5 prose-hr:m-0 prose-hr:mt-2 prose-headings:m-0 prose-headings:mt-2 prose-p:m-0 prose-p:mt-2 prose-h2:text-lg prose-img:m-0 prose-img:mt-2 prose-p:leading-5 prose-li:m-0 prose-li:leading-5">
+        <article className="prose dark:prose-invert">
           <MDXRemote {...markdown} components={{ img: MdImage }} />
-        </div>
+        </article>
       </div>
     </div>
   );

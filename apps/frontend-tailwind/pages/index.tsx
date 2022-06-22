@@ -15,7 +15,8 @@ import { Pagination } from '../components/Pagination';
 import { usePageReducer } from '../hooks/usePageReducer';
 import { CourseCard } from '../components/CourseCard';
 import { LabelSelect } from '../components/LabelSelect';
-import { Navbar } from '../components/Navbar.tsx';
+import rehypePrettyCode from 'rehype-pretty-code';
+import type { Options } from 'rehype-pretty-code';
 
 type CourseProp = {
   course: Course;
@@ -40,10 +41,23 @@ const getHomeProps = async () => {
       }
     });
   });
+  const rehypePrettyCodeOptions: Partial<Options> = {
+    theme: {
+      theme: "css-variables"
+    },
+  };
   const coursesWithMarkdown = await Promise.all(
     courses.map(async (course) => {
       const mdxSource = await serialize(
-        course.description ? course.description : ''
+        course.description ? course.description : '',
+        {
+          mdxOptions: {
+            remarkPlugins: [],
+            rehypePlugins: course.description?.includes('```')
+              ? [[rehypePrettyCode, rehypePrettyCodeOptions]]
+              : [],
+          },
+        }
       );
       return { course, markdown: mdxSource };
     })
@@ -183,7 +197,6 @@ const Home: NextPage<HomeProps> = ({ courses, tags }) => {
       <Head>
         <title>Egghead IO Courses</title>
       </Head>
-      <Navbar />
       <div className="max-w-full mx-4 pt-20">
         <div className="bg-white shadow-md rounded-md dark:bg-zinc-900 max-w-lg mx-auto">
           <div className="flex items-center justify-center">
