@@ -20,10 +20,10 @@ type PaginationProps = {
   numPages: number;
 };
 const PaginationDiv: FC<
-  JSX.IntrinsicElements['td'] & { clickable: boolean }
+  JSX.IntrinsicElements['button'] & { clickable: boolean }
 > = ({ className, children, clickable, ...props }) => {
   return (
-    <div
+    <button
       className={clsx(
         'w-8 h-8 justify-center items-center flex',
         clickable &&
@@ -31,10 +31,11 @@ const PaginationDiv: FC<
         !clickable && 'text-zinc-400 dark:text-zinc-500',
         className
       )}
+      disabled={!clickable}
       {...props}
     >
       {children}
-    </div>
+    </button>
   );
 };
 
