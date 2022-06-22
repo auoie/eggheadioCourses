@@ -42,7 +42,7 @@ const getHomeProps = async () => {
   });
   const rehypePrettyCodeOptions: Partial<Options> = {
     theme: {
-      theme: "css-variables"
+      theme: 'css-variables',
     },
   };
   const coursesWithMarkdown = await Promise.all(
@@ -192,11 +192,11 @@ const Home: NextPage<HomeProps> = ({ courses, tags }) => {
   }, [pageSize, courses.length, dispatchPage]);
   const numPages = Math.ceil(processedCourses.length / pageState.pageSize);
   return (
-    <div className="max-w-[180rem] mx-auto">
+    <div className="mx-auto max-w-[180rem]">
       <div className="max-w-full mx-4 pt-20">
         <div className="bg-white shadow-md rounded-md dark:bg-zinc-900 max-w-lg mx-auto">
           <div className="flex items-center justify-center">
-            <div className="flex flex-col flex-1 p-6 pb-4 mx-auto space-y-1">
+            <div className="flex flex-col flex-1 p-4 pb-4 mx-auto space-y-1">
               <LabelSelect
                 identification="access_state"
                 setState={setAccessState}
@@ -240,10 +240,10 @@ const Home: NextPage<HomeProps> = ({ courses, tags }) => {
               />
             </div>
           </div>
-          <div className="max-w-full h-px dark:bg-zinc-800 bg-zinc-200 mt-2 mb-4"></div>
+          <div className="max-w-full h-px dark:bg-zinc-800 bg-zinc-200 mt-0 mb-2"></div>
           <div className="text-center">
             <div className="px-5 pb-3">
-              <div className="text-center m-1 whitespace-nowrap">
+              <div className="text-center mt-4 mb-1 whitespace-nowrap">
                 Items {(pageState.pageNumber - 1) * pageState.pageSize + 1}{' '}
                 through{' '}
                 {Math.min(
@@ -255,30 +255,31 @@ const Home: NextPage<HomeProps> = ({ courses, tags }) => {
               <Pagination
                 page={[pageState, dispatchPage]}
                 numPages={numPages}
-                className="mt-1"
+                className="mt-0"
               />
             </div>
           </div>
         </div>
       </div>
-
-      <div className="grid grid-cols-1 gap-4 m-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {processedCourses
-          .slice(
-            (pageState.pageNumber - 1) * pageState.pageSize,
-            pageState.pageSize * pageState.pageNumber
-          )
-          .map((courseProp) => {
-            const course = courseProp.course;
-            return (
-              <CourseCard
-                course={course}
-                markdown={courseProp.markdown}
-                key={course.slug}
-                className="bg-white shadow-md dark:bg-zinc-900 rounded-md grid-cols-1 overflow-hidden"
-              />
-            );
-          })}
+      <div className="m-4 flex justify-center">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4">
+          {processedCourses
+            .slice(
+              (pageState.pageNumber - 1) * pageState.pageSize,
+              pageState.pageSize * pageState.pageNumber
+            )
+            .map((courseProp) => {
+              const course = courseProp.course;
+              return (
+                <CourseCard
+                  course={course}
+                  markdown={courseProp.markdown}
+                  key={course.slug}
+                  className="bg-white shadow-md dark:bg-zinc-900 rounded-md grid-cols-1 overflow-hidden"
+                />
+              );
+            })}
+        </div>
       </div>
     </div>
   );

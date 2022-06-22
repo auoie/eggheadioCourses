@@ -53,7 +53,7 @@
     @apply leading-5 mt-1;
   }
   code {
-    @apply font-mono
+    @apply font-mono;
   }
   :not(pre) > code {
     &:before,

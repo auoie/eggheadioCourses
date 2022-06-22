@@ -15,6 +15,9 @@ module.exports = {
         sans: ['Fira Sans', ...defaultTheme.fontFamily.sans],
         mono: ['Fira Code', ...defaultTheme.fontFamily.mono],
       },
+      screens: {
+        '3xl': '2160px',
+      },
     },
   },
   plugins: [],

@@ -130,7 +130,8 @@ For example, I removed the backticks from the code snippets and gave a gave them
 # Todo
 
 - [ ] Make a nice looking select component based on `nextra-docs-theme`
-- [ ] Passing components to MDXProvider (specificially make link responsive, modify image component, and make inline code look better, and make code block look better)
+- [ ] Add hamburger transition thing for small screens
+- [ ] Passing components to MDXProvider (specificially make link refer to external thing)
 - [ ] Figure out how to transition between adjacent pagination buttons based on Geist tabs.
 - [ ] Adding nice looking search component
 - [ ] Preserve state when navigating to about page

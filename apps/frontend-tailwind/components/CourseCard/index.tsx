@@ -25,7 +25,11 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
       <div className="flex flex-col p-4">
         <div className="flex overflow-x-hidden overflow-y-hidden">
           <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>
-            <a className="text-xl font-bold leading-6 hover:opacity-50 transition duration-300">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              className="text-xl font-bold leading-6 hover:opacity-50 transition duration-300"
+            >
               {course.title}
             </a>
           </Link>
@@ -33,7 +37,11 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
         <div className="mt-2">
           <div className="flex overflow-x-auto overflow-y-hidden">
             <Link href={`${EGGHEADIO_URL}${course.instructor.path}`}>
-              <a className="font-semibold hover:opacity-50 transition duration-300">
+              <a
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold hover:opacity-50 transition duration-300"
+              >
                 {course.instructor.full_name}
               </a>
             </Link>
@@ -61,7 +69,7 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
             );
           })}
         </div>
-        <article className="prose dark:prose-invert">
+        <article className="prose dark:prose-invert max-w-full">
           <MDXRemote {...markdown} components={{ img: MdImage }} />
         </article>
       </div>
