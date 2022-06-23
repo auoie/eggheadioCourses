@@ -67,7 +67,7 @@ export const Pagination: FC<JSX.IntrinsicElements['div'] & PaginationProps> = ({
         onClick={() => {
           dispatchPage({ type: 'decrement' });
         }}
-        clickable={pageState.pageNumber !== 1}
+        clickable={pageState.pageNumber > 1}
       >
         <CaretLeft width={16} height={16} />
       </PaginationDiv>
@@ -100,7 +100,7 @@ export const Pagination: FC<JSX.IntrinsicElements['div'] & PaginationProps> = ({
         onClick={() => {
           dispatchPage({ type: 'increment', numPages });
         }}
-        clickable={pageState.pageNumber !== numPages}
+        clickable={pageState.pageNumber < numPages}
       >
         <CaretRight width={16} height={16} />
       </PaginationDiv>

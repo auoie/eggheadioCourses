@@ -82,7 +82,7 @@ type HomeProps = ResolveStaticPropsReturnType<typeof getHomeProps>;
 export const getStaticProps: GetStaticProps<HomeProps> = async (_context) => {
   return await getHomeProps();
 };
-const allAccessState = { value: 'all', label: '' } as const;
+const allAccessState = { value: 'all', label: 'Both' } as const;
 const freeAccessState = { value: 'free', label: 'Free' } as const;
 const proAccessState = { value: 'pro', label: 'Pro' } as const;
 const accessStates = [allAccessState, freeAccessState, proAccessState] as const;
@@ -209,7 +209,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags }) => {
                 setState={setTag}
                 value={tag}
                 states={[
-                  { label: '', value: '' },
+                  { label: 'All', value: '' },
                   ...tags.map((tag) => ({
                     label: `${tag.tag.label} (${tag.count})`,
                     value: tag.tag.name,

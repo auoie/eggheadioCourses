@@ -21,7 +21,7 @@ export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
     >
       <nav
         className={clsx(
-          'h-16 flex items-center px-4 fixed left-0 right-0 top-0',
+          'h-16 flex items-center px-4 fixed left-0 right-0 top-0 z-50',
           'bg-white border-zinc-200 dark:bg-zinc-900 border-b dark:border-zinc-800 shadow-md',
           'nextra-nav-container-blur'
         )}
