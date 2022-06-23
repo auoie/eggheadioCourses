@@ -137,3 +137,4 @@ For example, I removed the backticks from the code snippets and gave a gave them
 - [ ] Preserve state when navigating to about page
 - [ ] Fix vertical spacing for inline code
 - [ ] Remove flash of black on refresh in light mode
+- [ ] Custom 404 page

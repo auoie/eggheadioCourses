@@ -12,8 +12,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Fira Sans', ...defaultTheme.fontFamily.sans],
-        mono: ['Fira Code', ...defaultTheme.fontFamily.mono],
+        sans: ['Stratos', ...defaultTheme.fontFamily.sans],
       },
       screens: {
         '3xl': '2160px',

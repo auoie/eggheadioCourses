@@ -1,3 +1,52 @@
+@font-face {
+  font-family: 'Stratos';
+  src: url('/fonts/Stratos/Stratos-Regular.otf');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Stratos';
+  src: url('/fonts/Stratos/Stratos-Medium.otf');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Stratos';
+  src: url('/fonts/Stratos/Stratos-SemiBold.otf');
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Stratos';
+  src: url('/fonts/Stratos/Stratos-Bold.otf');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Stratos';
+  src: url('/fonts/Stratos/Stratos-RegularItalic.otf');
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Stratos';
+  src: url('/fonts/Stratos/Stratos-MediumItalic.otf');
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Stratos';
+  src: url('/fonts/Stratos/Stratos-SemiBoldItalic.otf');
+  font-weight: 600;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Stratos';
+  src: url('/fonts/Stratos/Stratos-BoldItalic.otf');
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Stratos';
+  src: url('/fonts/Stratos/Stratos-ExtraBold.otf');
+  font-weight: 800;
+}
 @tailwind base;
 @tailwind components;
 
