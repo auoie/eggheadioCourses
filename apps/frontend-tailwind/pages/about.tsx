@@ -1,12 +1,13 @@
 import type { NextPage } from 'next';
+import Div100vh from 'react-div-100vh';
 
-type HomeProps = unknown;
-const About: NextPage<HomeProps> = () => {
+type AboutProps = unknown;
+const About: NextPage<AboutProps> = () => {
   return (
-    <div className="max-w-[180rem] mx-auto">
+    <Div100vh>
       <div className="max-w-full mx-4 pt-20">
         <div className="bg-white shadow-md rounded-md dark:bg-zinc-900 max-w-lg mx-auto p-4">
-          <div className="prose dark:prose-invert prose-p:m-0 prose-p:leading-5 space-y-2 max-w-full">
+          <div className="prose dark:prose-invert max-w-full">
             <p>
               This is a static website. It parses the contents of{' '}
               <a href="https://egghead.io/courses">egghead.io/courses</a> and
@@ -18,7 +19,7 @@ const About: NextPage<HomeProps> = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Div100vh>
   );
 };
 

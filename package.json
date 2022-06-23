@@ -22,6 +22,7 @@
     "next-themes": "^0.2.0",
     "node-html-parser": "^5.3.3",
     "react": "18.2.0",
+    "react-div-100vh": "^0.7.0",
     "react-dom": "18.2.0",
     "regenerator-runtime": "0.13.7",
     "rehype-pretty-code": "^0.3.2",

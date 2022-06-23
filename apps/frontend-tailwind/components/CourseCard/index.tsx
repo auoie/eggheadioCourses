@@ -69,9 +69,12 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
             );
           })}
         </div>
-        <article className="prose dark:prose-invert max-w-full">
-          <MDXRemote {...markdown} components={{ img: MdImage }} />
-        </article>
+        {course.description?.length !== undefined &&
+          course.description.length > 0 && (
+            <article className="prose dark:prose-invert max-w-full mt-2">
+              <MDXRemote {...markdown} components={{ img: MdImage }} />
+            </article>
+          )}
       </div>
     </div>
   );

@@ -71,7 +71,7 @@
   content: '';
   * {
     @apply m-0 break-words text-zinc-700 dark:text-zinc-300;
-    /* @apply first:mt-0; */
+    @apply first:mt-0;
   }
   > * {
     @apply mt-2;
