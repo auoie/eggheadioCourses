@@ -23,7 +23,7 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
   return (
     <div className={clsx('', className)} {...rest}>
       <div className="flex flex-col p-4">
-        <div className="flex overflow-x-hidden overflow-y-hidden">
+        <div className="flex">
           <Link href={`${EGGHEADIO_COURSES_URL}${course.slug}`}>
             <a
               target="_blank"
@@ -35,7 +35,7 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
           </Link>
         </div>
         <div className="mt-2">
-          <div className="flex overflow-x-auto overflow-y-hidden">
+          <div className="flex">
             <Link href={`${EGGHEADIO_URL}${course.instructor.path}`}>
               <a
                 target="_blank"
