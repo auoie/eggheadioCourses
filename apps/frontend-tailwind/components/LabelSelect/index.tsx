@@ -2,13 +2,14 @@ import { Listbox } from '@headlessui/react';
 import { ChevronDown } from '../../icons/ChevronDown';
 import clsx from 'clsx';
 import { Check } from '../../icons/Check';
+import type { ReactNode } from 'react';
 
 type HTMLSelectValue = JSX.IntrinsicElements['select']['value'] &
   JSX.IntrinsicElements['option']['key'];
 type LabelSelectProps<T extends HTMLSelectValue> = {
   value: T;
   identification: string;
-  states: readonly { value: T; label: string }[];
+  states: readonly { value: T; label: ReactNode }[];
   setState: (value: T) => void;
   title: string;
   labelHidden?: boolean;
@@ -36,7 +37,7 @@ export const LabelSelect = <T extends HTMLSelectValue>({
               <div className="col-span-3 relative w-full">
                 <Listbox.Button
                   className={clsx(
-                    'w-full rounded-md text-left px-3 py-1 transition-colors',
+                    'w-full rounded-md text-left px-3 h-9 transition-colors whitespace-nowrap',
                     open
                       ? 'bg-zinc-900 bg-opacity-10 dark:bg-zinc-100 dark:bg-opacity-10'
                       : 'bg-zinc-900 bg-opacity-5  dark:bg-zinc-100 dark:bg-opacity-5 dark:hover:text-zinc-50'
@@ -49,7 +50,7 @@ export const LabelSelect = <T extends HTMLSelectValue>({
                 </Listbox.Button>
                 <Listbox.Options
                   className={
-                    'absolute top-[110%] w-full shadow-md z-40 overflow-auto max-h-96 bg-white dark:bg-zinc-800 rounded-md dark:ring-white dark:ring-opacity-20 ring-1 ring-black ring-opacity-5'
+                    'absolute top-[110%] py-1 w-full shadow-md z-40 overflow-auto max-h-96 bg-white dark:bg-zinc-800 rounded-md dark:ring-white dark:ring-opacity-20 ring-1 ring-black ring-opacity-5'
                   }
                 >
                   {states.map((state) => {
@@ -59,7 +60,7 @@ export const LabelSelect = <T extends HTMLSelectValue>({
                         value={state.value}
                         className={({ active, selected }) =>
                           clsx(
-                            'relative px-3 py-1.5 flex justify-between items-center select-none',
+                            'relative px-3 min-h-[36px] py-1.5 flex items-center select-none',
                             selected ? '' : '',
                             active
                               ? 'dark:bg-zinc-100 dark:bg-opacity-10 bg-zinc-900 bg-opacity-10'
@@ -67,10 +68,15 @@ export const LabelSelect = <T extends HTMLSelectValue>({
                           )
                         }
                       >
+                        <div className="mr-2">
+                          {state.value === value ? (
+                            <Check height={16} width={16} />
+                          ) : (
+                            <div className="h-4 w-4"></div>
+                          )}
+                        </div>
+
                         {state.label}
-                        {state.value === value && (
-                          <Check height={16} width={16} />
-                        )}
                       </Listbox.Option>
                     );
                   })}
@@ -80,36 +86,6 @@ export const LabelSelect = <T extends HTMLSelectValue>({
           )}
         </Listbox>
       </div>
-      {/* <div className={clsx('grid grid-cols-5', className)} {...rest}>
-        <div className="col-span-2 leading-4 align-middle text-center flex items-center whitespace-nowrap">
-          <label
-            htmlFor={identification}
-            className="w-full h-full flex items-center"
-          >
-            {title}
-          </label>
-        </div>
-        <div className="col-span-3 flex items-center justify-center">
-          <select
-            className="w-full rounded-md text-left px-3 py-1 transition-colors appearance-none"
-            name={identification}
-            id={identification}
-            value={value}
-            onChange={(event) => {
-              setState(event.target.value as T);
-            }}
-          >
-            {children}
-            {states.map((state) => {
-              return (
-                <option value={state.value} key={state.value}>
-                  {state.label}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-      </div> */}
     </>
   );
 };

@@ -16,6 +16,7 @@ import { CourseCard } from '../components/CourseCard';
 import { LabelSelect } from '../components/LabelSelect';
 import rehypePrettyCode from 'rehype-pretty-code';
 import type { Options } from 'rehype-pretty-code';
+import { Infinite } from '../icons/Infinite';
 
 type CourseProp = {
   course: Course;
@@ -91,7 +92,10 @@ const ascendingState = { value: 'ascending', label: 'Ascending' } as const;
 const sortOrderStates = [descendingState, ascendingState] as const;
 const pageSize60 = { value: 60, label: '60' } as const;
 const pageSize120 = { value: 120, label: '120' } as const;
-const pageSizeAll = { value: 'all', label: 'All' } as const;
+const pageSizeAll = {
+  value: 'all',
+  label: <Infinite aria-details="infinite" height={18} width={18} />,
+} as const;
 const pageSizeStates = [pageSize60, pageSize120, pageSizeAll] as const;
 const sortByDate = { value: 'date', label: 'Date' } as const;
 const sortByCompleted = {
