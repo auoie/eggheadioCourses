@@ -128,6 +128,13 @@ Then I could manually override the prose settings in my `globals.css` file using
 For guidance, I looked at the nextra docs and blog themes.
 For example, I removed the backticks from the code snippets and gave a gave them a rounded background instead.
 
+## Fonts
+
+Note that for google fonts, if you put the link in the `_document.tsx` header,
+then [Next.js](https://nextjs.org/blog/next-10-2#automatic-webfont-optimization) will automatically inline it.
+You should do this.
+Though, I'm using custom fonts so I'm not doing that.
+
 # Todo
 
 - [ ] Make a nice looking select component based on `nextra-docs-theme`. E.g., add exit transition.
@@ -136,5 +143,5 @@ For example, I removed the backticks from the code snippets and gave a gave them
 - [ ] Figure out how to transition between adjacent pagination buttons based on Geist tabs.
 - [ ] Adding nice looking search component
 - [ ] Preserve state when navigating to about page
-- [ ] Fix vertical spacing for inline code
 - [ ] Remove flash of black on refresh in light mode
+- [ ] Make navbar occupy full width when phone is in horizontal mode

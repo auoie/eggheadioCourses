@@ -15,7 +15,12 @@ class MyDocument extends Document {
   override render() {
     return (
       <Html lang="en">
-        <Head />
+        <Head>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap"
+            rel="stylesheet"
+          />
+        </Head>
         <body className="bg-zinc-200 dark:bg-zinc-950">
           <Main />
           <NextScript />

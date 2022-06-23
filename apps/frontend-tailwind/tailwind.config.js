@@ -13,6 +13,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Stratos', ...defaultTheme.fontFamily.sans],
+        mono: ['Fira Mono', ...defaultTheme.fontFamily.mono],
       },
       screens: {
         '3xl': '2160px',
