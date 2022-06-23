@@ -135,3 +135,4 @@ For example, I removed the backticks from the code snippets and gave a gave them
 - [ ] Figure out how to transition between adjacent pagination buttons based on Geist tabs.
 - [ ] Adding nice looking search component
 - [ ] Preserve state when navigating to about page
+- [ ] Fix vertical spacing for inline code
