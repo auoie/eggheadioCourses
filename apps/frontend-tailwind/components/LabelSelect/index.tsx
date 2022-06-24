@@ -1,8 +1,8 @@
-import { Listbox } from '@headlessui/react';
+import { Listbox, Transition } from '@headlessui/react';
 import { ChevronDown } from '../../icons/ChevronDown';
 import clsx from 'clsx';
 import { Check } from '../../icons/Check';
-import type { ReactNode } from 'react';
+import { Fragment, ReactNode } from 'react';
 
 type HTMLSelectValue = JSX.IntrinsicElements['select']['value'] &
   JSX.IntrinsicElements['option']['key'];
@@ -48,39 +48,47 @@ export const LabelSelect = <T extends HTMLSelectValue>({
                     <ChevronDown width={16} height={16} />
                   </div>
                 </Listbox.Button>
-                <Listbox.Options
-                  className={
-                    'absolute top-[110%] py-1 w-full shadow-md z-40 overflow-auto max-h-96 bg-white dark:bg-zinc-800 rounded-md dark:ring-white dark:ring-opacity-20 ring-1 ring-black ring-opacity-5'
-                  }
+                <Transition
+                  show={open}
+                  as={Fragment}
+                  leave={'transition'}
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-10"
                 >
-                  {states.map((state) => {
-                    return (
-                      <Listbox.Option
-                        key={state.value}
-                        value={state.value}
-                        className={({ active, selected }) =>
-                          clsx(
-                            'relative px-3 min-h-[36px] py-1.5 flex items-center select-none',
-                            selected ? '' : '',
-                            active
-                              ? 'dark:bg-zinc-100 dark:bg-opacity-10 bg-zinc-900 bg-opacity-10'
-                              : ''
-                          )
-                        }
-                      >
-                        <div className="mr-2">
-                          {state.value === value ? (
-                            <Check height={16} width={16} />
-                          ) : (
-                            <div className="h-4 w-4"></div>
-                          )}
-                        </div>
+                  <Listbox.Options
+                    className={
+                      'absolute top-[130%] py-1 w-full shadow-md z-40 overflow-auto max-h-96 bg-white dark:bg-zinc-800 rounded-md dark:ring-white dark:ring-opacity-20 ring-1 ring-black ring-opacity-5'
+                    }
+                  >
+                    {states.map((state) => {
+                      return (
+                        <Listbox.Option
+                          key={state.value}
+                          value={state.value}
+                          className={({ active, selected }) =>
+                            clsx(
+                              'relative px-3 min-h-[36px] py-1.5 flex items-center select-none',
+                              selected ? '' : '',
+                              active
+                                ? 'dark:bg-zinc-100 dark:bg-opacity-10 bg-zinc-900 bg-opacity-10'
+                                : ''
+                            )
+                          }
+                        >
+                          <div className="mr-2">
+                            {state.value === value ? (
+                              <Check height={16} width={16} />
+                            ) : (
+                              <div className="h-4 w-4"></div>
+                            )}
+                          </div>
 
-                        {state.label}
-                      </Listbox.Option>
-                    );
-                  })}
-                </Listbox.Options>
+                          {state.label}
+                        </Listbox.Option>
+                      );
+                    })}
+                  </Listbox.Options>
+                </Transition>
               </div>
             </>
           )}

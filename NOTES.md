@@ -144,4 +144,9 @@ Though, I'm using custom fonts so I'm not doing that.
 - [ ] Adding nice looking search component
 - [ ] Preserve state when navigating to about page
 - [ ] Remove flash of black on refresh in light mode
-- [ ] Make navbar occupy full width when phone is in horizontal mode
+- [x] Make navbar occupy full width when phone is in horizontal mode.
+      Actually, I'll call that a feature rather than a bug.
+      If I did this, I would need knowledge of the size of the iphone wedge
+      in order to make the content not be covered by it.
+      Encoding device specific values into the frontend doesn't seem like a good
+      long-term move.
