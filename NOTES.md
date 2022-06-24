@@ -137,9 +137,9 @@ Though, I'm using custom fonts so I'm not doing that.
 
 # Todo
 
-- [ ] Make a nice looking select component based on `nextra-docs-theme`. E.g., add exit transition.
+- [x] Make a nice looking select component based on `nextra-docs-theme`. E.g., add exit transition.
 - [ ] Add hamburger transition thing for small screens
-- [ ] Passing components to MDXProvider (specificially make link refer to external thing)
+- [x] Passing components to MDXProvider (specificially make link refer to external thing)
 - [ ] Figure out how to transition between adjacent pagination buttons based on Geist tabs.
 - [ ] Adding nice looking search component
 - [ ] Preserve state when navigating to about page

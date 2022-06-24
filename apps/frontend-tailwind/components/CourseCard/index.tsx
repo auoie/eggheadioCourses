@@ -1,10 +1,11 @@
 import type { Course } from '@egghead/egghead-courses';
 import clsx from 'clsx';
-import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import Link from 'next/link';
-import type { FC } from 'react';
 import { Badge } from '../Badge';
-import MdImage from '../MdImage';
+
+import type { FC } from 'react';
+import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { MDXTheme } from '../MdxTheme';
 
 export interface CourseCardProps {
   course: Course;
@@ -28,7 +29,7 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
             <a
               target="_blank"
               rel="noreferrer"
-              className="text-xl font-bold leading-6 hover:opacity-50 transition duration-300"
+              className="text-2xl font-bold leading-6 hover:opacity-50 transition duration-300 font-head"
             >
               {course.title}
             </a>
@@ -72,7 +73,7 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
         {course.description?.length !== undefined &&
           course.description.length > 0 && (
             <article className="prose dark:prose-invert max-w-full mt-2">
-              <MDXRemote {...markdown} components={{ img: MdImage }} />
+              <MDXTheme {...markdown} />
             </article>
           )}
       </div>

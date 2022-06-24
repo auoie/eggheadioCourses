@@ -1,51 +1,46 @@
 @font-face {
-  font-family: 'Stratos';
-  src: url('/fonts/Stratos/Stratos-Regular.otf');
+  font-family: 'Metric';
+  src: url('/fonts/Metric/MetricRegular.otf');
   font-weight: 400;
 }
 @font-face {
-  font-family: 'Stratos';
-  src: url('/fonts/Stratos/Stratos-Medium.otf');
+  font-family: 'Metric';
+  src: url('/fonts/Metric/MetricMedium.otf');
   font-weight: 500;
 }
 @font-face {
-  font-family: 'Stratos';
-  src: url('/fonts/Stratos/Stratos-SemiBold.otf');
+  font-family: 'Metric';
+  src: url('/fonts/Metric/MetricSemiBold.otf');
   font-weight: 600;
 }
 @font-face {
-  font-family: 'Stratos';
-  src: url('/fonts/Stratos/Stratos-Bold.otf');
+  font-family: 'Metric';
+  src: url('/fonts/Metric/MetricBold.otf');
   font-weight: 700;
 }
 @font-face {
-  font-family: 'Stratos';
-  src: url('/fonts/Stratos/Stratos-Italic.otf');
+  font-family: 'Metric';
+  src: url('/fonts/Metric/MetricRegularItalic.otf');
   font-weight: 400;
   font-style: italic;
 }
 @font-face {
-  font-family: 'Stratos';
-  src: url('/fonts/Stratos/Stratos-MediumItalic.otf');
+  font-family: 'Metric';
+  src: url('/fonts/Metric/MetricMediumItalic.otf');
   font-weight: 500;
   font-style: italic;
 }
 @font-face {
-  font-family: 'Stratos';
-  src: url('/fonts/Stratos/Stratos-SemiBoldItalic.otf');
+  font-family: 'Metric';
+  src: url('/fonts/Metric/MetricSemiBoldItalic.otf');
   font-weight: 600;
   font-style: italic;
 }
 @font-face {
-  font-family: 'Stratos';
-  src: url('/fonts/Stratos/Stratos-BoldItalic.otf');
+  font-family: 'Metric';
+  src: url('/fonts/Metric/MetricBoldItalic.otf');
   font-weight: 700;
   font-style: italic;
-}
-@font-face {
-  font-family: 'Stratos';
-  src: url('/fonts/Stratos/Stratos-ExtraBold.otf');
-  font-weight: 800;
 }
 @tailwind base;
 @tailwind components;

@@ -42,7 +42,7 @@ const ThemeSwitch: FC<SetThemeProps> = ({ className }) => {
                 className
               )}
             >
-              <div className="flex items-center w-[74.375px]">
+              <div className="flex items-center w-[76.4375px]">
                 <div className="h-3 w-3 mr-2">
                   {resolvedTheme === 'dark' ? (
                     <Moon height={12} width={12} />

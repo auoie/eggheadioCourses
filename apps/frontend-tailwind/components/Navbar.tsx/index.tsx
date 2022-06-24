@@ -30,7 +30,7 @@ export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
           <div className="flex w-full ">
             <div className="">
               <Link href={'/'}>
-                <a className="hover:opacity-50 whitespace-nowrap transition duration-300 font-extrabold text-lg">
+                <a className="hover:opacity-50 whitespace-nowrap transition duration-300 font-head font-extrabold text-2xl">
                   egghead.io Courses
                 </a>
               </Link>
