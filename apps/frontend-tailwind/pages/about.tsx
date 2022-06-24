@@ -1,21 +1,53 @@
-import type { NextPage } from 'next';
+import type { GetStaticProps, NextPage } from 'next';
+import { serialize } from 'next-mdx-remote/serialize';
 import Div100vh from 'react-div-100vh';
+import rehypePrettyCode from 'rehype-pretty-code';
 
-type AboutProps = unknown;
-const About: NextPage<AboutProps> = () => {
+import type { ResolveStaticPropsReturnType } from '../utils/typeUtils';
+import type { Options } from 'rehype-pretty-code';
+import { MDXTheme } from '../components/MdxTheme';
+
+const ABOUT_MD_TEXT = `
+This is a static website. It parses the contents of
+[egghead.io/courses](https://egghead.io/courses) and
+displays the results here. It uses
+[Next.js](https://nextjs.org/) to render the initial
+state and [Tailwind CSS](https://tailwindcss.com/) for
+styling.
+`;
+const getAboutProps = async () => {
+  const course = ABOUT_MD_TEXT;
+  const rehypePrettyCodeOptions: Partial<Options> = {
+    theme: {
+      theme: 'css-variables',
+    },
+  };
+  const mdxSource = await serialize(course ? course : '', {
+    mdxOptions: {
+      remarkPlugins: [],
+      rehypePlugins: course?.includes('```')
+        ? [[rehypePrettyCode, rehypePrettyCodeOptions]]
+        : [],
+    },
+  });
+  const result = {
+    props: {
+      mdxSource,
+    },
+  };
+  return result;
+};
+type AboutProps = ResolveStaticPropsReturnType<typeof getAboutProps>;
+export const getStaticProps: GetStaticProps<AboutProps> = async (_context) => {
+  return await getAboutProps();
+};
+const About: NextPage<AboutProps> = ({ mdxSource }) => {
   return (
     <Div100vh>
       <div className="max-w-full mx-4 pt-20">
         <div className="bg-white shadow-md rounded-md dark:bg-zinc-900 max-w-lg mx-auto p-4">
           <div className="prose dark:prose-invert max-w-full">
-            <p>
-              This is a static website. It parses the contents of{' '}
-              <a href="https://egghead.io/courses">egghead.io/courses</a> and
-              displays the results here. It uses{' '}
-              <a href="https://nextjs.org/">Next.js</a> to render the initial
-              state and <a href="https://tailwindcss.com/">Tailwind CSS</a> for
-              styling.
-            </p>
+            <MDXTheme {...mdxSource} />
           </div>
         </div>
       </div>

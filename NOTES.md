@@ -138,15 +138,18 @@ Though, I'm using custom fonts so I'm not doing that.
 # Todo
 
 - [x] Make a nice looking select component based on `nextra-docs-theme`. E.g., add exit transition.
-- [ ] Add hamburger transition thing for small screens
-- [x] Passing components to MDXProvider (specificially make link refer to external thing)
-- [ ] Figure out how to transition between adjacent pagination buttons based on Geist tabs.
-- [ ] Adding nice looking search component
-- [ ] Preserve state when navigating to about page
-- [ ] Remove flash of black on refresh in light mode
+- [x] Passing components to MDXProvider (specificially make link refer to external thing).
+      Make the about page use this provider.
 - [x] Make navbar occupy full width when phone is in horizontal mode.
       Actually, I'll call that a feature rather than a bug.
       If I did this, I would need knowledge of the size of the iphone wedge
       in order to make the content not be covered by it.
       Encoding device specific values into the frontend doesn't seem like a good
       long-term move.
+- [ ] Add hamburger transition thing for small screens
+- [ ] There is some repetition between ThemeSwitch and LabelSelect.
+      There is some repetition between course card mdx and about page mdx.
+- [ ] Figure out how to transition between adjacent pagination buttons based on Geist tabs.
+- [ ] Adding nice looking search component
+- [ ] Preserve state when navigating to about page
+- [ ] Remove flash of black on refresh in light mode
