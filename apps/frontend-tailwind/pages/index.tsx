@@ -198,7 +198,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags }) => {
   return (
     <div className="mx-auto max-w-[180rem]">
       <div className="max-w-full mx-4 pt-20">
-        <div className="bg-white shadow-md rounded-md dark:bg-zinc-900 max-w-lg mx-auto">
+        <div className="bg-white shadow-xl dark:shadow-zinc-950 rounded-md dark:bg-zinc-900 max-w-lg mx-auto">
           <div className="flex items-center justify-center">
             <div className="flex flex-col flex-1 p-4 pb-4 mx-auto space-y-1">
               <LabelSelect
@@ -279,7 +279,7 @@ const Home: NextPage<HomeProps> = ({ courses, tags }) => {
                   course={course}
                   markdown={courseProp.markdown}
                   key={course.slug}
-                  className="bg-white shadow-md dark:bg-zinc-900 rounded-md grid-cols-1 overflow-hidden"
+                  className="bg-white shadow-xl dark:shadow-zinc-950 dark:bg-zinc-900 rounded-md grid-cols-1 overflow-hidden"
                 />
               );
             })}

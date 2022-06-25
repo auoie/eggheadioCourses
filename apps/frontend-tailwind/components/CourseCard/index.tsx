@@ -29,7 +29,7 @@ export const CourseCard: FC<JSX.IntrinsicElements['div'] & CourseCardProps> = ({
             <a
               target="_blank"
               rel="noreferrer"
-              className="text-2xl font-bold leading-6 hover:opacity-50 transition duration-300 font-head"
+              className="text-xl font-bold leading-6 hover:opacity-50 transition duration-300 font-head"
             >
               {course.title}
             </a>

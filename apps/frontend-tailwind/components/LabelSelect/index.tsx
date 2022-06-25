@@ -57,7 +57,7 @@ export const LabelSelect = <T extends HTMLSelectValue>({
                 >
                   <Listbox.Options
                     className={
-                      'absolute top-[130%] py-1 w-full shadow-md z-40 overflow-auto max-h-96 bg-white dark:bg-zinc-800 rounded-md dark:ring-white dark:ring-opacity-20 ring-1 ring-black ring-opacity-5'
+                      'absolute top-[130%] py-1 w-full shadow-xl dark:shadow-zinc-950 z-40 overflow-auto max-h-96 bg-white dark:bg-zinc-800 rounded-md dark:ring-white dark:ring-opacity-20 ring-1 ring-black ring-opacity-5'
                     }
                   >
                     {states.map((state) => {

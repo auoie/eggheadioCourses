@@ -134,6 +134,8 @@ Note that for google fonts, if you put the link in the `_document.tsx` header,
 then [Next.js](https://nextjs.org/blog/next-10-2#automatic-webfont-optimization) will automatically inline it.
 You should do this.
 Though, I'm using custom fonts so I'm not doing that.
+Actually, it's probably a good idea to use an open source font.
+See [here](https://news.ycombinator.com/item?id=28009042) for some font recommendations.
 
 # Todo
 
@@ -146,7 +148,7 @@ Though, I'm using custom fonts so I'm not doing that.
       in order to make the content not be covered by it.
       Encoding device specific values into the frontend doesn't seem like a good
       long-term move.
-- [ ] Add hamburger transition thing for small screens
+- [ ] Add hamburger transition thing for small screens. Actually, made it look like the one [here](https://createwithflow.com/).
 - [ ] There is some repetition between ThemeSwitch and LabelSelect.
       There is some repetition between course card mdx and about page mdx.
 - [ ] Figure out how to transition between adjacent pagination buttons based on Geist tabs.

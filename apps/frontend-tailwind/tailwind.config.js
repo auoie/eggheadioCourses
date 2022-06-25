@@ -12,9 +12,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        sans: ['Public Sans', ...defaultTheme.fontFamily.sans],
         mono: ['Source Code Pro', ...defaultTheme.fontFamily.mono],
-        head: ['Metric', ...defaultTheme.fontFamily.sans]
+        head: ['Public Sans', ...defaultTheme.fontFamily.sans]
       },
       screens: {
         '3xl': '2160px',

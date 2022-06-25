@@ -45,7 +45,7 @@ const About: NextPage<AboutProps> = ({ mdxSource }) => {
   return (
     <Div100vh>
       <div className="max-w-full mx-4 pt-20">
-        <div className="bg-white shadow-md rounded-md dark:bg-zinc-900 max-w-lg mx-auto p-4">
+        <div className="bg-white shadow-lg dark:shadow-zinc-950 rounded-md dark:bg-zinc-900 max-w-lg mx-auto p-4">
           <div className="prose dark:prose-invert max-w-full">
             <MDXTheme {...mdxSource} />
           </div>
