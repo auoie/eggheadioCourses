@@ -14,7 +14,7 @@ module.exports = {
       fontFamily: {
         sans: ['Public Sans', ...defaultTheme.fontFamily.sans],
         mono: ['Source Code Pro', ...defaultTheme.fontFamily.mono],
-        head: ['Public Sans', ...defaultTheme.fontFamily.sans]
+        head: ['Gilmer', ...defaultTheme.fontFamily.sans]
       },
       screens: {
         '3xl': '2160px',
