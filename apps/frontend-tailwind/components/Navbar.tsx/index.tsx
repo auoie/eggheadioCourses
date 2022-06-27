@@ -2,7 +2,7 @@ import { Hamburger } from '../../icons/Hamburger';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FC, useState } from 'react';
+import { FC, Fragment, useState } from 'react';
 import ThemeSwitch from '../ThemeSwitch';
 
 export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
@@ -43,7 +43,7 @@ export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
               </Link>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             {items.map((item) => (
               <Link href={item.path} key={item.path}>
                 <a
@@ -51,7 +51,7 @@ export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
                     pathname.startsWith(item.path)
                       ? ''
                       : 'dark:text-zinc-400 text-zinc-500',
-                    'hidden md:inline-block'
+                    'hidden md:inline-block hover:bg-zinc-100 hover:active:bg-zinc-200 hover:dark:bg-zinc-800 hover:active:dark:bg-zinc-700 transition rounded-md px-2 py-0.5'
                   )}
                 >
                   {item.label}
@@ -69,24 +69,27 @@ export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
         </div>
         <div
           className={clsx(
-            'w-full space-y-2 pb-2 px-2 md:hidden',
+            'w-full pb-2 px-0 md:hidden',
             menu ? 'flex flex-col' : 'hidden'
           )}
         >
           {items.map((item) => (
-            <Link href={item.path} key={item.path}>
-              <a
-                className={clsx(
-                  pathname.startsWith(item.path)
-                    ? ''
-                    : 'dark:text-zinc-400 text-zinc-500',
-                  'py-0.5 px-2 rounded-md w-full dark:bg-zinc-800'
-                )}
-                onClick={() => setMenu((menu) => !menu)}
-              >
-                {item.label}
-              </a>
-            </Link>
+            <Fragment key={item.path}>
+              <Link href={item.path}>
+                <a
+                  className={clsx(
+                    pathname.startsWith(item.path)
+                      ? ''
+                      : 'dark:text-zinc-400 text-zinc-500',
+                    'py-0.5 px-2 rounded-md w-full hover:dark:bg-zinc-800 hover:active:dark:bg-zinc-700 hover:bg-zinc-100 hover:active:bg-zinc-200'
+                  )}
+                  onClick={() => setMenu((menu) => !menu)}
+                >
+                  {item.label}
+                </a>
+              </Link>
+              <div className="w-full border-b my-2 dark:border-zinc-700 border-zinc-200" />
+            </Fragment>
           ))}
           <div className="">
             <ThemeSwitch className="w-full" />

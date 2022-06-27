@@ -12,7 +12,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Public Sans', ...defaultTheme.fontFamily.sans],
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
         mono: ['Source Code Pro', ...defaultTheme.fontFamily.mono],
         head: ['Gilmer', ...defaultTheme.fontFamily.sans]
       },
