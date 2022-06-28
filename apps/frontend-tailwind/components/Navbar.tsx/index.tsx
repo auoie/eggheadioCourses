@@ -63,7 +63,7 @@ export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
               className="md:hidden"
               onClick={() => setMenu((menu) => !menu)}
             >
-              <Hamburger />
+              <Hamburger height={30} width={30} />
             </button>
           </div>
         </div>
@@ -88,11 +88,11 @@ export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
                   {item.label}
                 </a>
               </Link>
-              <div className='w-full border-b dark:border-b-zinc-800 border-b-zinc-100'></div>
+              <div className="w-full border-b dark:border-b-zinc-800 border-b-zinc-100"></div>
             </Fragment>
           ))}
           <div className="">
-            <ThemeSwitch className="w-full" buttonClassName="h-10" />
+            <ThemeSwitch className="w-full" buttonHeight="h-10" />
           </div>
         </div>
       </nav>
