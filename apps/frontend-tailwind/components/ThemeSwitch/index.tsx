@@ -5,8 +5,10 @@ import { Moon } from '../../icons/Moon';
 import { Sun } from '../../icons/Sun';
 import { useMountedTheme } from '../../hooks/useMountedTheme';
 import { Check } from '../../icons/Check';
-type SetThemeProps = { className?: string };
-const ThemeSwitch: FC<SetThemeProps> = ({ className }) => {
+type SetThemeProps = JSX.IntrinsicElements['div'] & {
+  buttonClassName?: string;
+};
+const ThemeSwitch: FC<SetThemeProps> = ({ className, buttonClassName }) => {
   const { theme, setTheme, resolvedTheme } = useMountedTheme();
   const options = [
     {
@@ -38,7 +40,8 @@ const ThemeSwitch: FC<SetThemeProps> = ({ className }) => {
                 'rounded-md w-full px-2 h-7 transition-colors flex items-center focus:outline-none',
                 open
                   ? 'bg-zinc-900 bg-opacity-10 text-zinc-950 dark:bg-zinc-100 dark:bg-opacity-10 dark:text-zinc-50'
-                  : 'bg-zinc-900 text-zinc-500 dark:text-zinc-400 bg-opacity-5 hover:text-zinc-950 dark:bg-zinc-100 dark:bg-opacity-5 dark:hover:text-zinc-50'
+                  : 'bg-zinc-900 text-zinc-500 dark:text-zinc-400 bg-opacity-5 hover:text-zinc-950 dark:bg-zinc-100 dark:bg-opacity-5 dark:hover:text-zinc-50',
+                buttonClassName
               )}
             >
               <div className="flex items-center">

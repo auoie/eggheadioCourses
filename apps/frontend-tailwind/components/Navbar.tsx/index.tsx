@@ -81,18 +81,18 @@ export const Navbar: FC<JSX.IntrinsicElements['div']> = ({
                     pathname.startsWith(item.path)
                       ? ''
                       : 'dark:text-zinc-400 text-zinc-500',
-                    'py-0.5 px-2 rounded-md w-full hover:dark:bg-zinc-800 hover:active:dark:bg-zinc-700 hover:bg-zinc-100 hover:active:bg-zinc-200'
+                    'px-2 h-10 flex items-center rounded-md w-full hover:dark:bg-zinc-800 hover:active:dark:bg-zinc-700 hover:bg-zinc-100 hover:active:bg-zinc-200'
                   )}
                   onClick={() => setMenu((menu) => !menu)}
                 >
                   {item.label}
                 </a>
               </Link>
-              <div className="w-full border-b my-2 dark:border-zinc-700 border-zinc-200" />
+              <div className='w-full border-b dark:border-b-zinc-800 border-b-zinc-100'></div>
             </Fragment>
           ))}
           <div className="">
-            <ThemeSwitch className="w-full" />
+            <ThemeSwitch className="w-full" buttonClassName="h-10" />
           </div>
         </div>
       </nav>
