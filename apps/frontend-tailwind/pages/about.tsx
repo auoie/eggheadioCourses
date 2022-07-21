@@ -6,6 +6,7 @@ import rehypePrettyCode from 'rehype-pretty-code';
 import type { ResolveStaticPropsReturnType } from '../utils/typeUtils';
 import type { Options } from 'rehype-pretty-code';
 import { MDXTheme } from '../components/MdxTheme';
+import { botResult } from '../utils/getBotResult';
 
 const ABOUT_MD_TEXT = `
 This is a static website. It parses the contents of
@@ -30,9 +31,12 @@ const getAboutProps = async () => {
         : [],
     },
   });
+  const buildTime = new Date().toISOString();
   const result = {
     props: {
       mdxSource,
+      buildTime,
+      fetchedTime: botResult.time,
     },
   };
   return result;
@@ -41,13 +45,17 @@ type AboutProps = ResolveStaticPropsReturnType<typeof getAboutProps>;
 export const getStaticProps: GetStaticProps<AboutProps> = async (_context) => {
   return await getAboutProps();
 };
-const About: NextPage<AboutProps> = ({ mdxSource }) => {
+const About: NextPage<AboutProps> = ({ mdxSource, buildTime, fetchedTime }) => {
   return (
     <Div100vh>
       <div className="max-w-full mx-4 pt-20">
         <div className="bg-white shadow-lg dark:shadow-zinc-950 rounded-md dark:bg-zinc-900 max-w-lg mx-auto p-4">
           <div className="prose dark:prose-invert max-w-full">
             <MDXTheme {...mdxSource} />
+            <p>
+              This was last built at {buildTime} and the courses were last
+              fetched at {fetchedTime}.
+            </p>
           </div>
         </div>
       </div>

@@ -1,0 +1,6 @@
+docker/
+dist/
+node_modules/
+output/
+.env.local
+_courses/cleanCourses.json

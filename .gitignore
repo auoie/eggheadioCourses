@@ -46,3 +46,6 @@ _courses/cleanCourses.json
 # assets
 
 fonts/
+output/
+*.tar.gz
+*.tar

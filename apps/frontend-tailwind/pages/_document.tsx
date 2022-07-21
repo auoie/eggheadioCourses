@@ -21,7 +21,7 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
           <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
             rel="stylesheet"
           />
           <link
@@ -37,7 +37,7 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body className="bg-zinc-50 dark:bg-zinc-900">
+        <body className="bg-white dark:bg-zinc-900">
           <Main />
           <NextScript />
         </body>

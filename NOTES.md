@@ -137,6 +137,28 @@ Though, I'm using custom fonts so I'm not doing that.
 Actually, it's probably a good idea to use an open source font.
 See [here](https://news.ycombinator.com/item?id=28009042) for some font recommendations.
 
+## Docker
+
+Locally, I can use:
+
+```bash
+# Building and running locally
+docker build -f ./docker/Dockerfile -t eggheadio-courses:latest .
+docker run --rm -it \
+      -v $PWD/output/:/app/output \
+      --name eggheadio-courses \
+      eggheadio-courses
+
+# Running on remote VPS run on remote VPS
+git clone https://github.com/auoie/eggheadioCourses.git
+sudo DOCKER_BUILDKIT=1 docker build -f ./docker/Dockerfile -t eggheadio-courses:latest .
+sudo docker run -d \
+--restart always \
+-v /path/to/folder/:/app/output/ \
+--name eggheadio-courses \
+eggheadio-courses
+```
+
 # Todo
 
 - [x] Make a nice looking select component based on `nextra-docs-theme`. E.g., add exit transition.

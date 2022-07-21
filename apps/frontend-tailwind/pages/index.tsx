@@ -1,11 +1,8 @@
-import { readFileSync } from 'fs';
 import type { GetStaticProps, NextPage } from 'next';
-import { join } from 'path';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { useEffect, useMemo, useState } from 'react';
 import type {
-  BotResult,
   Course,
   Tag as TagType,
 } from '@egghead/egghead-courses';
@@ -17,14 +14,13 @@ import { LabelSelect } from '../components/LabelSelect';
 import rehypePrettyCode from 'rehype-pretty-code';
 import type { Options } from 'rehype-pretty-code';
 import { Infinite } from '../icons/Infinite';
+import { botResult } from '../utils/getBotResult';
 
 type CourseProp = {
   course: Course;
   markdown: MDXRemoteSerializeResult<Record<string, unknown>>;
 };
 const getHomeProps = async () => {
-  const coursesPath = join(process.cwd(), '_courses', 'cleanCourses.json');
-  const botResult = JSON.parse(readFileSync(coursesPath, 'utf8')) as BotResult;
   const courses = botResult.courses.slice(0);
   const distinctTags = new Set<string>();
   const tagObjects = new Map<string, TagType>();

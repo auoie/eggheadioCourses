@@ -1,18 +1,11 @@
-@font-face {
-  font-family: 'Gilmer';
-  src: url('/fonts/Gilmer/GilmerBold.otf');
-  font-weight: 700;
-}
-@font-face {
-  font-family: 'Gilmer';
-  src: url('/fonts/Gilmer/GilmerHeavy.otf');
-  font-weight: 700;
-}
 @tailwind base;
 @tailwind components;
 
 :root {
   overflow-y: scroll;
+}
+*::selection {
+  @apply bg-zinc-600 bg-opacity-20 dark:bg-zinc-400 dark:bg-opacity-20;
 }
 
 @tailwind utilities;
